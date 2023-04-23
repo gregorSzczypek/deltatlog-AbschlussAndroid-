@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--    custom colors night mode-->
+    <color name="bg_low_sat">#16434E</color>
+    <color name="bg_mid_sat">#163036</color>
+    <color name="bg_high_sat">#07272E</color>
+
+    <color name="btn_alert_lowest_sat">#FFEEEE</color>
+    <color name="btn_alert_low_sat">#CA6969</color>
+    <color name="btn_alert_mid_sat">#A13F3F</color>
+    <color name="btn_alert_high_sat">#921F1F</color>
+
+    <color name="btn_normal_low_sat">#FFF9E9</color>
+    <color name="btn_normal_mid_sat">#B8A575</color>
+    <color name="btn_normal_high_sat">#684919</color>
+
+    <color name="borders_low_sat">#E6E6E6</color>
+    <color name="borders_mid_sat">#838383</color>
+    <color name="borders_high_sat">#434343</color>
+
+</resources>
