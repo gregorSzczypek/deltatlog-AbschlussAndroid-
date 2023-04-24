@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FFFFFF</color>
+    <color name="white">#000000</color>
 
-    <!--    custom colors night mode-->
+    <!--    custom colors night mode -->
     <color name="bg_low_sat">#16434E</color>
     <color name="bg_mid_sat">#163036</color>
     <color name="bg_high_sat">#07272E</color>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_low_sat"
+        tools:context=".ui.LandingPageFragment">
+
+
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_marginTop="@dimen/margin_from_scr_top_land"
+            android:src="@drawable/applogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="@dimen/btn_large_width"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/btn_spacing"
+            android:text="Login"
+            android:textSize="@dimen/text_size_btn_large"
+            app:layout_constraintBottom_toTopOf="@+id/btn_sign_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_sign_up"
+            android:layout_width="@dimen/btn_large_width"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_from_scr_bottom_land"
+            android:text="Sign Up"
+            android:textSize="@dimen/text_size_btn_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
