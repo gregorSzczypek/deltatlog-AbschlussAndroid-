@@ -7,11 +7,31 @@
 
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_low_sat"
         tools:context=".ui.LoginFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:backgroundTint="@color/bg_high_sat"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/login_title"
+            app:titleCentered="true"
+            app:titleTextColor="@color/black"
+            app:menu="@menu/dot_menu"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:navigationIconTint="@color/black"/>
 
         <ImageView
             android:id="@+id/app_logo"
@@ -32,50 +52,51 @@
             android:backgroundTint="@color/btn_normal_high_sat"
             android:text="login"
             android:textSize="@dimen/text_size_btn_large"
-            app:layout_constraintBottom_toTopOf="@+id/btn_cancel"
+            app:layout_constraintBottom_toTopOf="@+id/tv_not_registered"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="@dimen/btn_large_width"
+
+        <TextView
+            android:id="@+id/tv_not_registered"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_from_scr_bottom"
-            android:backgroundTint="@color/btn_alert_low_sat"
-            android:text="Cancel"
-            android:textSize="@dimen/text_size_btn_large"
+            android:clickable="true"
+            android:text="@string/not_registered"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
+
         <EditText
             android:id="@+id/input_email_adress"
-            android:layout_width="@dimen/txt_input_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/btn_btn_spacing"
             android:ems="10"
-            android:hint="e-mail"
+            android:hint="E-Mail"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toTopOf="@+id/input_pw_1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/input_pw_1"
-            android:layout_width="@dimen/txt_input_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/btn_text_spacing"
             android:ems="10"
-            android:hint="password"
+            android:hint="Password"
             android:inputType="textPassword"
             app:layout_constraintBottom_toTopOf="@id/btn_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:passwordToggleEnabled="true"/>
+            app:passwordToggleEnabled="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,34 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/landingPageFragment">
+    app:startDestination="@id/loginFragment">
 
-    <fragment
-        android:id="@+id/landingPageFragment"
-        android:name="com.example.deltatlog.ui.LandingPageFragment"
-        android:label="LandingPageFragment" >
-        <action
-            android:id="@+id/action_landingPageFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-        <action
-            android:id="@+id/action_landingPageFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.deltatlog.ui.LoginFragment"
         android:label="LoginFragment" >
         <action
-            android:id="@+id/action_loginFragment_to_landingPageFragment"
-            app:destination="@id/landingPageFragment" />
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.deltatlog.ui.SignUpFragment"
         android:label="SignUpFragment" >
-        <action
-            android:id="@+id/action_signUpFragment_to_landingPageFragment"
-            app:destination="@id/landingPageFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

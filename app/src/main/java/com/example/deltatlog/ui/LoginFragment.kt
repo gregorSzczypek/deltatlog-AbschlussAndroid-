@@ -1,10 +1,8 @@
 package com.example.deltatlog.ui
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -12,6 +10,8 @@ import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlin.concurrent.fixedRateTimer
+
 
 class LoginFragment : Fragment() {
 
@@ -29,7 +29,6 @@ class LoginFragment : Fragment() {
             container,
             false
         )
-
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -58,11 +57,11 @@ class LoginFragment : Fragment() {
             } else {
                 Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
             }
+        }
 
-            // Navigation to landing page
-            binding.btnCancel.setOnClickListener {
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToLandingPageFragment())
-            }
+        // Navigation to sign up page
+        binding.tvNotRegistered.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
         }
     }
 }

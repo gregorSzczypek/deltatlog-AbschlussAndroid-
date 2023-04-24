@@ -2,4 +2,11 @@
     <string name="app_name">deltatlog</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="not_registered">Not a member yet? Register now.</string>+
+    <string name="registered">Already a member? Please Login.</string>
+    <string name="login_title">LOGIN</string>
+    <string name="sign_up_title">SIGN UP</string>
+    <string name="password">Password</string>
+    <string name="email">E-Mail</string>
+    <string name="cancel">Cancel</string>
 </resources>

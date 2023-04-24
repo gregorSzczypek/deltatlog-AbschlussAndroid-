@@ -13,46 +13,66 @@
         android:background="@color/bg_low_sat"
         tools:context=".ui.SignUpFragment">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:backgroundTint="@color/bg_high_sat"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/sign_up_title"
+            app:titleCentered="true"
+            app:titleTextColor="@color/black"
+            app:menu="@menu/dot_menu"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:navigationIconTint="@color/black"/>
+
         <ImageView
             android:id="@+id/app_logo"
-            android:layout_width="@dimen/app_logo_width_land"
-            android:layout_height="@dimen/app_logo_height_land"
+            android:layout_width="@dimen/app_logo_width"
+            android:layout_height="@dimen/app_logo_height"
             android:layout_marginTop="@dimen/margin_from_scr_top_land"
             android:src="@drawable/applogo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
 
         <Button
             android:id="@+id/btn_sign_me_up"
             android:layout_width="@dimen/btn_large_width_land"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/btn_scr_left_right_margin"
-            android:layout_marginBottom="@dimen/margin_from_scr_bottom_land"
             android:backgroundTint="@color/btn_normal_high_sat"
             android:text="sign me up"
+            android:layout_marginBottom="@dimen/btn_btn_spacing_land"
             android:textSize="@dimen/text_size_btn_large"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_registered"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="@dimen/btn_large_width_land"
+        <TextView
+            android:id="@+id/tv_registered"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/btn_scr_left_right_margin"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/btn_alert_low_sat"
-            android:text="Cancel"
-            android:textSize="@dimen/text_size_btn_large"
+            android:layout_marginBottom="@dimen/margin_from_scr_bottom_land"
+            android:text="@string/registered"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            android:clickable="true"/>
 
         <EditText
             android:id="@+id/input_email_adress"
             android:layout_width="@dimen/txt_input_width_land"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/btn_btn_spacing"
+            android:layout_marginBottom="@dimen/btn_btn_spacing_land"
             android:ems="10"
             android:hint="e-mail"
             android:inputType="textEmailAddress"
@@ -65,7 +85,7 @@
             android:id="@+id/input_pw_1"
             android:layout_width="@dimen/txt_input_width_land"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/btn_btn_spacing"
+            android:layout_marginBottom="@dimen/btn_btn_spacing_land"
             android:ems="10"
             android:hint="password"
             android:inputType="textPassword"
@@ -78,7 +98,7 @@
             android:id="@+id/input_pw_2"
             android:layout_width="@dimen/txt_input_width_land"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/btn_text_spacing"
+            android:layout_marginBottom="@dimen/btn_text_spacing_land"
             android:ems="10"
             android:hint="confirm password"
             android:inputType="textPassword"

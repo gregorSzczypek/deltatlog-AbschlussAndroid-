@@ -73,9 +73,8 @@ class SignUpFragment : Fragment() {
         }
 
         // Navigation to sign up screen
-        binding.btnCancel.setOnClickListener {
-            findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToLandingPageFragment())
+        binding.tvRegistered.setOnClickListener {
+            findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToLoginFragment())
         }
-
     }
 }
