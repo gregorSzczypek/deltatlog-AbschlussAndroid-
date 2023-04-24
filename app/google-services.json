@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491969237646",
+    "project_id": "deltatlog",
+    "storage_bucket": "deltatlog.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491969237646:android:5e2161b60b1c11dc1e2fdf",
+        "android_client_info": {
+          "package_name": "com.example.deltatlog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491969237646-5kfik3kq4tmpu3tcbaf7bmtmj2o6e1s6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDde0KYvvS2k4SGkiWvWKotYk86E8U8xR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491969237646-5kfik3kq4tmpu3tcbaf7bmtmj2o6e1s6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
