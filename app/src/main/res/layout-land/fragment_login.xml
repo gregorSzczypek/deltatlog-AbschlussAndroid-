@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_low_sat"
-        tools:context=".ui.LandingPageFragment">
+        tools:context=".ui.LoginFragment">
 
         <ImageView
             android:id="@+id/app_logo"
@@ -37,16 +37,43 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/btn_sign_up"
+            android:id="@+id/btn_cancel"
             android:layout_width="@dimen/btn_large_width_land"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/btn_scr_left_right_margin"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/btn_normal_high_sat"
-            android:text="sign up"
+            android:backgroundTint="@color/btn_alert_low_sat"
+            android:text="Cancel"
             android:textSize="@dimen/text_size_btn_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/input_email_adress"
+            android:layout_width="@dimen/txt_input_width_land"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/btn_btn_spacing"
+            android:ems="10"
+            android:hint="e-mail"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toTopOf="@+id/input_pw_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/input_pw_1"
+            android:layout_width="@dimen/txt_input_width_land"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/btn_text_spacing"
+            android:ems="10"
+            android:hint="password"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

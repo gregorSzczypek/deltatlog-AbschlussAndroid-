@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.databinding.FragmentLandingPageBinding
+import com.example.deltatlog.databinding.FragmentLoginBinding
+import com.example.deltatlog.databinding.FragmentSignUpBinding
 
+class LoginFragment : Fragment() {
 
-class LandingPageFragment : Fragment() {
-
-    private lateinit var binding: FragmentLandingPageBinding
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +22,7 @@ class LandingPageFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_landing_page,
+            R.layout.fragment_login,
             container,
             false
         )
@@ -36,13 +35,14 @@ class LandingPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Navigation to sign up screen
-        binding.btnSignUp.setOnClickListener {
-            findNavController().navigate(LandingPageFragmentDirections.actionLandingPageFragmentToSignUpFragment())
+        binding.btnCancel.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToLandingPageFragment())
         }
 
         // Navigation to login screen
         binding.btnLogin.setOnClickListener {
-            findNavController().navigate(LandingPageFragmentDirections.actionLandingPageFragmentToLoginFragment())
+            //TODO go initiate login procedure, check if it was successfull
+            //TODO navigate to home
         }
     }
 }
