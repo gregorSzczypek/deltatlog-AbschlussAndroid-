@@ -5,15 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.databinding.FragmentSignUpBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +37,32 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Navigation to sign up screen
-        binding.btnCancel.setOnClickListener {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToLandingPageFragment())
-        }
+        // Initialize Firebase
+        firebaseAuth = FirebaseAuth.getInstance()
 
-        // Navigation to login screen
         binding.btnLogin.setOnClickListener {
-            //TODO go initiate login procedure, check if it was successfull
-            //TODO navigate to home
+            val email = binding.inputEmailAdress.text.toString()
+            val pw = binding.inputPw1.text.toString()
+
+            // Check of valid input and calling login method from firebase object
+            if (email.isNotEmpty() && pw.isNotEmpty()) {
+                firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(context, "Succesfully registered", Toast.LENGTH_SHORT).show()
+                        // TODO Navigation after successful login
+
+                    } else {
+                        Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
+            }
+
+            // Navigation to landing page
+            binding.btnCancel.setOnClickListener {
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToLandingPageFragment())
+            }
         }
     }
 }
