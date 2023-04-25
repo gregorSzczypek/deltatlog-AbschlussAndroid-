@@ -29,9 +29,7 @@
             app:title="@string/home_title"
             app:titleCentered="true"
             app:titleTextColor="@color/black"
-            app:menu="@menu/dot_menu"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
-            app:navigationIconTint="@color/black"/>
+            app:menu="@menu/dot_menu"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/project_list"
