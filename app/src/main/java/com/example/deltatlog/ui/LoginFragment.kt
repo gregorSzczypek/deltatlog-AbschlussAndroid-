@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
@@ -39,6 +40,7 @@ class LoginFragment : Fragment() {
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
 
+        // // this click listener performs the login procedure in firebase after checks of valid input
         binding.btnLogin.setOnClickListener {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
@@ -48,7 +50,7 @@ class LoginFragment : Fragment() {
                 firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Toast.makeText(context, "Succesfully registered", Toast.LENGTH_SHORT).show()
-                        // TODO Navigation after successful login
+                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
 
                     } else {
                         Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -59,7 +61,12 @@ class LoginFragment : Fragment() {
             }
         }
 
-        // Navigation to sign up page
+        // BackButton Navigation in Toolbar
+        binding.materialToolbar.setNavigationOnClickListener{
+            findNavController().navigateUp()
+        }
+
+        // Navigation to sign up page in case user is not a member yet
         binding.tvNotRegistered.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
         }
