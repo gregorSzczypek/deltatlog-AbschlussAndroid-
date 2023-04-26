@@ -49,7 +49,7 @@ class LoginFragment : Fragment() {
             if (email.isNotEmpty() && pw.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Toast.makeText(context, "Succesfully registered", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Succesfully signed in user ${firebaseAuth.currentUser?.email}", Toast.LENGTH_LONG).show()
                         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
 
                     } else {
