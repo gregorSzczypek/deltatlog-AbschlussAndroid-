@@ -10,13 +10,18 @@ class Datasource {
                 1,
                 "Project 1",
                 "Employer 1",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036",
+                        "2023-04-26",
+                        123445,
+                        "This is a very very long task description because this task is very very important1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+                        "This is a very very long note, because this task is so complicated and no one ever understands it without my note here"
                     )
                 )
             ),
@@ -24,17 +29,27 @@ class Datasource {
                 2,
                 "Project 2",
                 "Employer 2",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036",
+                        "2023-04-26",
+                        123445,
+                        "This is a very very long task description because this task is very very important1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+                        "This is a very very long note, because this task is so complicated and no one ever understands it without my note here"
                     ),
                     Task(
-                        2,
-                        "Task 2"
+                        1,
+                        "Task 1",
+                        "#163036",
+                        "2023-04-26",
+                        123445,
+                        "This is a very very long task description because this task is very very important1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
+                        "This is a very very long note, because this task is so complicated and no one ever understands it without my note here"
                     )
                 )
             ),
@@ -42,21 +57,24 @@ class Datasource {
                 3,
                 "Project 3",
                 "Employer 3",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -64,25 +82,29 @@ class Datasource {
                 4,
                 "Project 4",
                 "Employer 4",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -90,29 +112,34 @@ class Datasource {
                 5,
                 "Project 5",
                 "Employer 5",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -120,33 +147,39 @@ class Datasource {
                 6,
                 "Project 6",
                 "Employer 6",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -154,41 +187,49 @@ class Datasource {
                 7,
                 "Project 7",
                 "Employer 7",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -196,45 +237,54 @@ class Datasource {
                 8,
                 "Project 8",
                 "Employer 8",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -242,49 +292,59 @@ class Datasource {
                 9,
                 "Project 9",
                 "Employer 9",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -292,57 +352,59 @@ class Datasource {
                 10,
                 "Project 10",
                 "Employer 10",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
             ),
@@ -350,439 +412,63 @@ class Datasource {
                 11,
                 "Project 11",
                 "Employer 11",
-                R.color.btn_alert_low_sat,
+                "#ffffff",
                 "01.01.2023",
                 "no additional Info",
                 listOf(
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         2,
-                        "Task 2"
+                        "Task 2",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     ),
                     Task(
                         1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
+                        "Task 1",
+                        "#163036"
                     )
                 )
-            ),
-            Project(
-                12,
-                "Project 12",
-                "Employer 12",
-                R.color.btn_alert_low_sat,
-                "01.01.2023",
-                "no additional Info",
-                listOf(
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    )
-                )
-            ),
-            Project(
-                13,
-                "Project 13",
-                "Employer 13",
-                R.color.btn_alert_low_sat,
-                "01.01.2023",
-                "no additional Info",
-                listOf(
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    )
-                )
-            ),
-            Project(
-                14,
-                "Project 14",
-                "Employer 14",
-                R.color.btn_alert_low_sat,
-                "01.01.2023",
-                "no additional Info",
-                listOf(
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    )
-                )
-            ),
-            Project(
-                15,
-                "Project 15",
-                "Employer 15",
-                R.color.btn_alert_low_sat,
-                "01.01.2023",
-                "no additional Info",
-                listOf(
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    )
-                )
-            ),
-            Project(
-                16,
-                "Project 16",
-                "Employer 16",
-                R.color.btn_alert_low_sat,
-                "01.01.2023",
-                "no additional Info",
-                listOf(
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    ),
-                    Task(
-                        1,
-                        "Task 1"
-                    )
-                )
-            ),
+            )
         )
     }
 
-    fun loadTasks (project: Project): List<Task> {
+    fun loadTasks(project: Project): List<Task> {
         val tasks = project.tasks
         return tasks
+    }
+
+    fun loadTaskAttributes(task: Task): List<String> {
+        val taskAttr = listOf<String>(
+            task.date,
+            task.notes,
+            task.description,
+            task.id.toString(),
+            task.duration.toString()
+        )
+        return taskAttr
     }
 }

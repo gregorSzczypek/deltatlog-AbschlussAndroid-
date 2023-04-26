@@ -2,7 +2,12 @@ package com.example.apicalls.data.datamodels
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.common.util.Hex
 import com.squareup.moshi.Json
+import java.text.DateFormat
+import java.text.DateFormat.getDateInstance
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 data class Task(
@@ -12,18 +17,21 @@ data class Task(
     val id: Long,
 
     @Json(name = "strNameTask")
-    val name: String,
+    val name: String = "Unnamed",
 
-//    @Json(name = "intColorTask")
-//    val color: Int,
+    @Json(name = "intColorTask")
+    val color: String = "#ffffff",
 
-//    @Json(name = "imageTask")
-//    val image: String,
+    @Json(name = "strDateTask")
+    val date: String = LocalDateTime.now().toLocalDate().toString(),
 
-//    @Json(name = "strDateTask")
-//    val date: String,
+    @Json(name = "strDurationTask")
+    val duration: Int = 0,
 
-//    @Json(name = "strDurationTask")
-//    val addInfo: String
+    @Json(name = "strDescriptionTask")
+    val description: String = "No Description",
+
+    @Json(name = "strNotesTask")
+    val notes: String = "No Notes"
 
 )

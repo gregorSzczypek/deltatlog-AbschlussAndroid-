@@ -1,55 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:alpha="1"
-    app:cardBackgroundColor="@color/bg_high_sat"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="10dp"
-    tools:layout_editor_absoluteX="1dp"
-    tools:layout_editor_absoluteY="93dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/task_card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/bg_high_sat"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="93dp">
 
-        <ImageView
-            android:id="@+id/list_image"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:adjustViewBounds="true"
-            android:background="@color/btn_alert_high_sat"
-            android:cropToPadding="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/list_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_image"
-            tools:text="Taskname" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/list_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_scroll_view"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="Taskname" />
 
-</com.google.android.material.card.MaterialCardView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="0dp"
+                android:clipToPadding="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@id/list_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="10"
+                tools:listitem="@layout/list_item_task_attr" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
+
+<!--<HorizontalScrollView-->
+<!--android:id="@+id/list_scroll_view"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="200dp"-->
+<!--android:orientation="horizontal"-->
+<!--android:background="@color/borders_high_sat"-->
+<!--app:layout_constraintTop_toTopOf="parent"-->
+<!--android:layout_margin="10dp">-->
+
+<!--<LinearLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="200dp"-->
+<!--    android:layout_margin="10dp"-->
+<!--    android:orientation="vertical">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/task_id"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="ID: 1"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_margin="0dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="22sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/task_date"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Date: 26.04.2023"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:layout_margin="3dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="22sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/task_description"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:layout_margin="3dp"-->
+<!--        android:text="Info: Hallo ich bin ein langer Text der nicht mehr in das Item der recyclerview passtsfsfsfsfsf"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="22sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/task_duration"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:layout_margin="3dp"-->
+<!--        android:text="Current duration: 02:22:13"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="22sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/task_notes"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:layout_margin="3dp"-->
+<!--        android:text="Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes "-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="22sp" />-->
+
+<!--</LinearLayout>-->
+<!--</HorizontalScrollView>-->

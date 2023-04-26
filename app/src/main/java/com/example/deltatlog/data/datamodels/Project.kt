@@ -3,6 +3,7 @@ package com.example.apicalls.data.datamodels
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import java.time.LocalDateTime
 
 @Entity
 data class Project(
@@ -14,22 +15,28 @@ data class Project(
     @Json(name = "strNameProject")
     val name: String,
 
-    @Json(name = "strNameEmployerProject")
-    val nameEmployer: String,
+    @Json(name = "strCustomerProject")
+    val nameCustomer: String,
 
     @Json(name = "intColorProject")
-    val severityColor: Int,
+    val color: String = "#ffffff",
 
-//    @Json(name = "imageProject")
+//    @Json(name = "imageProject") (??)
 //    val image: String,
 
     @Json(name = "strDateProject")
-    val date: String,
+    val date: String = LocalDateTime.now().toLocalDate().toString(),
 
-    @Json(name = "strAdditionalInfoProject")
-    val addInfo: String,
+    @Json(name = "strDescriptionProject")
+    val description: String,
 
     @Json(name = "listTasksProject")
-    val tasks: List<Task>
+    val tasks: List<Task>,
+
+    @Json(name = "intNumberOfTasks")
+    val numberOfTasks: Int = tasks.size,
+
+//    @Json(name = "intNumberOfOpenTasks")
+//    val numberOfOpenTasks: Int = 0
 
 )

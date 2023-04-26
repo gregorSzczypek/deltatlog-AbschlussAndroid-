@@ -28,11 +28,11 @@ class HomeFragment : Fragment() {
             false
         )
 
-        val projects = Datasource().loadProjects() // Wir holen unsere Liste mit unseren Objekten aus Datasource
-        binding.projectList.adapter = ProjectAdapter(projects) // Wir übergeben der RV unseren Adapter
+        val projects = Datasource().loadProjects() // load projects from Datasource (gor testing only)
+        binding.projectList.adapter = ProjectAdapter(projects) // attach adapter to recycler view
 
-        binding.projectList.setHasFixedSize(true) // optional - legt fest dass das item layout sich nicht verändert
-        // Dies verhindert eine ständige neu Berechnung der Layout Dimensionen und macht die RV schlanker und performanter
+        binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
+        // performance
 
 
         // Inflate the layout for this fragment

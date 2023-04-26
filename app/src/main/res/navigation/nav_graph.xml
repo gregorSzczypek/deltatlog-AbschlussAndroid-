@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/projectDetailFragment"
-        android:name="com.example.deltatlog.ui.ProjectDetailFragment"
+        android:name="com.example.deltatlog.ui.TaskFragment"
         android:label="ProjectDetailFragment" >
         <action
             android:id="@+id/action_projectDetailFragment_to_homeFragment"
