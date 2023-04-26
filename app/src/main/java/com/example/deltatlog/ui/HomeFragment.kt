@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import com.example.apicalls.adapter.ProjectAdapter
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentHomeBinding
-import com.google.firebase.auth.FirebaseAuth
 
 
 class HomeFragment : Fragment() {
@@ -30,7 +29,7 @@ class HomeFragment : Fragment() {
         )
 
         val projects = Datasource().loadProjects() // Wir holen unsere Liste mit unseren Objekten aus Datasource
-        binding.projectList.adapter = ProjectAdapter(this, projects) // Wir übergeben der RV unseren Adapter
+        binding.projectList.adapter = ProjectAdapter(projects) // Wir übergeben der RV unseren Adapter
 
         binding.projectList.setHasFixedSize(true) // optional - legt fest dass das item layout sich nicht verändert
         // Dies verhindert eine ständige neu Berechnung der Layout Dimensionen und macht die RV schlanker und performanter

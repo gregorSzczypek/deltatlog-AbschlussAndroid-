@@ -17,10 +17,6 @@ class Datasource {
                     Task(
                         1,
                         "Task 1"
-                    ),
-                    Task(
-                        2,
-                        "Task 2"
                     )
                 )
             ),
@@ -57,6 +53,10 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
@@ -75,6 +75,14 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
@@ -93,6 +101,18 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
@@ -111,6 +131,22 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
@@ -129,6 +165,30 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
@@ -147,9 +207,582 @@ class Datasource {
                     Task(
                         2,
                         "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                9,
+                "Project 9",
+                "Employer 9",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                10,
+                "Project 10",
+                "Employer 10",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                11,
+                "Project 11",
+                "Employer 11",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                12,
+                "Project 12",
+                "Employer 12",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                13,
+                "Project 13",
+                "Employer 13",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                14,
+                "Project 14",
+                "Employer 14",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                15,
+                "Project 15",
+                "Employer 15",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    )
+                )
+            ),
+            Project(
+                16,
+                "Project 16",
+                "Employer 16",
+                R.color.btn_alert_low_sat,
+                "01.01.2023",
+                "no additional Info",
+                listOf(
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        2,
+                        "Task 2"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
+                    ),
+                    Task(
+                        1,
+                        "Task 1"
                     )
                 )
             ),
         )
+    }
+
+    fun loadTasks (project: Project): List<Task> {
+        val tasks = project.tasks
+        return tasks
     }
 }

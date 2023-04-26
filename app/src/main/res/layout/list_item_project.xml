@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/project_card_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="170dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:alpha="0.8"
-    app:cardBackgroundColor="#FFF1F1"
+    android:layout_margin="10dp"
+    android:alpha="1"
+    app:cardBackgroundColor="@color/bg_high_sat"
     app:cardCornerRadius="10dp"
-    app:cardElevation="5dp"
+    app:cardElevation="10dp"
     tools:layout_editor_absoluteX="1dp"
     tools:layout_editor_absoluteY="93dp">
 
@@ -25,15 +27,15 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:adjustViewBounds="true"
+            android:background="@color/btn_alert_high_sat"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            android:background="@color/btn_alert_high_sat"/>
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/list_text"
