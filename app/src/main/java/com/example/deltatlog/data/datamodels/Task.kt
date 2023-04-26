@@ -1,4 +1,3 @@
-package com.example.apicalls.data.datamodels
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

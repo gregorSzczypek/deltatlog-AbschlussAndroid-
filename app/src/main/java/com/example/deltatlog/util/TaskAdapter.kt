@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.apicalls.adapter.TaskAttrAdapter
-import com.example.apicalls.data.datamodels.Task
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.example.deltatlog.databinding.FragmentTaskBinding

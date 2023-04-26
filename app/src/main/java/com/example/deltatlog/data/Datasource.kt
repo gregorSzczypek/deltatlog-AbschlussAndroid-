@@ -1,5 +1,4 @@
-import com.example.apicalls.data.datamodels.Project
-import com.example.apicalls.data.datamodels.Task
+
 import com.example.deltatlog.R
 
 class Datasource {
