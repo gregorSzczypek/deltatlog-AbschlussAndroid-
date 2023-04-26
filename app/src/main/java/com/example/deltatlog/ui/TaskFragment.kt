@@ -1,6 +1,7 @@
 package com.example.deltatlog.ui
 
 import Datasource
+import TaskAdapter
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,9 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import com.example.apicalls.adapter.TaskAdapter
+//import com.example.apicalls.adapter.TaskAdapter
 import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentTaskBinding
@@ -49,8 +51,8 @@ class TaskFragment : Fragment() {
         binding.taskList.setHasFixedSize(true) // optional - legt fest dass das item layout sich nicht verändert
         // Dies verhindert eine ständige neu Berechnung der Layout Dimensionen und macht die RV schlanker und performanter
 
-        val helperTask: SnapHelper = PagerSnapHelper()
-        helperTask.attachToRecyclerView(binding.taskList)
+//        val helperTask: SnapHelper = LinearSnapHelper()
+//        helperTask.attachToRecyclerView(binding.taskList)
 
         // Inflate the layout for this fragment
         return binding.root

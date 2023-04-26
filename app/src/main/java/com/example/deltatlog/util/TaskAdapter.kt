@@ -1,5 +1,3 @@
-package com.example.apicalls.adapter
-
 import Datasource
 import android.content.Context
 import android.graphics.Color
@@ -9,13 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.apicalls.data.datamodels.Task
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentHomeBinding
@@ -39,15 +40,9 @@ class TaskAdapter(
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val scrollView = view.findViewById<HorizontalScrollView>(R.id.list_image)
         val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)
         val textViewName = view.findViewById<TextView>(R.id.list_text)
         val rvTaskAttr = view.findViewById<RecyclerView>(R.id.list_scroll_view)
-//        val textViewId = view.findViewById<TextView>(R.id.task_id)
-//        val textViewDate = view.findViewById<TextView>(R.id.task_date)
-//        val textViewDescription = view.findViewById<TextView>(R.id.task_description)
-//        val textViewDuration = view.findViewById<TextView>(R.id.task_duration)
-//        val textViewNotes = view.findViewById<TextView>(R.id.task_notes)
     }
 
     // create new viewholders
@@ -64,7 +59,6 @@ class TaskAdapter(
 
     // recyclingprocess
     // set parameters
-
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
@@ -78,6 +72,7 @@ class TaskAdapter(
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        // Setup of second recyclerview in the item of the current recyclerview
         holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
         val taskAttrAdapter = TaskAttrAdapter(attrList)
         holder.rvTaskAttr.adapter = taskAttrAdapter
