@@ -1,15 +1,16 @@
-
+package com.example.deltatlog.data.datamodels
+import Task
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
-@Entity
+@Entity(tableName = "projectTable")
 data class Project(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @Json(name = "idProject")
-    val id: Long,
+    val id: Long = 0,
 
     @Json(name = "strNameProject")
     val name: String,
@@ -27,13 +28,13 @@ data class Project(
     val date: String = LocalDateTime.now().toLocalDate().toString(),
 
     @Json(name = "strDescriptionProject")
-    val description: String,
+    val description: String
 
-    @Json(name = "listTasksProject")
-    val tasks: List<Task>,
+//    @Json(name = "listTasksProject")
+//    val tasks: List<Task>,
 
-    @Json(name = "intNumberOfTasks")
-    val numberOfTasks: Int = tasks.size,
+//    @Json(name = "intNumberOfTasks")
+//    val numberOfTasks: Int = tasks.size,
 
 //    @Json(name = "intNumberOfOpenTasks")
 //    val numberOfOpenTasks: Int = 0

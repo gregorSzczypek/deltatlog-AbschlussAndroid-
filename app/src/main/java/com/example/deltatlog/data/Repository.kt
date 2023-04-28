@@ -1,4 +1,39 @@
 package com.example.deltatlog.data
 
-class Repository {
+import android.util.Log
+import androidx.lifecycle.LiveData
+import com.example.deltatlog.data.datamodels.Project
+import com.example.deltatlog.data.local.ProjectDatabase
+
+val TAG = "Repository"
+
+class Repository(private val database: ProjectDatabase) {
+
+    val projectList: LiveData<List<Project>> = database.projectDatabaseDao.getAll()
+
+    suspend fun insert(project: Project) {
+        try {
+            database.projectDatabaseDao.insert(project)
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to insert into Database: $e")
+        }
+    }
+
+    //todo: Update
+    suspend fun update(project: Project) {
+        try {
+            database.projectDatabaseDao.update(project)
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to update Database: $e")
+        }
+    }
+
+    //todo: delete
+    suspend fun delete(project: Project) {
+        try {
+            database.projectDatabaseDao.deleteById(project.id)
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to delete Database entry: $e")
+        }
+    }
 }

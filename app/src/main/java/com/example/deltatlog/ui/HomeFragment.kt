@@ -39,9 +39,6 @@ class HomeFragment : Fragment() {
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
         // performance
 
-
-
-
         // Inflate the layout for this fragment
         return binding.root
     }

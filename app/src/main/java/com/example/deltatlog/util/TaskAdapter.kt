@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -41,6 +42,7 @@ class TaskAdapter(
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)
         val textViewName = view.findViewById<TextView>(R.id.list_text)
+        val textDate = view.findViewById<EditText>(R.id.edit_text_date)
         val rvTaskAttr = view.findViewById<RecyclerView>(R.id.list_scroll_view)
     }
 
@@ -62,7 +64,9 @@ class TaskAdapter(
 
         val item = dataset[position]
 
-        holder.textViewName.text = item.name
+        holder.textViewName.text = item.name.keys.toList()[0]
+        holder.textDate.setText(item.date)
+
         holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
 
         val attrList = Datasource().loadTaskAttributes(item)

@@ -8,29 +8,31 @@ import java.text.DateFormat.getDateInstance
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@Entity
+//@Entity
 data class Task(
 
-    @PrimaryKey
-    @Json(name = "idTask")
-    val id: Long,
+//    @PrimaryKey(autoGenerate = true)
+//    @Json(name = "idTask")
+//    val id: Long,
 
-    @Json(name = "strNameTask")
-    val name: String = "Unnamed",
+    @Json(name = "customId")
+    val customId: Map<String, Boolean> = mutableMapOf("1" to false, "customId" to true),
 
-    @Json(name = "intColorTask")
-    val color: String = "#ffffff",
+    @Json(name = "NameTask")
+    val name: Map<String, Boolean> = mutableMapOf("Unnamed" to true, "name" to true),
 
-    @Json(name = "strDateTask")
+    @Json(name = "ColorTask")
+    val color: String = "#163036",
+
+    @Json(name = "DateTask")
     val date: String = LocalDateTime.now().toLocalDate().toString(),
 
-    @Json(name = "strDurationTask")
-    val duration: Int = 0,
+    @Json(name = "DurationTask")
+    val duration: Map<String, Boolean> = mutableMapOf("0" to false, "duration" to true),
 
-    @Json(name = "strDescriptionTask")
-    val description: String = "No Description",
+    @Json(name = "DescriptionTask")
+    val description: Map<String, Boolean> = mutableMapOf("No Description" to true, "description" to true),
 
-    @Json(name = "strNotesTask")
-    val notes: String = "No Notes"
-
+    @Json(name = "NotesTask")
+    val notes: Map<String, Boolean> = mutableMapOf("No Notes" to true, "notes" to true)
 )

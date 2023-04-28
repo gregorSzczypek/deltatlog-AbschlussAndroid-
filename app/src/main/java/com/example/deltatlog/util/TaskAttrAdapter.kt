@@ -2,6 +2,7 @@ package com.example.apicalls.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import com.google.android.material.card.MaterialCardView
 
 class TaskAttrAdapter(
 
-    private var dataset: List<String>
+    private var dataset: List<Map<String, Boolean>>
 ) : RecyclerView.Adapter<TaskAttrAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
@@ -38,7 +39,19 @@ class TaskAttrAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
-        holder.tvAttr.text = item
+        var prefix = ""
+
+        Log.i("AttrItem", item.keys.toList().toString())
+
+        when (item.keys.toList()[1]) {
+            "customId" -> prefix = "Custom ID: "
+            "duration" -> prefix = "Duration: "
+            "description" -> prefix = "Description: "
+            "notes" -> prefix = "Notes: "
+        }
+
+        holder.tvAttr.text = "$prefix ${item.keys.toList()[0]}"
+        holder.tvAttr.isEnabled = item.values.toList()[0] == true
     }
 
     // get size of list for viewholder

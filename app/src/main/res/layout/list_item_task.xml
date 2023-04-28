@@ -23,12 +23,13 @@
             android:layout_height="match_parent">
 
 
-            <TextView
+            <EditText
                 android:id="@+id/list_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:enabled="true"
                 android:gravity="center"
                 android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -44,8 +45,8 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="0dp"
                 android:clipToPadding="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="@id/list_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -54,76 +55,18 @@
                 tools:itemCount="10"
                 tools:listitem="@layout/list_item_task_attr" />
 
+            <EditText
+                android:id="@+id/edit_text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:hint="Date"
+                android:inputType="date"
+                android:text="23.04.2023"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
-
-<!--<HorizontalScrollView-->
-<!--android:id="@+id/list_scroll_view"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="200dp"-->
-<!--android:orientation="horizontal"-->
-<!--android:background="@color/borders_high_sat"-->
-<!--app:layout_constraintTop_toTopOf="parent"-->
-<!--android:layout_margin="10dp">-->
-
-<!--<LinearLayout-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="200dp"-->
-<!--    android:layout_margin="10dp"-->
-<!--    android:orientation="vertical">-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/task_id"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="ID: 1"-->
-<!--        android:paddingRight="20dp"-->
-<!--        android:gravity="center"-->
-<!--        android:layout_margin="0dp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="22sp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/task_date"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Date: 26.04.2023"-->
-<!--        android:paddingRight="20dp"-->
-<!--        android:layout_margin="3dp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="22sp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/task_description"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="center"-->
-<!--        android:paddingRight="20dp"-->
-<!--        android:layout_margin="3dp"-->
-<!--        android:text="Info: Hallo ich bin ein langer Text der nicht mehr in das Item der recyclerview passtsfsfsfsfsf"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="22sp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/task_duration"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingRight="20dp"-->
-<!--        android:layout_margin="3dp"-->
-<!--        android:text="Current duration: 02:22:13"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="22sp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/task_notes"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingRight="20dp"-->
-<!--        android:layout_margin="3dp"-->
-<!--        android:text="Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes Notes "-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="22sp" />-->
-
-<!--</LinearLayout>-->
-<!--</HorizontalScrollView>-->
