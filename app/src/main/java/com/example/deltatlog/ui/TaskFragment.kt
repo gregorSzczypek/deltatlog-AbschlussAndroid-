@@ -1,6 +1,6 @@
 package com.example.deltatlog.ui
 
-import Task
+import ProjectAdapter
 import TaskAdapter
 import android.app.AlertDialog
 import android.os.Bundle
@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -19,12 +21,15 @@ import androidx.recyclerview.widget.SnapHelper
 //import com.example.apicalls.adapter.TaskAdapter
 import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.deltatlog.R
+import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.databinding.ListItemTaskBinding
 
 
 class TaskFragment : Fragment() {
 
+    private val viewModel: SharedViewModel by viewModels()
     private lateinit var binding: FragmentTaskBinding
 
     private var projectId: Long = 0
@@ -40,6 +45,11 @@ class TaskFragment : Fragment() {
             container,
             false
         )
+
+        // damit LiveData automatisch observed wird vom layout
+        binding.lifecycleOwner = this.viewLifecycleOwner
+
+        viewModel.loadTaskData()
 
         // Hole die contactId aus den Argumenten
         projectId = requireArguments().getLong("projectId")
@@ -68,6 +78,15 @@ class TaskFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        val recyclerView = binding.taskList
+
+        viewModel.taskList.observe(
+            viewLifecycleOwner,
+            Observer {
+                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it)
+            }
+        )
+
         binding.floatingActionButton.setOnClickListener{
 
             val builder = AlertDialog.Builder(context)
@@ -79,8 +98,9 @@ class TaskFragment : Fragment() {
                 setTitle("New Task")
                 setPositiveButton("Ok") {dialog, which ->
                     val newTaskName = editText.text.toString()
-                    val newTask = Task(name = mapOf(newTaskName to false))
+                    val newTask = Task(name = newTaskName)
                     // TODO Save instance of Task
+                    viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("Cancel") {dialog, which ->

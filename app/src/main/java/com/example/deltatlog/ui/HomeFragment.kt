@@ -1,5 +1,6 @@
 package com.example.deltatlog.ui
 
+import ProjectAdapter
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -13,7 +14,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.apicalls.adapter.ProjectAdapter
 import com.example.deltatlog.MainActivity
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel

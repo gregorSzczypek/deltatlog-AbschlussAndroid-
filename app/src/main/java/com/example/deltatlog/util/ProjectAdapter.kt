@@ -1,4 +1,4 @@
-package com.example.apicalls.adapter
+
 
 import android.app.AlertDialog
 import android.content.Context
@@ -80,6 +80,7 @@ class ProjectAdapter(
                 when (menuItem.title) {
                     "Edit Project" -> {
                         // Handle edit project action
+                        // TODO edit actions should be implemented here
                         true
                     }
                     "Delete Project" -> {
@@ -88,7 +89,6 @@ class ProjectAdapter(
                             .setTitle("Confirm Project Deletion")
                             .setMessage("Are you sure you want to delete this project?")
                             .setPositiveButton("Yes") { dialog, _ ->
-                                // Handle delete project action
                                 sharedViewModel.deleteProject(item)
                                 Toast.makeText(context, "Project ${item.name} deleted", Toast.LENGTH_LONG).show()
                                 dialog.dismiss()

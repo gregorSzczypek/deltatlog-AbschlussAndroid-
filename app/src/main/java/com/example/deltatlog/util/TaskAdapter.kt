@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.deltatlog.R
+import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.databinding.ListItemTaskBinding
@@ -25,8 +27,8 @@ import com.google.android.material.card.MaterialCardView
 import java.security.AccessController.getContext
 
 class TaskAdapter(
-
-    private val context: Context,
+    private var sharedViewModel: SharedViewModel,
+    private var context: Context,
     private var dataset: List<Task>
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
@@ -63,7 +65,7 @@ class TaskAdapter(
 
         val item = dataset[position]
 
-        holder.textViewName.text = item.name.keys.toList()[0]
+        holder.textViewName.text = item.name
         holder.textDate.setText(item.date)
 
         holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))

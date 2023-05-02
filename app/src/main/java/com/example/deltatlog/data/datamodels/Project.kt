@@ -1,5 +1,5 @@
 package com.example.deltatlog.data.datamodels
-import Task
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
@@ -15,20 +15,20 @@ data class Project(
     @Json(name = "strNameProject")
     val name: String,
 
-//    @Json(name = "strCustomerProject")
-//    val nameCustomer: String,
-//
-//    @Json(name = "intColorProject")
-//    val color: String = "#ffffff",
+    @Json(name = "strCustomerProject")
+    val nameCustomer: String = "No customer name",
+
+    @Json(name = "intColorProject")
+    val color: String = "#ffffff",
 
 //    @Json(name = "imageProject") (??)
 //    val image: String,
 
-//    @Json(name = "strDateProject")
-//    val date: String = LocalDateTime.now().toLocalDate().toString(),
-//
-//    @Json(name = "strDescriptionProject")
-//    val description: String
+    @Json(name = "strDateProject")
+    val date: String = LocalDateTime.now().toLocalDate().toString(),
+
+    @Json(name = "strDescriptionProject")
+    val description: String = "No description",
 
 //    @Json(name = "listTasksProject")
 //    val tasks: List<Task>,
