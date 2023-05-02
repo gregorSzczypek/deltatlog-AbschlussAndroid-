@@ -7,9 +7,9 @@ class Datasource {
 
             Project(
                 name = "Project1",
-                nameCustomer = "Employer",
-                color = "#ffffff",
-                description = "no additional Info",
+//                nameCustomer = "Employer",
+//                color = "#ffffff",
+//                description = "no additional Info",
 //                listOf(
 //                    Task(1),
 //                    Task(2),
@@ -23,9 +23,9 @@ class Datasource {
             ),
             Project(
                 name = "Project2",
-                nameCustomer = "Employer",
-                color = "#ffffff",
-                description = "no additional Info",
+//                nameCustomer = "Employer",
+//                color = "#ffffff",
+//                description = "no additional Info",
 //                listOf(
 //                    Task(1),
 //                    Task(2),
@@ -39,9 +39,9 @@ class Datasource {
             ),
             Project(
                 name = "Project3",
-                nameCustomer = "Employer",
-                color = "#ffffff",
-                description = "no additional Info",
+//                nameCustomer = "Employer",
+//                color = "#ffffff",
+//                description = "no additional Info",
 //                listOf(
 //                    Task(1),
 //                    Task(2),

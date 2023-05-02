@@ -1,12 +1,13 @@
 package com.example.deltatlog.ui
 
 import Datasource
-import android.content.Context
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.apicalls.adapter.ProjectAdapter
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -68,6 +70,30 @@ class HomeFragment : Fragment() {
                 ).show()
             }
             true
+        }
+
+        binding.floatingActionButton.setOnClickListener{
+
+            val builder = AlertDialog.Builder(context)
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_project, null)
+            val editText = dialogLayout.findViewById<EditText>(R.id.input_project_name)
+
+            with(builder) {
+                setTitle("New Project")
+                setPositiveButton("Ok") {dialog, which ->
+                    val newProjectName = editText.text.toString()
+                    val newTask = Project(name = newProjectName)
+                    // TODO Save instance of Project
+                    Toast.makeText(context, "$newProjectName created", Toast.LENGTH_SHORT).show()
+                }
+                setNegativeButton("Cancel") {dialog, which ->
+                    dialog.dismiss()
+                    Toast.makeText(context, "Project creation cancelled by user", Toast.LENGTH_SHORT).show()
+                }
+                setView(dialogLayout)
+                show()
+            }
         }
     }
 }

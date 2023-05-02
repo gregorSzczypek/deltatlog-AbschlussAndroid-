@@ -1,13 +1,17 @@
 package com.example.deltatlog.ui
 
 import Datasource
+import Task
 import TaskAdapter
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -63,6 +67,30 @@ class TaskFragment : Fragment() {
         // BackButton Navigation in Toolbar
         binding.materialToolbar.setNavigationOnClickListener{
             findNavController().navigateUp()
+        }
+
+        binding.floatingActionButton.setOnClickListener{
+
+            val builder = AlertDialog.Builder(context)
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_task, null)
+            val editText = dialogLayout.findViewById<EditText>(R.id.input_project_name)
+
+            with(builder) {
+                setTitle("New Task")
+                setPositiveButton("Ok") {dialog, which ->
+                    val newTaskName = editText.text.toString()
+                    val newTask = Task(name = mapOf(newTaskName to false))
+                    // TODO Save instance of Task
+                    Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()
+                }
+                setNegativeButton("Cancel") {dialog, which ->
+                    dialog.dismiss()
+                    Toast.makeText(context, "Task creation cancelled by user", Toast.LENGTH_SHORT).show()
+                }
+                setView(dialogLayout)
+                show()
+            }
         }
     }
 }
