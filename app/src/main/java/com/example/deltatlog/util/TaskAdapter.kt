@@ -1,4 +1,3 @@
-import Datasource
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -69,7 +68,7 @@ class TaskAdapter(
 
         holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
 
-        val attrList = Datasource().loadTaskAttributes(item)
+//        val attrList = Datasource().loadTaskAttributes(item)
         val taskAttrLayoutManager = LinearLayoutManager(
             holder.rvTaskAttr.context,
             LinearLayoutManager.HORIZONTAL,
@@ -77,8 +76,8 @@ class TaskAdapter(
         )
         // Setup of second recyclerview in the item of the current recyclerview
         holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
-        val taskAttrAdapter = TaskAttrAdapter(attrList)
-        holder.rvTaskAttr.adapter = taskAttrAdapter
+//        val taskAttrAdapter = TaskAttrAdapter(attrList)
+//        holder.rvTaskAttr.adapter = taskAttrAdapter
 
         holder.rvTaskAttr.setHasFixedSize(true)
 

@@ -1,7 +1,7 @@
 package com.example.deltatlog.ui
 
-import Datasource
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.apicalls.adapter.ProjectAdapter
+import com.example.deltatlog.MainActivity
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Project
@@ -44,8 +45,8 @@ class HomeFragment : Fragment() {
 
         viewModel.loadData() // load projects into DB
 
-        val projects = Datasource().loadProjects() // load projects from Datasource (for testing only)
-        binding.projectList.adapter = ProjectAdapter(projects) // attach adapter to recycler view
+//        val projects = Datasource().loadProjects() // load projects from Datasource (for testing only)
+//        binding.projectList.adapter = ProjectAdapter(projects) // attach adapter to recycler view
 
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
         // performance
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
         viewModel.projectList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = ProjectAdapter(it)
+                recyclerView.adapter = ProjectAdapter(viewModel, requireContext(), it)
             }
         )
 
@@ -97,7 +98,6 @@ class HomeFragment : Fragment() {
                 setPositiveButton("Ok") {dialog, which ->
                     val newProjectName = editText.text.toString()
                     val newProject = Project(name = newProjectName)
-                    // TODO Save instance of Project
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectName created", Toast.LENGTH_SHORT).show()
                 }

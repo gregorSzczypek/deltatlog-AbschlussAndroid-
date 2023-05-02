@@ -1,6 +1,5 @@
 package com.example.deltatlog.ui
 
-import Datasource
 import Task
 import TaskAdapter
 import android.app.AlertDialog
@@ -47,7 +46,7 @@ class TaskFragment : Fragment() {
         Log.i("conID", projectId.toString())
 
 //        val project = viewModel.projectList.value?.find { it.id == projectId.toInt() } Später mit live data!!
-        val project = Datasource().loadProjects().find { it.id == projectId }
+//        val project = Datasource().loadProjects().find { it.id == projectId }
 
 //        val tasks = Datasource().loadTasks(project!!) // Wir holen unsere Liste mit unseren Objekten aus Datasource
 //        binding.taskList.adapter = TaskAdapter(requireContext(), tasks) // Wir übergeben die RV unseren Adapter

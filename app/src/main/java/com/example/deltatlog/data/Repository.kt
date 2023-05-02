@@ -1,6 +1,5 @@
 package com.example.deltatlog.data
 
-import Datasource
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.deltatlog.data.datamodels.Project
