@@ -1,6 +1,5 @@
 package com.example.apicalls.adapter
 
-import Project
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
+import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.HomeFragmentDirections
 import com.google.android.material.card.MaterialCardView
 

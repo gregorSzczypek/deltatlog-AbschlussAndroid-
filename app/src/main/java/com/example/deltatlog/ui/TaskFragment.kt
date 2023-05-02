@@ -45,8 +45,8 @@ class TaskFragment : Fragment() {
 //        val project = viewModel.projectList.value?.find { it.id == projectId.toInt() } Später mit live data!!
         val project = Datasource().loadProjects().find { it.id == projectId }
 
-        val tasks = Datasource().loadTasks(project!!) // Wir holen unsere Liste mit unseren Objekten aus Datasource
-        binding.taskList.adapter = TaskAdapter(requireContext(), tasks) // Wir übergeben die RV unseren Adapter
+//        val tasks = Datasource().loadTasks(project!!) // Wir holen unsere Liste mit unseren Objekten aus Datasource
+//        binding.taskList.adapter = TaskAdapter(requireContext(), tasks) // Wir übergeben die RV unseren Adapter
 
         binding.taskList.setHasFixedSize(true) // optional - legt fest dass das item layout sich nicht verändert
         // Dies verhindert eine ständige neu Berechnung der Layout Dimensionen und macht die RV schlanker und performanter

@@ -12,6 +12,9 @@ import com.example.deltatlog.data.datamodels.Project
 interface ProjectDatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(projects: List<Project>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(project: Project)
 
     //ToDo: Update

@@ -1,15 +1,33 @@
 package com.example.deltatlog.data
 
+import Datasource
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.ProjectDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 val TAG = "Repository"
 
 class Repository(private val database: ProjectDatabase) {
 
     val projectList: LiveData<List<Project>> = database.projectDatabaseDao.getAll()
+
+    suspend fun getProjects() {
+        withContext(Dispatchers.IO) {
+            val newProjectList = Datasource().loadProjects()
+            Log.i("Projects", newProjectList.toString())
+            database.projectDatabaseDao.insertAll(newProjectList)
+        }
+    }
+
+//    suspend fun getProjects() {
+//        withContext(Dispatchers.IO) {
+//            val newDrinkList = api.retrofitService.getDrinkList().drinks
+//            database.drinkDatabaseDao.insertAll(newDrinkList)
+//        }
+//    }
 
     suspend fun insert(project: Project) {
         try {

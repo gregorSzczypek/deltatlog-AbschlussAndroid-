@@ -11,6 +11,10 @@ import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getDatabase
 import kotlinx.coroutines.launch
 
+const val TAG = "SharedViewModel"
+
+enum class ApiStatus { LOADING, ERROR, DONE }
+
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = getDatabase(application)
@@ -18,14 +22,34 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     val projectList = repository.projectList
 
-    private val _complete = MutableLiveData<Boolean>()
-    val complete: LiveData<Boolean>
-        get() = _complete
+//    init {
+//        loadData()
+//    }
+
+    private val _loading = MutableLiveData<ApiStatus>()
+    val loading: LiveData<ApiStatus>
+        get() = _loading
+
+    fun loadData() {
+        viewModelScope.launch {
+            try {
+                repository.getProjects()
+                _loading.value = ApiStatus.DONE
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading Data: $e")
+                if (projectList.value.isNullOrEmpty()) {
+                    _loading.value = ApiStatus.ERROR
+                } else {
+                    _loading.value = ApiStatus.DONE
+                }
+            }
+        }
+    }
 
     fun insertProject(project: Project) {
         viewModelScope.launch {
             repository.insert(project)
-            _complete.value = true
+//            _loading.value = true
         }
     }
 
@@ -33,7 +57,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     fun updateProject(project: Project) {
         viewModelScope.launch {
             repository.update(project)
-            _complete.value = true
+//            _loading.value = true
         }
     }
 
@@ -42,12 +66,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${project.id}")
             repository.delete(project)
-            _complete.value = true
+//            _loading.value = true
         }
     }
 
     //todo: unset complete
     fun unsetComplete() {
-        _complete.value = false
+//        _loading.value = false
     }
 }

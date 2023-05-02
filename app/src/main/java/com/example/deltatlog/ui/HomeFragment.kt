@@ -9,15 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.apicalls.adapter.ProjectAdapter
 import com.example.deltatlog.R
+import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
 class HomeFragment : Fragment() {
 
+    private val viewModel: SharedViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
@@ -33,7 +36,9 @@ class HomeFragment : Fragment() {
             false
         )
 
-        val projects = Datasource().loadProjects() // load projects from Datasource (gor testing only)
+        viewModel.loadData() // load projects into DB
+
+        val projects = Datasource().loadProjects() // load projects from Datasource (for testing only)
         binding.projectList.adapter = ProjectAdapter(projects) // attach adapter to recycler view
 
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view

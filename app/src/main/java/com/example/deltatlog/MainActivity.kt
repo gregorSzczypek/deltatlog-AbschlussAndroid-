@@ -20,6 +20,11 @@ class MainActivity : AppCompatActivity() {
 //        setupActionBarWithNavController(navController)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
