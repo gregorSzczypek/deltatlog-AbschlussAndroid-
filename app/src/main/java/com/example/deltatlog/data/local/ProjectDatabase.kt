@@ -12,7 +12,7 @@ import com.example.deltatlog.data.datamodels.Project
  *  RoomDatabase for storing Projects
  */
 
-@Database(entities = [Project::class], version = 1)
+@Database(entities = [Project::class], version = 2)
 abstract class ProjectDatabase : RoomDatabase() {
 
     abstract val projectDatabaseDao: ProjectDatabaseDao
@@ -29,7 +29,9 @@ fun getDatabase(context: Context): ProjectDatabase {
                 ProjectDatabase::class.java,
                 "project_database"
             )
+                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
+
         }
     }
     Log.i("DatabaseBuilder", "HERE BUILDING DB")

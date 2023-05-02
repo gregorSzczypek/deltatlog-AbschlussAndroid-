@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.apicalls.adapter.ProjectAdapter
 import com.example.deltatlog.R
@@ -37,6 +38,9 @@ class HomeFragment : Fragment() {
             container,
             false
         )
+
+        // damit LiveData automatisch observed wird vom layout
+        binding.lifecycleOwner = this.viewLifecycleOwner
 
         viewModel.loadData() // load projects into DB
 
@@ -72,6 +76,15 @@ class HomeFragment : Fragment() {
             true
         }
 
+        val recyclerView = binding.projectList
+
+        viewModel.projectList.observe(
+            viewLifecycleOwner,
+            Observer {
+                recyclerView.adapter = ProjectAdapter(it)
+            }
+        )
+
         binding.floatingActionButton.setOnClickListener{
 
             val builder = AlertDialog.Builder(context)
@@ -83,8 +96,9 @@ class HomeFragment : Fragment() {
                 setTitle("New Project")
                 setPositiveButton("Ok") {dialog, which ->
                     val newProjectName = editText.text.toString()
-                    val newTask = Project(name = newProjectName)
+                    val newProject = Project(name = newProjectName)
                     // TODO Save instance of Project
+                    viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectName created", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("Cancel") {dialog, which ->
