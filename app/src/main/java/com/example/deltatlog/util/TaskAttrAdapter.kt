@@ -14,7 +14,7 @@ import com.google.android.material.card.MaterialCardView
 
 class TaskAttrAdapter(
 
-    private var dataset: List<Map<String, Boolean>>
+    private var dataset: List<String>
 ) : RecyclerView.Adapter<TaskAttrAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
@@ -41,17 +41,17 @@ class TaskAttrAdapter(
         val item = dataset[position]
         var prefix = ""
 
-        Log.i("AttrItem", item.keys.toList().toString())
+//        Log.i("AttrItem", item.keys.toList().toString())
 
-        when (item.keys.toList()[1]) {
-            "customId" -> prefix = "Custom ID: "
-            "duration" -> prefix = "Duration: "
-            "description" -> prefix = "Description: "
-            "notes" -> prefix = "Notes: "
-        }
+//        when (item.keys.toList()[1]) {
+//            "customId" -> prefix = "Custom ID: "
+//            "duration" -> prefix = "Duration: "
+//            "description" -> prefix = "Description: "
+//            "notes" -> prefix = "Notes: "
+//        }
 
-        holder.tvAttr.text = "$prefix ${item.keys.toList()[0]}"
-        holder.tvAttr.isEnabled = item.values.toList()[0] == true
+        holder.tvAttr.text = item
+//        holder.tvAttr.isEnabled = item.values.toList()[0] == true
     }
 
     // get size of list for viewholder

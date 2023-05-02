@@ -99,7 +99,6 @@ class TaskFragment : Fragment() {
                 setPositiveButton("Ok") {dialog, which ->
                     val newTaskName = editText.text.toString()
                     val newTask = Task(name = newTaskName)
-                    // TODO Save instance of Task
                     viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()
                 }

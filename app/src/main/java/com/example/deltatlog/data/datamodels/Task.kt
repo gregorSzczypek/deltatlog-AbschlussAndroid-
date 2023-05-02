@@ -27,12 +27,12 @@ data class Task(
     @Json(name = "DateTask")
     val date: String = LocalDateTime.now().toLocalDate().toString(),
 
-//    @Json(name = "DurationTask")
-//    val duration: Map<String, Boolean> = mutableMapOf("0" to false, "duration" to true),
+    @Json(name = "DurationTask")
+    val duration: Long = 0,
 
-//    @Json(name = "DescriptionTask")
-//    val description: Map<String, Boolean> = mutableMapOf("No Description" to true, "description" to true),
+    @Json(name = "DescriptionTask")
+    val description: String = "No Description",
 
-//    @Json(name = "NotesTask")
-//    val notes: Map<String, Boolean> = mutableMapOf("No Notes" to true, "notes" to true)
+    @Json(name = "NotesTask")
+    val notes: String = "No Notes"
 )

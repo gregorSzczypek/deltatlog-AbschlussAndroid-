@@ -70,16 +70,17 @@ class TaskAdapter(
 
         holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
 
-//        val attrList = Datasource().loadTaskAttributes(item)
+        val attrList = listOf<String>(item.name, item.description, item.notes, item.id.toString())
         val taskAttrLayoutManager = LinearLayoutManager(
             holder.rvTaskAttr.context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
+
         // Setup of second recyclerview in the item of the current recyclerview
         holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
-//        val taskAttrAdapter = TaskAttrAdapter(attrList)
-//        holder.rvTaskAttr.adapter = taskAttrAdapter
+        val taskAttrAdapter = TaskAttrAdapter(attrList)
+        holder.rvTaskAttr.adapter = taskAttrAdapter
 
         holder.rvTaskAttr.setHasFixedSize(true)
 
