@@ -1,5 +1,6 @@
 package com.example.apicalls.adapter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
@@ -7,23 +8,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
+import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.data.datamodels.Task
 import com.google.android.material.card.MaterialCardView
 
 class TaskAttrAdapter(
 
+    private var taskList: List<Task>,
+    private var taskId: Long,
+    private var sharedViewModel: SharedViewModel,
+    private var context: Context,
     private var dataset: List<String>
 ) : RecyclerView.Adapter<TaskAttrAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val tvAttr = view.findViewById<TextView>(R.id.list_text)
+        val cardView = view.findViewById<CardView>(R.id.taskAttr_card_view)
+        val prefixText = view.findViewById<TextView>(R.id.task_prefix)
     }
 
     // create new viewholders
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskAttrAdapter.ItemViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): TaskAttrAdapter.ItemViewHolder {
 
         // inflate item layout
         val adapterLayout = LayoutInflater.from(parent.context)
@@ -39,19 +54,61 @@ class TaskAttrAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
+
+
         var prefix = ""
 
-//        Log.i("AttrItem", item.keys.toList().toString())
 
-//        when (item.keys.toList()[1]) {
-//            "customId" -> prefix = "Custom ID: "
-//            "duration" -> prefix = "Duration: "
-//            "description" -> prefix = "Description: "
-//            "notes" -> prefix = "Notes: "
-//        }
+        when (position) {
+            0 -> prefix = "Duration: "
+            1 -> prefix = "Description: "
+            2 -> prefix = "Notes: "
+            3 -> prefix = "ID: "
+        }
 
+        holder.prefixText.text = prefix
         holder.tvAttr.text = item
-//        holder.tvAttr.isEnabled = item.values.toList()[0] == true
+        holder.tvAttr.isEnabled = false
+
+        holder.cardView.setOnLongClickListener {
+            if (position == 1 || position == 2) {
+                val menuItems = arrayOf("Edit Data")
+
+                val popupMenu = PopupMenu(context, holder.cardView)
+                menuItems.forEach { popupMenu.menu.add(it) }
+
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.title) {
+                        "Edit Data" -> {
+                            // Handle edit task action
+                            holder.tvAttr.isEnabled = true
+                            val currentTask = taskList.find { it.id == taskId }!!
+
+                            holder.cardView.setOnClickListener {
+                                when (position) {
+                                    // Change description
+                                    1 -> {
+                                        currentTask.description = holder.tvAttr.text.toString()
+                                    }
+                                    // Change Notes
+                                    2 -> {
+                                        currentTask.notes = holder.tvAttr.text.toString()
+                                    }
+                                }
+
+                                sharedViewModel.updateTask(currentTask)
+                                holder.tvAttr.isEnabled = false
+                            }
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+                popupMenu.show()
+            }
+            true // return true to indicate that the event has been consumed
+        }
     }
 
     // get size of list for viewholder

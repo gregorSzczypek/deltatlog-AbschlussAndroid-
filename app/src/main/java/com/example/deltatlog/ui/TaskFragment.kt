@@ -51,9 +51,9 @@ class TaskFragment : Fragment() {
 
         viewModel.loadTaskData()
 
-        // Hole die contactId aus den Argumenten
+        // Hole die projectId aus den Argumenten
         projectId = requireArguments().getLong("projectId")
-        Log.i("conID", projectId.toString())
+        Log.i("projectID", projectId.toString())
 
 //        val project = viewModel.projectList.value?.find { it.id == projectId.toInt() } Später mit live data!!
 //        val project = Datasource().loadProjects().find { it.id == projectId }
@@ -98,7 +98,10 @@ class TaskFragment : Fragment() {
                 setTitle("New Task")
                 setPositiveButton("Ok") {dialog, which ->
                     val newTaskName = editText.text.toString()
-                    val newTask = Task(name = newTaskName)
+                    val newTask = Task(
+                        name = newTaskName,
+                        projectId = projectId                    )
+
                     viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()
                 }
