@@ -1,3 +1,4 @@
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -6,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.HorizontalScrollView
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
@@ -87,6 +90,44 @@ class TaskAdapter(
         val helperTaskAttr: SnapHelper = PagerSnapHelper()
         holder.rvTaskAttr.setOnFlingListener(null)
         helperTaskAttr.attachToRecyclerView(holder.rvTaskAttr)
+
+        holder.taskCardView.setOnLongClickListener {
+
+            val menuItems = arrayOf("Edit Task", "Delete Task")
+
+            val popupMenu = PopupMenu(context, holder.taskCardView)
+            menuItems.forEach { popupMenu.menu.add(it) }
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.title) {
+                    "Edit Task" -> {
+                        // Handle edit task action
+                        // TODO edit actions should be implemented here
+                        true
+                    }
+                    "Delete Task" -> {
+                        // Handle delete task action
+                        AlertDialog.Builder(context)
+                            .setTitle("Confirm Task Deletion")
+                            .setMessage("Are you sure you want to delete this Task?")
+                            .setPositiveButton("Yes") { dialog, _ ->
+                                sharedViewModel.deleteTask(item)
+                                Toast.makeText(context, "Task ${item.name} deleted", Toast.LENGTH_LONG).show()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("No") { dialog, _ ->
+                                Toast.makeText(context, "Deletion cancelled", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+            true // return true to indicate that the event has been consumed
+        }
 
     }
 
