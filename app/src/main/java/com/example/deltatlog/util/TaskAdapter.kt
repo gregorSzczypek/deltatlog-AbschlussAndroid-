@@ -69,6 +69,7 @@ class TaskAdapter(
         val item = dataset[position]
 
         holder.textViewName.text = item.name
+        holder.textViewName.isEnabled = false
         holder.textDate.setText(item.date)
 
         holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
@@ -100,16 +101,23 @@ class TaskAdapter(
 
         holder.taskCardView.setOnLongClickListener {
 
-            val menuItems = arrayOf("Edit Task", "Delete Task")
+            val menuItems = arrayOf("Rename Task", "Delete Task")
 
             val popupMenu = PopupMenu(context, holder.taskCardView)
             menuItems.forEach { popupMenu.menu.add(it) }
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.title) {
-                    "Edit Task" -> {
-                        // Handle edit task action
-                        // TODO edit actions should be implemented here
+                    "Rename Task" -> {
+                        // Handle Rename task action
+                        // TODO Rename tasks actions should be implemented here
+                        holder.textViewName.isEnabled = true
+
+                        holder.taskCardView.setOnClickListener{
+                            item.name = holder.textViewName.text.toString()
+                            holder.textViewName.isEnabled = false
+                            sharedViewModel.updateTask(item)
+                        }
                         true
                     }
                     "Delete Task" -> {

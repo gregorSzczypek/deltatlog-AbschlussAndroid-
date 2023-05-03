@@ -19,7 +19,7 @@ data class Task(
     val projectId: Long,
 
     @Json(name = "NameTask")
-    val name: String = "Unnamed",
+    var name: String = "Unnamed",
 
     @Json(name = "ColorTask")
     val color: String = "#163036",

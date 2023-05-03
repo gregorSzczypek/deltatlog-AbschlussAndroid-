@@ -3,6 +3,7 @@ package com.example.apicalls.adapter
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -68,45 +69,51 @@ class TaskAttrAdapter(
 
         holder.prefixText.text = prefix
         holder.tvAttr.text = item
-        holder.tvAttr.isEnabled = false
+        holder.tvAttr.isEnabled = true
+//        holder.tvAttr.isFocusable = false
+        holder.tvAttr.isLongClickable = true
 
-        holder.cardView.setOnLongClickListener {
-            if (position == 1 || position == 2) {
-                val menuItems = arrayOf("Edit Data")
 
-                val popupMenu = PopupMenu(context, holder.cardView)
-                menuItems.forEach { popupMenu.menu.add(it) }
 
-                popupMenu.setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.title) {
-                        "Edit Data" -> {
-                            // Handle edit task action
-                            holder.tvAttr.isEnabled = true
-                            val currentTask = taskList.find { it.id == taskId }!!
+        holder.tvAttr.setOnLongClickListener{
+                if (position == 1 || position == 2) {
+                    val menuItems = arrayOf("Edit Data")
 
-                            holder.cardView.setOnClickListener {
-                                when (position) {
-                                    // Change description
-                                    1 -> {
-                                        currentTask.description = holder.tvAttr.text.toString()
+                    val popupMenu = PopupMenu(context, holder.cardView)
+                    menuItems.forEach { popupMenu.menu.add(it) }
+
+                    popupMenu.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.title) {
+                            "Edit Data" -> {
+                                // Handle edit task action
+//                                holder.tvAttr.isFocusable = true
+                                holder.tvAttr.isLongClickable = false
+                                val currentTask = taskList.find { it.id == taskId }!!
+
+                                holder.tvAttr.setOnClickListener {
+                                    when (position) {
+                                        // Change description
+                                        1 -> {
+                                            currentTask.description = holder.tvAttr.text.toString()
+                                        }
+                                        // Change Notes
+                                        2 -> {
+                                            currentTask.notes = holder.tvAttr.text.toString()
+                                        }
                                     }
-                                    // Change Notes
-                                    2 -> {
-                                        currentTask.notes = holder.tvAttr.text.toString()
-                                    }
+
+                                    sharedViewModel.updateTask(currentTask)
+//                                    holder.tvAttr.isFocusable = false
+                                    holder.tvAttr.isLongClickable = true
                                 }
-
-                                sharedViewModel.updateTask(currentTask)
-                                holder.tvAttr.isEnabled = false
+                                true
                             }
-                            true
-                        }
 
-                        else -> false
+                            else -> false
+                        }
                     }
+                    popupMenu.show()
                 }
-                popupMenu.show()
-            }
             true // return true to indicate that the event has been consumed
         }
     }
