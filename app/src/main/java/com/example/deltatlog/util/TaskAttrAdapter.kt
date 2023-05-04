@@ -69,13 +69,13 @@ class TaskAttrAdapter(
 
         holder.prefixText.text = prefix
         holder.tvAttr.text = item
-        holder.tvAttr.isEnabled = true
+        holder.tvAttr.isEnabled = false
 //        holder.tvAttr.isFocusable = false
-        holder.tvAttr.isLongClickable = true
+//        holder.tvAttr.isLongClickable = true
 
 
 
-        holder.tvAttr.setOnLongClickListener{
+        holder.cardView.setOnLongClickListener{
                 if (position == 1 || position == 2) {
                     val menuItems = arrayOf("Edit Data")
 
@@ -87,10 +87,10 @@ class TaskAttrAdapter(
                             "Edit Data" -> {
                                 // Handle edit task action
 //                                holder.tvAttr.isFocusable = true
-                                holder.tvAttr.isLongClickable = false
+                                holder.cardView.isLongClickable = false
                                 val currentTask = taskList.find { it.id == taskId }!!
 
-                                holder.tvAttr.setOnClickListener {
+                                holder.cardView.setOnClickListener {
                                     when (position) {
                                         // Change description
                                         1 -> {

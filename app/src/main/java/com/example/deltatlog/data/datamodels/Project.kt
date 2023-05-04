@@ -6,6 +6,7 @@ import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
 @Entity(tableName = "projectTable")
+
 data class Project(
 
     @PrimaryKey(autoGenerate = true)

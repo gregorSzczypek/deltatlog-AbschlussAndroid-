@@ -1,4 +1,5 @@
 package com.example.deltatlog.data.datamodels
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.common.util.Hex
@@ -9,14 +10,15 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity(tableName = "taskTable")
+
 data class Task(
 
     @PrimaryKey(autoGenerate = true)
     @Json(name = "idTask")
     val id: Long = 0,
 
-    @Json(name = "projectId")
-    val projectId: Long,
+    @Json(name = "taskProjectId")
+    val taskProjectId: Long,
 
     @Json(name = "NameTask")
     var name: String = "Unnamed",

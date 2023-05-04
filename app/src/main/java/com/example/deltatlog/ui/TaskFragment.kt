@@ -83,7 +83,7 @@ class TaskFragment : Fragment() {
         viewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it)
+                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId })
             }
         )
 
@@ -100,7 +100,7 @@ class TaskFragment : Fragment() {
                     val newTaskName = editText.text.toString()
                     val newTask = Task(
                         name = newTaskName,
-                        projectId = projectId                    )
+                        taskProjectId = projectId                    )
 
                     viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()

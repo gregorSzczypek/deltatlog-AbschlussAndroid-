@@ -65,7 +65,6 @@ class TaskAdapter(
     // recyclingprocess
     // set parameters
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-
         val item = dataset[position]
 
         holder.textViewName.text = item.name
@@ -79,7 +78,7 @@ class TaskAdapter(
             item.duration.toString(),
             item.description,
             item.notes,
-            item.projectId.toString(),
+            item.taskProjectId.toString(),
         )
 
         val taskAttrLayoutManager = LinearLayoutManager(
