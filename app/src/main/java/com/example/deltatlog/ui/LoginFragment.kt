@@ -20,6 +20,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val sharedViewModel: SharedViewModel by viewModels()
+    private lateinit var userMail: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +48,7 @@ class LoginFragment : Fragment() {
         }
 
         // BackButton Navigation in Toolbar
-        binding.materialToolbar.setNavigationOnClickListener{
+        binding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
 
@@ -57,3 +58,9 @@ class LoginFragment : Fragment() {
         }
     }
 }
+
+//sharedViewModel.currentUser.observe(viewLifecycleOwner) {
+//            if (it != null) {
+//                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+//            }
+//        }
