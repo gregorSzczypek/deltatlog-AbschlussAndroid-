@@ -5,9 +5,11 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
+import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +19,7 @@ import kotlin.concurrent.fixedRateTimer
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private val sharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,28 +39,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize Firebase
-        firebaseAuth = FirebaseAuth.getInstance()
-
         // // this click listener performs the login procedure in firebase after checks of valid input
         binding.btnLogin.setOnClickListener {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
-
-            // Check of valid input and calling login method from firebase object
-            if (email.isNotEmpty() && pw.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Toast.makeText(context, "Succesfully signed in user ${firebaseAuth.currentUser?.email}", Toast.LENGTH_LONG).show()
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-
-                    } else {
-                        Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
-            }
+            sharedViewModel.login(requireContext(), email, pw, findNavController())
         }
 
         // BackButton Navigation in Toolbar
