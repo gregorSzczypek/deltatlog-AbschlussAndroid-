@@ -45,9 +45,6 @@ class HomeFragment : Fragment() {
 
         viewModel.loadData() // load projects into DB
 
-//        val projects = Datasource().loadProjects() // load projects from Datasource (for testing only)
-//        binding.projectList.adapter = ProjectAdapter(projects) // attach adapter to recycler view
-
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
         // performance
 

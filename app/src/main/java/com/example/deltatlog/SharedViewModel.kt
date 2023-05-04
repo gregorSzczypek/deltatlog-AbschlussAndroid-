@@ -120,6 +120,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun deleteAllTasks(projectTaskId: Long) {
+        viewModelScope.launch {
+            Log.d("ViewModel", "Calling repository delete with: ${projectTaskId}")
+            repository.deleteAllTasks(projectTaskId)
+//            _loading.value = true
+        }
+    }
+
     //todo: unset complete
 //    fun unsetComplete() {
 ////        _loading.value = false

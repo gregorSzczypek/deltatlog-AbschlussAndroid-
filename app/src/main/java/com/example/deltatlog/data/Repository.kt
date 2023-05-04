@@ -84,4 +84,12 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
             Log.d(TAG, "Failed to delete Database entry: $e")
         }
     }
+
+    suspend fun deleteAllTasks(projectTaskId: Long) {
+        try {
+            taskDatabase.taskDatabaseDao.deleteAllTasks(projectTaskId)
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to delete Database entry: $e")
+        }
+    }
 }

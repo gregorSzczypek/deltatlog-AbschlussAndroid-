@@ -87,8 +87,9 @@ class ProjectAdapter(
                         // Handle delete project action
                         AlertDialog.Builder(context)
                             .setTitle("Confirm Project Deletion")
-                            .setMessage("Are you sure you want to delete this project?")
+                            .setMessage("Are you sure you want to delete this project and all of the related tasks?")
                             .setPositiveButton("Yes") { dialog, _ ->
+                                sharedViewModel.deleteAllTasks(item.id)
                                 sharedViewModel.deleteProject(item)
                                 Toast.makeText(context, "Project ${item.name} deleted", Toast.LENGTH_LONG).show()
                                 dialog.dismiss()
