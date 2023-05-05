@@ -1,9 +1,14 @@
 package com.example.deltatlog.ui
 
 import ProjectAdapter
+import ProjectAdapter.Companion.PICK_IMAGE_REQUEST_CODE
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +32,7 @@ class HomeFragment : Fragment() {
     private val viewModel: SharedViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var firebaseAuth: FirebaseAuth
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,6 +111,17 @@ class HomeFragment : Fragment() {
                 setView(dialogLayout)
                 show()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data.toString()
+            Log.i("DataImage", imageUri.toString())
+            // TODO: Store the image URI in your data model or pass it to the adapter in some way
+            viewModel.uri = imageUri
         }
     }
 }

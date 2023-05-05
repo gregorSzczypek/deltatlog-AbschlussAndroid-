@@ -1,11 +1,15 @@
 package com.example.apicalls.adapter
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
@@ -52,6 +56,7 @@ class TaskAttrAdapter(
     // recyclingprocess
     // set parameters
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
         val item = dataset[position]
@@ -72,6 +77,33 @@ class TaskAttrAdapter(
         holder.tvAttr.isEnabled = false
 //        holder.tvAttr.isFocusable = false
 //        holder.tvAttr.isLongClickable = true
+
+        // Set an OnTouchListener on the item view
+        holder.cardView.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Start the jump animation on the view
+                    val animator = ObjectAnimator.ofPropertyValuesHolder(
+                        v,
+                        PropertyValuesHolder.ofFloat("scaleX", 0.9f),
+                        PropertyValuesHolder.ofFloat("scaleY", 0.9f),
+                    )
+                    animator.duration = 100
+                    animator.start()
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    val animator = ObjectAnimator.ofPropertyValuesHolder(
+                        v,
+                        PropertyValuesHolder.ofFloat("scaleX", 1f),
+                        PropertyValuesHolder.ofFloat("scaleY", 1f)
+                    )
+                    animator.duration = 500
+                    animator.start()
+                }
+            }
+            false
+        }
 
 
 
