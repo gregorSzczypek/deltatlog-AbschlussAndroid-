@@ -113,15 +113,4 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri = data.data.toString()
-            Log.i("DataImage", imageUri.toString())
-            // TODO: Store the image URI in your data model or pass it to the adapter in some way
-            viewModel.uri = imageUri
-        }
-    }
 }

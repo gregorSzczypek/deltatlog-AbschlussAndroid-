@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -49,7 +50,7 @@ class ProjectAdapter(
 
     // Define the request code as a constant
     companion object {
-        const val PICK_IMAGE_REQUEST_CODE = 1
+        const val PICK_IMAGE_REQUEST_CODE = 123456789
     }
 
     // parts of the item which need to be change by adapter
@@ -86,8 +87,9 @@ class ProjectAdapter(
         holder.descriptionView.text = item.description
 //        holder.imageView.background = item.severityColor
 
-        if (item.image != null) {
-            holder.imageView.setImageURI(item.image.toUri())
+        if (item.image != "") {
+            holder.imageView.setImageURI(Uri.parse(item.image))
+            Log.i("heresetimage", item.image)
         } else {
             holder.imageView.setImageResource(R.drawable.applogo)
         }
@@ -130,7 +132,7 @@ class ProjectAdapter(
         }
 
         holder.imageView.setOnLongClickListener {
-//            Toast.makeText(context, "Image clicked long", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Image clicked long", Toast.LENGTH_SHORT).show()
             // Create an intent to select an image from the gallery
 //            val intent = Intent()
 //            intent.type = "image/*"
@@ -138,9 +140,14 @@ class ProjectAdapter(
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             (context as Activity).startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
 
-            item.image = sharedViewModel.uri
-
             false
+        }
+
+        holder.imageView.setOnClickListener {
+            if (sharedViewModel.uri.value != null) {
+                item.image = sharedViewModel.uri.value!!
+                Log.i("imageuri", sharedViewModel.uri.value.toString())
+            }
         }
 
         holder.projectCardview.setOnLongClickListener {

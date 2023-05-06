@@ -50,7 +50,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val loading: LiveData<ApiStatus>
         get() = _loading
 
-    var uri: String = ""
+    val _uri = MutableLiveData<String>()
+    val uri: LiveData<String>
+        get() = _uri
 
     fun loadData() {
         viewModelScope.launch {
