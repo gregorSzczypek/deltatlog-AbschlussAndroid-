@@ -76,8 +76,7 @@ class HomeFragment : Fragment() {
 
         viewModel.projectList.observe(
             viewLifecycleOwner,
-            Observer {
-                recyclerView.adapter = ProjectAdapter(viewModel, requireContext(), it)
+            Observer {recyclerView.adapter = ProjectAdapter(viewModel, requireContext(), it)
             }
         )
 
@@ -88,18 +87,18 @@ class HomeFragment : Fragment() {
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_project, null)
             val newProjectName = dialogLayout.findViewById<EditText>(R.id.input_project_name)
             val newCustomerName = dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
-            val newDescritpion = dialogLayout.findViewById<EditText>(R.id.input_project_description)
+            val newDescription = dialogLayout.findViewById<EditText>(R.id.input_project_description)
 
             with(builder) {
                 setTitle("New Project")
                 setPositiveButton("Ok") {dialog, which ->
                     val newProjectNameString = newProjectName.text.toString()
                     val newCustomerNameString = newCustomerName.text.toString()
-                    val newDescriptionString = newDescritpion.text.toString()
+                    val newDescriptionString = newDescription.text.toString()
 
                     val newProject = Project(name = newProjectNameString, nameCustomer = newCustomerNameString, description = newDescriptionString)
                     viewModel.insertProject(newProject)
-                    Toast.makeText(context, "$newProjectName created", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("Cancel") {dialog, which ->
                     dialog.dismiss()

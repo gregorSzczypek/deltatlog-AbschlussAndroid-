@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.graphics.drawable.toDrawable
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
@@ -25,11 +26,11 @@ class ProjectAdapter(
 
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun submitList(list: List<Project>) {
-//        dataset = list
-//        notifyDataSetChanged()
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitList(list: List<Project>) {
+        dataset = list
+        notifyDataSetChanged()
+    }
 
     // Define the request code as a constant
 
@@ -42,6 +43,17 @@ class ProjectAdapter(
         val customerView = view.findViewById<TextView>(R.id.customer)
         val descriptionView = view.findViewById<TextView>(R.id.description)
 
+        val icons = listOf(
+            R.drawable.ellipse_dunkel,
+            R.drawable.ellipse_blau,
+            R.drawable.ellipse_gelb,
+            R.drawable.ellipse_gruen,
+            R.drawable.ellipse_rot,
+            R.drawable.ellipse_orange,
+            R.drawable.ellipse_pink,
+            R.drawable.ellipse_t_rkis,
+            R.drawable.ellipse_schwarz
+        )
     }
 
     // create new viewholders
@@ -65,6 +77,7 @@ class ProjectAdapter(
         holder.customerView.text = item.nameCustomer
         holder.dateView.text = item.date
         holder.descriptionView.text = item.description
+        holder.imageView.setImageResource(item.image)
 
 
         holder.projectCardview.setOnClickListener {
@@ -106,6 +119,24 @@ class ProjectAdapter(
 
         holder.imageView.setOnLongClickListener {
             Toast.makeText(context, "Image clicked long", Toast.LENGTH_SHORT).show()
+
+            // Show dialog when a button is clicked
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item_list, null)
+
+            val iconListView = dialogView.findViewById<ListView>(R.id.icon_list)
+            val iconAdapter = IconAdapter(holder.icons, context) { icon ->
+                item.image = icon
+                sharedViewModel.updateProject(item)
+//                    Toast.makeText(context, "Icon clicked: ${context.resources.getResourceEntryName(icon)}", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "Item image: ${item.image.toString()}", Toast.LENGTH_SHORT).show()
+            }
+            iconListView.adapter = iconAdapter
+
+            val dialog = AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
+            dialog.show()
+
             false
         }
 
@@ -121,6 +152,45 @@ class ProjectAdapter(
                     "Edit Project" -> {
                         // Handle edit project action
                         // TODO edit actions should be implemented here
+                        val builder = AlertDialog.Builder(context)
+                        val inflater = LayoutInflater.from(context)
+                        val dialogLayout =
+                            inflater.inflate(R.layout.edit_text_dialogue_project, null)
+                        val newProjectName =
+                            dialogLayout.findViewById<EditText>(R.id.input_project_name)
+                        val newCustomerName =
+                            dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
+                        val newDescription =
+                            dialogLayout.findViewById<EditText>(R.id.input_project_description)
+
+                        with(builder) {
+                            setTitle("Update Project")
+                            setPositiveButton("Ok") { dialog, which ->
+                                val newProjectNameString = newProjectName.text.toString()
+                                val newCustomerNameString = newCustomerName.text.toString()
+                                val newDescriptionString = newDescription.text.toString()
+
+                                if (newProjectNameString != "") {
+                                    item.name = newProjectNameString
+                                }
+                                if (newCustomerNameString != "") {
+                                    item.nameCustomer = newCustomerNameString
+                                }
+                                if (newDescriptionString != "") {
+                                    item.description = newDescriptionString
+                                }
+
+                                sharedViewModel.updateProject(item)
+                                submitList(sharedViewModel.projectList.value!!)
+                                Toast.makeText(
+                                    context,
+                                    "$newProjectNameString updated",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            setView(dialogLayout)
+                        }.show()
+
                         true
                     }
 

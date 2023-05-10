@@ -3,6 +3,7 @@ package com.example.deltatlog.data.datamodels
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.deltatlog.R
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
@@ -15,22 +16,22 @@ data class Project(
     val id: Long = 0,
 
     @Json(name = "strNameProject")
-    val name: String,
+    var name: String,
 
     @Json(name = "strCustomerProject")
-    val nameCustomer: String = "No customer name",
+    var nameCustomer: String = "No customer name",
 
-    @Json(name = "intColorProject")
-    val color: String = "#ffffff",
+//    @Json(name = "intColorProject")
+//    val color: String = "#ffffff",
 
     @Json(name = "imageProject")
-    var image: String = "",
+    var image: Int = R.drawable.applogo,
 
     @Json(name = "strDateProject")
     val date: String = LocalDateTime.now().toLocalDate().toString(),
 
     @Json(name = "strDescriptionProject")
-    val description: String = "No description",
+    var description: String = "No description",
 
 //    @Json(name = "intNumberOfTasks")
 //    val numberOfTasks: Int = tasks.size,
