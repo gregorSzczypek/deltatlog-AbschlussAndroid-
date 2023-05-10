@@ -32,10 +32,6 @@ class ProjectAdapter(
 //    }
 
     // Define the request code as a constant
-    companion object {
-        const val PICK_IMAGE_REQUEST_CODE = 123456789
-        const val REQUEST_CODE = 123
-    }
 
     // parts of the item which need to be change by adapter
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {

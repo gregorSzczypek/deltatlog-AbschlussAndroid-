@@ -86,13 +86,18 @@ class HomeFragment : Fragment() {
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_project, null)
-            val editText = dialogLayout.findViewById<EditText>(R.id.input_project_name)
+            val newProjectName = dialogLayout.findViewById<EditText>(R.id.input_project_name)
+            val newCustomerName = dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
+            val newDescritpion = dialogLayout.findViewById<EditText>(R.id.input_project_description)
 
             with(builder) {
                 setTitle("New Project")
                 setPositiveButton("Ok") {dialog, which ->
-                    val newProjectName = editText.text.toString()
-                    val newProject = Project(name = newProjectName)
+                    val newProjectNameString = newProjectName.text.toString()
+                    val newCustomerNameString = newCustomerName.text.toString()
+                    val newDescriptionString = newDescritpion.text.toString()
+
+                    val newProject = Project(name = newProjectNameString, nameCustomer = newCustomerNameString, description = newDescriptionString)
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectName created", Toast.LENGTH_SHORT).show()
                 }
