@@ -4,21 +4,17 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.data.Repository
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.LoginFragmentDirections
-import com.example.deltatlog.ui.SignUpFragment
 import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -77,7 +73,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: Update guest
     fun updateProject(project: Project) {
         viewModelScope.launch {
             repository.update(project)
@@ -85,7 +80,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: Delete guest
     fun deleteProject(project: Project) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${project.id}")
@@ -94,7 +88,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: unset complete
     fun unsetComplete() {
 //        _loading.value = false
     }
@@ -123,7 +116,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: Update guest
     fun updateTask(task: Task) {
         viewModelScope.launch {
             repository.updateTask(task)
@@ -131,7 +123,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: Delete guest
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${task.id}")
@@ -148,11 +139,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    //todo: unset complete
 //    fun unsetComplete() {
 ////        _loading.value = false
 //    }
-
 
     fun signUp(context: Context, email: String, pw: String, pwConfirm: String, navController: NavController) {
 

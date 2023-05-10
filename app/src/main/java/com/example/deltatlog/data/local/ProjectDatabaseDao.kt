@@ -5,7 +5,7 @@ import androidx.room.*
 import com.example.deltatlog.data.datamodels.Project
 
 /**
- * Data Access Object for the RoomDatabase
+ * Data Access Object for projectdatabase
  */
 
 @Dao

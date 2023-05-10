@@ -75,8 +75,6 @@ class TaskAttrAdapter(
         holder.prefixText.text = prefix
         holder.tvAttr.text = item
         holder.tvAttr.isEnabled = false
-//        holder.tvAttr.isFocusable = false
-//        holder.tvAttr.isLongClickable = true
 
         // Set an OnTouchListener on the item view
         holder.cardView.setOnTouchListener { v, event ->
@@ -118,7 +116,6 @@ class TaskAttrAdapter(
                         when (menuItem.title) {
                             "Edit Data" -> {
                                 // Handle edit task action
-//                                holder.tvAttr.isFocusable = true
                                 holder.cardView.isLongClickable = false
                                 val currentTask = taskList.find { it.id == taskId }!!
 

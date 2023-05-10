@@ -1,37 +1,20 @@
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.*
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.net.toUri
-import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.deltatlog.MainActivity
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Project
-import com.example.deltatlog.ui.HomeFragment
 import com.example.deltatlog.ui.HomeFragmentDirections
-import com.example.deltatlog.ui.TaskFragmentArgs
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.NonDisposableHandle.parent
-import kotlinx.coroutines.withContext
-import java.security.AccessController.getContext
 
 
 class ProjectAdapter(
@@ -51,6 +34,7 @@ class ProjectAdapter(
     // Define the request code as a constant
     companion object {
         const val PICK_IMAGE_REQUEST_CODE = 123456789
+        const val REQUEST_CODE = 123
     }
 
     // parts of the item which need to be change by adapter
@@ -85,14 +69,7 @@ class ProjectAdapter(
         holder.customerView.text = item.nameCustomer
         holder.dateView.text = item.date
         holder.descriptionView.text = item.description
-//        holder.imageView.background = item.severityColor
 
-        if (item.image != "") {
-            holder.imageView.setImageURI(Uri.parse(item.image))
-            Log.i("heresetimage", item.image)
-        } else {
-            holder.imageView.setImageResource(R.drawable.applogo)
-        }
 
         holder.projectCardview.setOnClickListener {
 
@@ -108,7 +85,7 @@ class ProjectAdapter(
         holder.itemView.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // Start the jump animation on the view
+                    // Start the animation on the view
                     val animator = ObjectAnimator.ofPropertyValuesHolder(
                         v,
                         PropertyValuesHolder.ofFloat("scaleX", 0.9f),
@@ -133,21 +110,7 @@ class ProjectAdapter(
 
         holder.imageView.setOnLongClickListener {
             Toast.makeText(context, "Image clicked long", Toast.LENGTH_SHORT).show()
-            // Create an intent to select an image from the gallery
-//            val intent = Intent()
-//            intent.type = "image/*"
-
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            (context as Activity).startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
-
             false
-        }
-
-        holder.imageView.setOnClickListener {
-            if (sharedViewModel.uri.value != null) {
-                item.image = sharedViewModel.uri.value!!
-                Log.i("imageuri", sharedViewModel.uri.value.toString())
-            }
         }
 
         holder.projectCardview.setOnLongClickListener {
@@ -156,9 +119,6 @@ class ProjectAdapter(
 
             val popupMenu = PopupMenu(context, holder.projectCardview)
             menuItems.forEach { popupMenu.menu.add(it) }
-
-//            val animation = AnimationUtils.loadAnimation(context, R.anim.rv_anim)
-//            holder.itemView.startAnimation(animation)
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.title) {

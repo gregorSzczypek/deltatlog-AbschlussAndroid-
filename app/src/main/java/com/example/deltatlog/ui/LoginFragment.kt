@@ -58,9 +58,3 @@ class LoginFragment : Fragment() {
         }
     }
 }
-
-//sharedViewModel.currentUser.observe(viewLifecycleOwner) {
-//            if (it != null) {
-//                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-//            }
-//        }

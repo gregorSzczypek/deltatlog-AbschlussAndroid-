@@ -32,9 +32,6 @@ data class Project(
     @Json(name = "strDescriptionProject")
     val description: String = "No description",
 
-//    @Json(name = "listTasksProject")
-//    val tasks: List<Task>,
-
 //    @Json(name = "intNumberOfTasks")
 //    val numberOfTasks: Int = tasks.size,
 

@@ -1,6 +1,5 @@
 package com.example.deltatlog.ui
 
-import ProjectAdapter
 import TaskAdapter
 import android.app.AlertDialog
 import android.os.Bundle
@@ -15,16 +14,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.SnapHelper
-//import com.example.apicalls.adapter.TaskAdapter
-import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
-import com.example.deltatlog.databinding.ListItemTaskBinding
 
 
 class TaskFragment : Fragment() {
@@ -55,17 +48,7 @@ class TaskFragment : Fragment() {
         projectId = requireArguments().getLong("projectId")
         Log.i("projectID", projectId.toString())
 
-//        val project = viewModel.projectList.value?.find { it.id == projectId.toInt() } Später mit live data!!
-//        val project = Datasource().loadProjects().find { it.id == projectId }
-
-//        val tasks = Datasource().loadTasks(project!!) // Wir holen unsere Liste mit unseren Objekten aus Datasource
-//        binding.taskList.adapter = TaskAdapter(requireContext(), tasks) // Wir übergeben die RV unseren Adapter
-
-        binding.taskList.setHasFixedSize(true) // optional - legt fest dass das item layout sich nicht verändert
-        // Dies verhindert eine ständige neu Berechnung der Layout Dimensionen und macht die RV schlanker und performanter
-
-//        val helperTask: SnapHelper = LinearSnapHelper()
-//        helperTask.attachToRecyclerView(binding.taskList)
+        binding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
 
         // Inflate the layout for this fragment
         return binding.root

@@ -1,12 +1,10 @@
 package com.example.deltatlog.data.local
 
 import android.content.Context
-import android.nfc.Tag
 import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 
 /**
@@ -35,6 +33,6 @@ fun getTaskDatabase(context: Context): TaskDatabase {
 
         }
     }
-    Log.i("DatabaseBuilder", "HERE BUILDING DB")
+    Log.i("DatabaseBuilder", "here building database")
     return INSTANCE
 }

@@ -32,7 +32,6 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    //todo: Update
     suspend fun update(project: Project) {
         try {
             database.projectDatabaseDao.update(project)
@@ -41,7 +40,6 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    //todo: delete
     suspend fun delete(project: Project) {
         try {
             database.projectDatabaseDao.deleteById(project.id)
@@ -67,7 +65,6 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    //todo: Update
     suspend fun updateTask(task: Task) {
         try {
             taskDatabase.taskDatabaseDao.update(task)
@@ -76,7 +73,6 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    //todo: delete
     suspend fun deleteTask(task: Task) {
         try {
             taskDatabase.taskDatabaseDao.deleteById(task.id)
