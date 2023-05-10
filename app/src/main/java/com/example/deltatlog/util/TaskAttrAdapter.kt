@@ -3,25 +3,21 @@ package com.example.apicalls.adapter
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Rect
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Task
-import com.google.android.material.card.MaterialCardView
+import com.example.deltatlog.util.Timer
 
 class TaskAttrAdapter(
 
@@ -29,7 +25,8 @@ class TaskAttrAdapter(
     private var taskId: Long,
     private var sharedViewModel: SharedViewModel,
     private var context: Context,
-    private var dataset: List<String>
+    private var dataset: List<String>,
+    private val timers: MutableMap<Int, Timer>
 ) : RecyclerView.Adapter<TaskAttrAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
@@ -59,11 +56,9 @@ class TaskAttrAdapter(
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
-        val item = dataset[position]
-
+        val attrItem = dataset[position]
 
         var prefix = ""
-
 
         when (position) {
             0 -> prefix = "Duration: "
@@ -73,39 +68,65 @@ class TaskAttrAdapter(
         }
 
         holder.prefixText.text = prefix
-        holder.tvAttr.text = item
+        holder.tvAttr.text = attrItem
         holder.tvAttr.isEnabled = false
 
-        // Set an OnTouchListener on the item view
-        holder.cardView.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    // Start the jump animation on the view
-                    val animator = ObjectAnimator.ofPropertyValuesHolder(
-                        v,
-                        PropertyValuesHolder.ofFloat("scaleX", 0.9f),
-                        PropertyValuesHolder.ofFloat("scaleY", 0.9f),
-                    )
-                    animator.duration = 100
-                    animator.start()
-                }
+        holder.cardView.setOnClickListener {
+            if (position == 0) {
+                val currentTaskList = taskList.filter { it.id == taskId }
+                val currentTask = currentTaskList[0]
+                val timer = timers[taskList.indexOf(currentTask)]!!
+                Log.i("currentTask", taskList.indexOf(currentTask).toString())
 
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    val animator = ObjectAnimator.ofPropertyValuesHolder(
-                        v,
-                        PropertyValuesHolder.ofFloat("scaleX", 1f),
-                        PropertyValuesHolder.ofFloat("scaleY", 1f)
-                    )
-                    animator.duration = 500
-                    animator.start()
+                if (timer.isRunning) { // TODO WEIRD BEHAVE
+                    currentTask.duration = holder.tvAttr.text.toString().toLong()
+                    sharedViewModel.updateTask(currentTask)
+                    timer.stop()
+                } else {
+                    timer.start()
+                    android.os.Handler(Looper.getMainLooper()).post(object : Runnable {
+                        override fun run() {
+                            val elapsed = timer.elapsed() + currentTask.duration * 1000
+                            Log.i("timerValue", elapsed.toString())
+                            val seconds = elapsed / 1000
+                            holder.tvAttr.text = seconds.toString()
+                            if (timer.isRunning) {
+                                android.os.Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+                            }
+                        }
+                    })
                 }
             }
-            false
-        }
 
+            // Set an OnTouchListener on the item view to start the animation
+            holder.cardView.setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        // Start the jump animation on the view
+                        val animator = ObjectAnimator.ofPropertyValuesHolder(
+                            v,
+                            PropertyValuesHolder.ofFloat("scaleX", 0.9f),
+                            PropertyValuesHolder.ofFloat("scaleY", 0.9f),
+                        )
+                        animator.duration = 100
+                        animator.start()
+                    }
 
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        val animator = ObjectAnimator.ofPropertyValuesHolder(
+                            v,
+                            PropertyValuesHolder.ofFloat("scaleX", 1f),
+                            PropertyValuesHolder.ofFloat("scaleY", 1f)
+                        )
+                        animator.duration = 500
+                        animator.start()
+                    }
+                }
+                false
+            }
 
-        holder.cardView.setOnLongClickListener{
+            // Set on click listener to change notes and descriptions
+            holder.cardView.setOnLongClickListener {
                 if (position == 1 || position == 2) {
                     val menuItems = arrayOf("Edit Data")
 
@@ -143,7 +164,8 @@ class TaskAttrAdapter(
                     }
                     popupMenu.show()
                 }
-            true // return true to indicate that the event has been consumed
+                true // return true to indicate that the event has been consumed
+            }
         }
     }
 

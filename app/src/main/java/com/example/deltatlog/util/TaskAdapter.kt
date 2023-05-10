@@ -30,6 +30,7 @@ import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.databinding.ListItemTaskBinding
+import com.example.deltatlog.util.Timer
 import com.google.android.material.card.MaterialCardView
 import java.security.AccessController.getContext
 
@@ -119,8 +120,12 @@ class TaskAdapter(
         }
 
         // Setup of second recyclerview in the item of the current recyclerview
+        val timers = mutableMapOf<Int, Timer>()
+        for ( i in 0 until dataset.size) {
+            timers.put(i, Timer())
+        }
         holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
-        val taskAttrAdapter = TaskAttrAdapter(dataset, item.id, sharedViewModel, context, attrList)
+        val taskAttrAdapter = TaskAttrAdapter(dataset, item.id, sharedViewModel, context, attrList, timers)
         holder.rvTaskAttr.adapter = taskAttrAdapter
 
         holder.rvTaskAttr.setHasFixedSize(true)
