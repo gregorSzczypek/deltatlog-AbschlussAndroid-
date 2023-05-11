@@ -16,7 +16,7 @@ data class Project(
     val id: Long = 0,
 
     @Json(name = "strNameProject")
-    var name: String,
+    var name: String = "No Project name",
 
     @Json(name = "strCustomerProject")
     var nameCustomer: String = "No customer name",

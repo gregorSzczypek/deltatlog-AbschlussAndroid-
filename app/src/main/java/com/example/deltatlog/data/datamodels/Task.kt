@@ -21,7 +21,7 @@ data class Task(
     val taskProjectId: Long,
 
     @Json(name = "NameTask")
-    var name: String = "Unnamed",
+    var name: String = "No Task name",
 
     @Json(name = "ColorTask")
     val color: String = "#163036",
@@ -30,11 +30,20 @@ data class Task(
     val date: String = LocalDateTime.now().toLocalDate().toString(),
 
     @Json(name = "DurationTask")
-    var duration: Long = 0,
+    var duration: String = "00:00:00",
 
     @Json(name = "DescriptionTask")
     var description: String = "No Description",
 
+    @Json(name = "IsTimerRunning")
+    var isTimerRunning: Boolean = false,
+
+    @Json(name = "StartTime")
+    var startTime: Long = 0,
+
     @Json(name = "NotesTask")
-    var notes: String = "No Notes"
+    var notes: String = "No Notes",
+
+    @Json(name = "ElapsedTime")
+    var elapsedTime: Long = 0
 )

@@ -96,7 +96,18 @@ class HomeFragment : Fragment() {
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
 
-                    val newProject = Project(name = newProjectNameString, nameCustomer = newCustomerNameString, description = newDescriptionString)
+                    val newProject = Project()
+
+                    if (newProjectNameString != "") {
+                        newProject.name = newProjectNameString
+                    }
+                    if (newCustomerNameString != "") {
+                        newProject.nameCustomer = newCustomerNameString
+                    }
+                    if (newDescriptionString != "") {
+                        newProject.description = newDescriptionString
+                    }
+
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
                 }

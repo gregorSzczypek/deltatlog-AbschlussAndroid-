@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -17,13 +18,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Task
+import com.example.deltatlog.util.Timer
 import com.google.android.material.card.MaterialCardView
+import java.util.TimerTask
 
 
 class TaskAdapter(
     private var sharedViewModel: SharedViewModel,
     private var context: Context,
-    private var dataset: List<Task>
+    private var dataset: List<Task>,
+    private var taskRV: RecyclerView
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
 
@@ -40,6 +44,7 @@ class TaskAdapter(
         val taskDuration = view.findViewById<TextView>(R.id.duration)
         val taskDate = view.findViewById<TextView>(R.id.date)
         val taskDescription = view.findViewById<TextView>(R.id.task_description)
+        val playButton = view.findViewById<ImageButton>(R.id.imageButton)
     }
 
     // create new viewholders
@@ -54,6 +59,8 @@ class TaskAdapter(
         return ItemViewHolder(adapterLayout)
     }
 
+    private var timer: java.util.Timer = java.util.Timer()
+
     // recyclingprocess
     // set parameters
     @SuppressLint("ClickableViewAccessibility")
@@ -66,7 +73,12 @@ class TaskAdapter(
         holder.taskDuration.text = item.duration.toString()
         holder.taskDescription.text = item.notes
 
-
+        if (item.isTimerRunning) {
+            startTimer(holder, item)
+        }
+//        else {
+//            stopTimer(holder, item, position)
+//        }
 
         // Set an OnTouchListener on the item view
         holder.taskCardView.setOnTouchListener { v, event ->
@@ -95,6 +107,7 @@ class TaskAdapter(
             false
         }
 
+        // set an OnLongClickListener on the item view
         holder.taskCardView.setOnLongClickListener {
 
             val menuItems = arrayOf("Rename Task", "Delete Task")
@@ -140,10 +153,51 @@ class TaskAdapter(
             true // return true to indicate that the event has been consumed
         }
 
+        // Set an OnCLickListener on the image Button
+        holder.playButton.setOnClickListener{
+
+            if (item.isTimerRunning) {
+                stopTimer(holder, item, position)
+                item.isTimerRunning = false
+                item.elapsedTime += System.currentTimeMillis() - item.startTime
+            } else {
+                startTimer(holder, item)
+                item.isTimerRunning = true
+                item.startTime = System.currentTimeMillis()
+            }
+        }
     }
 
     // get size of list for viewholder
     override fun getItemCount(): Int {
         return dataset.size
+    }
+
+    private fun startTimer(holder: ItemViewHolder, item: Task) {
+        timer = java.util.Timer()
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            @SuppressLint("SetTextI18n")
+            override fun run() {
+                holder.itemView.post {
+                    val timeInMillis = System.currentTimeMillis() - item.startTime + item.elapsedTime
+                    val seconds = (timeInMillis / 1000).toInt()
+                    val minutes = seconds / 60
+                    val hours = minutes / 60
+                    holder.taskDuration.text =
+                        "${String.format("%02d", hours % 24)}:${String.format("%02d", minutes % 60)}:${String.format(
+                            "%02d",
+                            seconds % 60
+                        )}"
+                }
+            }
+        }, 0, 1000)
+    }
+
+    private fun stopTimer(holder: ItemViewHolder, item:Task, position: Int) {
+        timer.cancel()
+        item.duration = holder.taskDuration.text.toString()
+        sharedViewModel.updateTask(item)
+        taskRV.adapter?.notifyItemChanged(position)
+//        timer = java.util.Timer()
     }
 }

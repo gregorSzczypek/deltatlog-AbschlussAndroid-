@@ -66,7 +66,7 @@ class TaskFragment : Fragment() {
         viewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId })
+                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId }, recyclerView)
             }
         )
 
@@ -81,12 +81,19 @@ class TaskFragment : Fragment() {
             with(builder) {
                 setTitle("New Task")
                 setPositiveButton("Ok") {dialog, which ->
-                    val newProjectNameString = newTaskName.text.toString()
-                    val newDescriptionString = newTaskDescription.text.toString()
+                    val newTaskNameString = newTaskName.text.toString()
+                    val newTaskDescriptionString = newTaskDescription.text.toString()
 
-                    val newTask = Task(name = newProjectNameString, notes = newDescriptionString, taskProjectId = projectId)
+                    val newTask = Task(taskProjectId = projectId)
+
+                    if (newTaskNameString != "") {
+                        newTask.name = newTaskNameString
+                    }
+                    if (newTaskDescriptionString != "") {
+                        newTask.notes = newTaskDescriptionString
+                    }
                     viewModel.insertTask(newTask)
-                    Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "$newTaskNameString created", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("Cancel") {dialog, which ->
                     dialog.dismiss()
