@@ -125,7 +125,16 @@ class TaskAdapter(
             timers.put(i, Timer())
         }
         holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
-        val taskAttrAdapter = TaskAttrAdapter(dataset, item.id, sharedViewModel, context, attrList, timers)
+        val taskAttrAdapter = TaskAttrAdapter(
+            dataset,
+            item.id,
+            sharedViewModel,
+            context,
+            attrList,
+            timers,
+            holder.rvTaskAttr
+        )
+
         holder.rvTaskAttr.adapter = taskAttrAdapter
 
         holder.rvTaskAttr.setHasFixedSize(true)

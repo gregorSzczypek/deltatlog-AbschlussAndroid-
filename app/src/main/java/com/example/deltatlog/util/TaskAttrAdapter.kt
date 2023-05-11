@@ -1,5 +1,6 @@
 package com.example.apicalls.adapter
 
+import TaskAdapter
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
@@ -26,7 +27,8 @@ class TaskAttrAdapter(
     private var sharedViewModel: SharedViewModel,
     private var context: Context,
     private var dataset: List<String>,
-    private val timers: MutableMap<Int, Timer>
+    private val timers: MutableMap<Int, Timer>,
+    private val rvTask: RecyclerView
 ) : RecyclerView.Adapter<TaskAttrAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
@@ -34,6 +36,7 @@ class TaskAttrAdapter(
         val tvAttr = view.findViewById<TextView>(R.id.list_text)
         val cardView = view.findViewById<CardView>(R.id.taskAttr_card_view)
         val prefixText = view.findViewById<TextView>(R.id.task_prefix)
+        val attrRV = view.findViewById<RecyclerView>(R.id.list_scroll_view)
     }
 
     // create new viewholders
@@ -77,11 +80,12 @@ class TaskAttrAdapter(
                 val currentTask = currentTaskList[0]
                 val timer = timers[taskList.indexOf(currentTask)]!!
                 Log.i("currentTask", taskList.indexOf(currentTask).toString())
-
-                if (timer.isRunning) { // TODO WEIRD BEHAVE
+                if (timer.isRunning) { // TODO
                     currentTask.duration = holder.tvAttr.text.toString().toLong()
-                    sharedViewModel.updateTask(currentTask)
                     timer.stop()
+                    sharedViewModel.updateTask(currentTask)
+//                    rvTask.adapter?.notifyItemChanged(taskList.indexOf(currentTask))
+//                    holder.attrRV.adapter?.notifyItemChanged(position)
                 } else {
                     timer.start()
                     android.os.Handler(Looper.getMainLooper()).post(object : Runnable {
