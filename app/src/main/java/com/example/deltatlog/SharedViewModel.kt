@@ -30,8 +30,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     private val taskDatabase = getTaskDatabase(application)
     private val repository = Repository(database, taskDatabase)
 
-
-
     val projectList = repository.projectList
     val taskList = repository.taskList
     //instanz von firebase

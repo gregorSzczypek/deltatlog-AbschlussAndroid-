@@ -26,16 +26,9 @@ import java.util.TimerTask
 class TaskAdapter(
     private var sharedViewModel: SharedViewModel,
     private var context: Context,
-    private var dataset: List<Task>,
-    private var taskRV: RecyclerView
+    private var dataset: List<Task>
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: List<Task>) {
-        dataset = list
-        notifyDataSetChanged()
-    }
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -59,7 +52,7 @@ class TaskAdapter(
         return ItemViewHolder(adapterLayout)
     }
 
-    private var timer: java.util.Timer = java.util.Timer()
+    private val timers = mutableMapOf<Long, java.util.Timer>()
 
     // recyclingprocess
     // set parameters
@@ -74,11 +67,8 @@ class TaskAdapter(
         holder.taskDescription.text = item.notes
 
         if (item.isTimerRunning) {
-            startTimer(holder, item)
+            startTimer(holder, item, position, item.id)
         }
-//        else {
-//            stopTimer(holder, item, position)
-//        }
 
         // Set an OnTouchListener on the item view
         holder.taskCardView.setOnTouchListener { v, event ->
@@ -157,11 +147,11 @@ class TaskAdapter(
         holder.playButton.setOnClickListener{
 
             if (item.isTimerRunning) {
-                stopTimer(holder, item, position)
+                stopTimer(holder, item, position, item.id)
                 item.isTimerRunning = false
                 item.elapsedTime += System.currentTimeMillis() - item.startTime
             } else {
-                startTimer(holder, item)
+                startTimer(holder, item, position, item.id)
                 item.isTimerRunning = true
                 item.startTime = System.currentTimeMillis()
             }
@@ -173,9 +163,12 @@ class TaskAdapter(
         return dataset.size
     }
 
-    private fun startTimer(holder: ItemViewHolder, item: Task) {
-        timer = java.util.Timer()
-        timer.scheduleAtFixedRate(object : TimerTask() {
+    private fun startTimer(holder: ItemViewHolder, item: Task, position: Int, itemId: Long) {
+
+        timers.getOrPut(itemId, {java.util.Timer()})
+        val timer = timers[itemId]
+
+        timer!!.scheduleAtFixedRate(object : TimerTask() {
             @SuppressLint("SetTextI18n")
             override fun run() {
                 holder.itemView.post {
@@ -193,11 +186,12 @@ class TaskAdapter(
         }, 0, 1000)
     }
 
-    private fun stopTimer(holder: ItemViewHolder, item:Task, position: Int) {
-        timer.cancel()
+    private fun stopTimer(holder: ItemViewHolder, item:Task, position: Int, itemId: Long) {
+        val timer = timers[itemId]
+        timer!!.cancel()
         item.duration = holder.taskDuration.text.toString()
+        this.notifyItemChanged(position)
         sharedViewModel.updateTask(item)
-        taskRV.adapter?.notifyItemChanged(position)
-//        timer = java.util.Timer()
+//        timers.remove(itemId)
     }
 }

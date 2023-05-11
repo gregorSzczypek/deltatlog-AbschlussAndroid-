@@ -66,7 +66,7 @@ class TaskFragment : Fragment() {
         viewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId }, recyclerView)
+                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId })
             }
         )
 
