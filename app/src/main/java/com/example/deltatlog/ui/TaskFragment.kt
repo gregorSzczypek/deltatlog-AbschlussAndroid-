@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
 
@@ -24,7 +25,6 @@ class TaskFragment : Fragment() {
 
     private val viewModel: SharedViewModel by viewModels()
     private lateinit var binding: FragmentTaskBinding
-
     private var projectId: Long = 0
 
     override fun onCreateView(
@@ -75,18 +75,18 @@ class TaskFragment : Fragment() {
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_task, null)
-            val editText = dialogLayout.findViewById<EditText>(R.id.input_project_name)
+            val newTaskName = dialogLayout.findViewById<EditText>(R.id.input_task_name)
+            val newTaskDescription = dialogLayout.findViewById<EditText>(R.id.input_task_description)
 
             with(builder) {
                 setTitle("New Task")
                 setPositiveButton("Ok") {dialog, which ->
-                    val newTaskName = editText.text.toString()
-                    val newTask = Task(
-                        name = newTaskName,
-                        taskProjectId = projectId                    )
+                    val newProjectNameString = newTaskName.text.toString()
+                    val newDescriptionString = newTaskDescription.text.toString()
 
+                    val newTask = Task(name = newProjectNameString, notes = newDescriptionString, taskProjectId = projectId)
                     viewModel.insertTask(newTask)
-                    Toast.makeText(context, "$newTaskName created", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("Cancel") {dialog, which ->
                     dialog.dismiss()

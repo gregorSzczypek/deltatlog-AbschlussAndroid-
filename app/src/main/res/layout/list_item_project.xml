@@ -31,7 +31,7 @@
             tools:text="ProjectName" />
 
         <TextView
-            android:id="@+id/customer"
+            android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -55,7 +55,7 @@
             tools:text="date" />
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/task_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -65,7 +65,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/customer"
+            app:layout_constraintTop_toBottomOf="@+id/duration"
             tools:text="description" />
 
         <ImageView

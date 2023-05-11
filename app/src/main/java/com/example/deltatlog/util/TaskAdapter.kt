@@ -4,35 +4,21 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.HorizontalScrollView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
-import com.example.apicalls.adapter.TaskAttrAdapter
 import com.example.deltatlog.R
 import com.example.deltatlog.SharedViewModel
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.databinding.FragmentHomeBinding
-import com.example.deltatlog.databinding.FragmentTaskBinding
-import com.example.deltatlog.databinding.ListItemTaskBinding
-import com.example.deltatlog.util.Timer
 import com.google.android.material.card.MaterialCardView
-import java.security.AccessController.getContext
+
 
 class TaskAdapter(
     private var sharedViewModel: SharedViewModel,
@@ -41,18 +27,19 @@ class TaskAdapter(
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun submitList(list: List<Project>) {
-//        dataset = list
-//        notifyDataSetChanged()
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitList(list: List<Task>) {
+        dataset = list
+        notifyDataSetChanged()
+    }
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)
-        val textViewName = view.findViewById<TextView>(R.id.list_text)
-        val textDate = view.findViewById<EditText>(R.id.edit_text_date)
-        val rvTaskAttr = view.findViewById<RecyclerView>(R.id.list_scroll_view)
+        val taskName = view.findViewById<TextView>(R.id.task_name)
+        val taskDuration = view.findViewById<TextView>(R.id.duration)
+        val taskDate = view.findViewById<TextView>(R.id.date)
+        val taskDescription = view.findViewById<TextView>(R.id.task_description)
     }
 
     // create new viewholders
@@ -73,25 +60,14 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
-        holder.textViewName.text = item.name
-        holder.textViewName.isEnabled = false
-        holder.textDate.setText(item.date)
+        holder.taskName.text = item.name
+        holder.taskDate.text = item.date
+//        holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
+        holder.taskDuration.text = item.duration.toString()
+        holder.taskDescription.text = item.notes
 
-        holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
 
-        // create list of actual task attributes
-        val attrList = listOf<String>(
-            item.duration.toString(),
-            item.description,
-            item.notes,
-            item.taskProjectId.toString(),
-        )
 
-        val taskAttrLayoutManager = LinearLayoutManager(
-            holder.rvTaskAttr.context,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
         // Set an OnTouchListener on the item view
         holder.taskCardView.setOnTouchListener { v, event ->
             when (event.action) {
@@ -119,30 +95,6 @@ class TaskAdapter(
             false
         }
 
-        // Setup of second recyclerview in the item of the current recyclerview
-        val timers = mutableMapOf<Int, Timer>()
-        for ( i in 0 until dataset.size) {
-            timers.put(i, Timer())
-        }
-        holder.rvTaskAttr.layoutManager = taskAttrLayoutManager
-        val taskAttrAdapter = TaskAttrAdapter(
-            dataset,
-            item.id,
-            sharedViewModel,
-            context,
-            attrList,
-            timers,
-            holder.rvTaskAttr
-        )
-
-        holder.rvTaskAttr.adapter = taskAttrAdapter
-
-        holder.rvTaskAttr.setHasFixedSize(true)
-
-        val helperTaskAttr: SnapHelper = PagerSnapHelper()
-        holder.rvTaskAttr.setOnFlingListener(null)
-        helperTaskAttr.attachToRecyclerView(holder.rvTaskAttr)
-
         holder.taskCardView.setOnLongClickListener {
 
             val menuItems = arrayOf("Rename Task", "Delete Task")
@@ -155,11 +107,11 @@ class TaskAdapter(
                     "Rename Task" -> {
                         // Handle Rename task action
                         // TODO Rename tasks actions should be implemented here
-                        holder.textViewName.isEnabled = true
+                        holder.taskName.isEnabled = true
 
                         holder.taskCardView.setOnClickListener{
-                            item.name = holder.textViewName.text.toString()
-                            holder.textViewName.isEnabled = false
+                            item.name = holder.taskName.text.toString()
+                            holder.taskName.isEnabled = false
                             sharedViewModel.updateTask(item)
                         }
                         true

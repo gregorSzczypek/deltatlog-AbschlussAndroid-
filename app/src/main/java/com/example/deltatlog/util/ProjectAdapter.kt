@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.graphics.drawable.toDrawable
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
@@ -40,8 +39,8 @@ class ProjectAdapter(
         val textView = view.findViewById<TextView>(R.id.Project_name)
         val projectCardview = view.findViewById<MaterialCardView>(R.id.project_card_view)
         val dateView = view.findViewById<TextView>(R.id.date)
-        val customerView = view.findViewById<TextView>(R.id.customer)
-        val descriptionView = view.findViewById<TextView>(R.id.description)
+        val customerView = view.findViewById<TextView>(R.id.duration)
+        val descriptionView = view.findViewById<TextView>(R.id.task_description)
 
         val icons = listOf(
             R.drawable.ellipse_dunkel,
