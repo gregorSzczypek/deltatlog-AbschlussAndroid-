@@ -67,7 +67,7 @@ class TaskAdapter(
         holder.taskDescription.text = item.notes
 
         if (item.isTimerRunning) {
-            startTimer(holder, item, position, item.id)
+            sharedViewModel.startTimer(holder, item, position, item.id, timers)
         }
 
         // Set an OnTouchListener on the item view
@@ -147,11 +147,11 @@ class TaskAdapter(
         holder.playButton.setOnClickListener{
 
             if (item.isTimerRunning) {
-                stopTimer(holder, item, position, item.id)
+                sharedViewModel.stopTimer(holder, item, position, item.id, this, timers)
                 item.isTimerRunning = false
                 item.elapsedTime += System.currentTimeMillis() - item.startTime
             } else {
-                startTimer(holder, item, position, item.id)
+                sharedViewModel.startTimer(holder, item, position, item.id, timers)
                 item.isTimerRunning = true
                 item.startTime = System.currentTimeMillis()
             }
@@ -161,37 +161,5 @@ class TaskAdapter(
     // get size of list for viewholder
     override fun getItemCount(): Int {
         return dataset.size
-    }
-
-    private fun startTimer(holder: ItemViewHolder, item: Task, position: Int, itemId: Long) {
-
-        timers.getOrPut(itemId, {java.util.Timer()})
-        val timer = timers[itemId]
-
-        timer!!.scheduleAtFixedRate(object : TimerTask() {
-            @SuppressLint("SetTextI18n")
-            override fun run() {
-                holder.itemView.post {
-                    val timeInMillis = System.currentTimeMillis() - item.startTime + item.elapsedTime
-                    val seconds = (timeInMillis / 1000).toInt()
-                    val minutes = seconds / 60
-                    val hours = minutes / 60
-                    holder.taskDuration.text =
-                        "${String.format("%02d", hours % 24)}:${String.format("%02d", minutes % 60)}:${String.format(
-                            "%02d",
-                            seconds % 60
-                        )}"
-                }
-            }
-        }, 0, 1000)
-    }
-
-    private fun stopTimer(holder: ItemViewHolder, item:Task, position: Int, itemId: Long) {
-        val timer = timers[itemId]
-        timer!!.cancel()
-        item.duration = holder.taskDuration.text.toString()
-        this.notifyItemChanged(position)
-        sharedViewModel.updateTask(item)
-//        timers.remove(itemId)
     }
 }

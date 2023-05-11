@@ -1,5 +1,7 @@
 package com.example.deltatlog
 
+import TaskAdapter
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -19,6 +21,7 @@ import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
+import java.util.TimerTask
 
 const val TAG = "SharedViewModel"
 
@@ -178,6 +181,38 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         } else {
             Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun startTimer(holder: TaskAdapter.ItemViewHolder, item: Task, position: Int, itemId: Long, timers: MutableMap<Long, java.util.Timer>) {
+
+        timers.getOrPut(itemId, {java.util.Timer()})
+        val timer = timers[itemId]
+
+        timer!!.scheduleAtFixedRate(object : TimerTask() {
+            @SuppressLint("SetTextI18n")
+            override fun run() {
+                holder.itemView.post {
+                    val timeInMillis = System.currentTimeMillis() - item.startTime + item.elapsedTime
+                    val seconds = (timeInMillis / 1000).toInt()
+                    val minutes = seconds / 60
+                    val hours = minutes / 60
+                    holder.taskDuration.text =
+                        "${String.format("%02d", hours % 24)}:${String.format("%02d", minutes % 60)}:${String.format(
+                            "%02d",
+                            seconds % 60
+                        )}"
+                }
+            }
+        }, 0, 1000)
+    }
+
+    fun stopTimer(holder: TaskAdapter.ItemViewHolder, item:Task, position: Int, itemId: Long, adapter: TaskAdapter, timers: MutableMap<Long, java.util.Timer>) {
+        val timer = timers[itemId]
+        timer!!.cancel()
+        item.duration = holder.taskDuration.text.toString()
+        adapter.notifyItemChanged(position)
+//        updateTask(item)
+        timers.remove(itemId)
     }
 }
 
