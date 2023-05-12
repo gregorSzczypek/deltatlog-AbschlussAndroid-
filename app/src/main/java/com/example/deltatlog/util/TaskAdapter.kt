@@ -15,10 +15,8 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
-import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.ui.HomeFragmentDirections
 import com.example.deltatlog.ui.TaskFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
@@ -45,7 +43,7 @@ class TaskAdapter(
         val taskDuration = view.findViewById<TextView>(R.id.duration)
         val taskDate = view.findViewById<TextView>(R.id.date)
         val taskDescription = view.findViewById<TextView>(R.id.task_description)
-        val playButton = view.findViewById<ImageButton>(R.id.imageButton)
+        val playButton = view.findViewById<ImageButton>(R.id.start_button)
     }
 
     // create new viewholders
@@ -182,7 +180,7 @@ class TaskAdapter(
 
         // Set an OnCLickListener on the image Button
         holder.playButton.setOnClickListener {
-            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id))
+            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id, item.name))
         }
     }
 

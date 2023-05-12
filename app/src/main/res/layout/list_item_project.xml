@@ -26,7 +26,7 @@
             android:layout_marginBottom="10dp"
             android:alpha="0.8"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/start_button"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="ProjectName" />
 
@@ -39,7 +39,7 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/start_button"
             app:layout_constraintTop_toBottomOf="@+id/Project_name"
             tools:text="CustomerName" />
 
@@ -64,12 +64,12 @@
             android:gravity="center"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/start_button"
             app:layout_constraintTop_toBottomOf="@+id/duration"
             tools:text="description" />
 
         <ImageView
-            android:id="@+id/imageButton"
+            android:id="@+id/start_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="10dp"

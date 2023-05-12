@@ -67,5 +67,18 @@
             app:layout_constraintTop_toBottomOf="@+id/app_logo"
             app:layout_constraintVertical_bias="0.5" />
 
+        <TextView
+            android:id="@+id/tvTaskName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TaskName"
+            app:layout_constraintBottom_toTopOf="@+id/tvTimer"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_logo"
+            app:layout_constraintVertical_bias="0.5" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

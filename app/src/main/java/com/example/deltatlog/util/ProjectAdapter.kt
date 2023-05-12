@@ -35,7 +35,7 @@ class ProjectAdapter(
 
     // parts of the item which need to be change by adapter
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val imageView = view.findViewById<ImageView>(R.id.imageButton)
+        val imageView = view.findViewById<ImageView>(R.id.start_button)
         val textView = view.findViewById<TextView>(R.id.Project_name)
         val projectCardview = view.findViewById<MaterialCardView>(R.id.project_card_view)
         val dateView = view.findViewById<TextView>(R.id.date)
@@ -126,8 +126,6 @@ class ProjectAdapter(
             val iconAdapter = IconAdapter(holder.icons, context) { icon ->
                 item.image = icon
                 viewModel.updateProject(item)
-//                    Toast.makeText(context, "Icon clicked: ${context.resources.getResourceEntryName(icon)}", Toast.LENGTH_SHORT).show()
-//                    Toast.makeText(context, "Item image: ${item.image.toString()}", Toast.LENGTH_SHORT).show()
             }
             iconListView.adapter = iconAdapter
 

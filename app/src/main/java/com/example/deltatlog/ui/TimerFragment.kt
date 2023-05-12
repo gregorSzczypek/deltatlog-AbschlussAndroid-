@@ -18,6 +18,7 @@ import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.databinding.FragmentTimerBinding
+import kotlinx.coroutines.processNextEventInCurrentThread
 import java.util.Locale
 
 
@@ -27,10 +28,10 @@ class TimerFragment : Fragment() {
     private val viewModel: viewModel by viewModels()
     private var taskId: Long = 0
     private var projectId: Long = 0
+    private var taskName: String? = ""
 
     var seconds = 0
     var isRunning = true
-    var oldTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,11 @@ class TimerFragment : Fragment() {
         arguments?.let {
             taskId = it.getLong("taskId")
             projectId = it.getLong("projectId")
+            taskName = it.getString("taskName")
         }
         Log.i("TimerFragment", "Task ID: $taskId")
+        Log.i("TimerFragment", "Project ID: ${projectId}")
+        Log.i("TimerFragment", "Task Name: $taskName")
     }
 
     override fun onCreateView(
@@ -62,6 +66,7 @@ class TimerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        binding.tvTaskName.text = taskName
 
         binding.btnStop.setOnClickListener {
 

@@ -60,5 +60,8 @@
         <argument
             android:name="taskId"
             app:argType="long" />
+        <argument
+            android:name="taskName"
+            app:argType="string" />
     </fragment>
 </navigation>
