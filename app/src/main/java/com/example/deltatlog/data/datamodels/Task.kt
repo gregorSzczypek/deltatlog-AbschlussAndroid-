@@ -24,7 +24,7 @@ data class Task(
     var name: String = "No Task name",
 
     @Json(name = "ColorTask")
-    val color: String = "#163036",
+    var color: String = "#163036",
 
     @Json(name = "DateTask")
     val date: String = LocalDateTime.now().toLocalDate().toString(),

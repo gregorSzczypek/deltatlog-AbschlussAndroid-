@@ -25,6 +25,7 @@ class TaskFragment : Fragment() {
     private val viewModel: viewModel by viewModels()
     private lateinit var binding: FragmentTaskBinding
     private var projectId: Long = 0
+    private var color: String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +47,8 @@ class TaskFragment : Fragment() {
         // Hole die projectId aus den Argumenten
         projectId = requireArguments().getLong("projectId")
         Log.i("projectID", projectId.toString())
+
+        color = requireArguments().getString("color")
 
         binding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
 
@@ -70,7 +73,9 @@ class TaskFragment : Fragment() {
                     requireContext(),
                     it.filter { it.taskProjectId == projectId },
                     findNavController(),
-                    projectId)
+                    projectId,
+                    color
+                )
             }
         )
 
@@ -88,7 +93,7 @@ class TaskFragment : Fragment() {
                     val newTaskNameString = newTaskName.text.toString()
                     val newTaskDescriptionString = newTaskDescription.text.toString()
 
-                    val newTask = Task(taskProjectId = projectId)
+                    val newTask = Task(taskProjectId = projectId, color = color.toString())
 
                     if (newTaskNameString != "") {
                         newTask.name = newTaskNameString

@@ -3,18 +3,22 @@ import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
+import com.example.deltatlog.data.Repository
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import java.util.Locale
 
 
 class ProjectAdapter(
@@ -51,6 +55,13 @@ class ProjectAdapter(
             R.drawable.ellipse_t_rkis,
             R.drawable.ellipse_schwarz
         )
+
+        val colors = listOf(
+            "#B26464",
+            "#93C164",
+            "#295074",
+            "#DFCE32"
+        )
     }
 
     // create new viewholders
@@ -75,6 +86,7 @@ class ProjectAdapter(
         holder.dateView.text = item.date
         holder.descriptionView.text = item.description
         holder.imageView.setImageResource(item.image)
+        holder.projectCardview.setCardBackgroundColor(Color.parseColor(item.color))
 
         // Set an OnTouchListener on the card view
         holder.projectCardview.setOnClickListener {
@@ -82,7 +94,7 @@ class ProjectAdapter(
             val navController = holder.projectCardview.findNavController()
             navController.navigate(
                 ProjectFragmentDirections.actionHomeFragmentToProjectDetailFragment(
-                    item.id
+                    item.id, item.color
                 )
             )
         }
@@ -141,7 +153,7 @@ class ProjectAdapter(
 
         holder.projectCardview.setOnLongClickListener {
 
-            val menuItems = arrayOf("Edit Project", "Delete Project")
+            val menuItems = arrayOf("Edit Project", "Change Color", "Delete Project")
 
             val popupMenu = PopupMenu(context, holder.projectCardview)
             menuItems.forEach { popupMenu.menu.add(it) }
@@ -149,8 +161,6 @@ class ProjectAdapter(
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.title) {
                     "Edit Project" -> {
-                        // Handle edit project action
-                        // TODO edit actions should be implemented here
                         val builder = AlertDialog.Builder(context)
                         val inflater = LayoutInflater.from(context)
                         val dialogLayout =
@@ -223,16 +233,41 @@ class ProjectAdapter(
                         true
                     }
 
-                    else -> false
-                }
-            }
-            popupMenu.show()
-            true // return true to indicate that the event has been consumed
-        }
-    }
+                    "Change Color" -> {
+                        // Show dialog when a button is clicked
+                        val dialogView =
+                            LayoutInflater.from(context).inflate(R.layout.dialog_color_list, null)
+                        val dialog = AlertDialog.Builder(context)
+                            .setView(dialogView)
+                            .create()
 
-    // get size of list for viewholder
-    override fun getItemCount(): Int {
-        return dataset.size
+                        val colorListView = dialogView.findViewById<ListView>(R.id.color_list)
+                        val colorAdapter = ColorAdapter(holder.colors, context) { color ->
+                            item.color = color
+                            viewModel.updateProject(item)
+
+                            this.notifyItemChanged(position)
+                            dialog.dismiss()
+                        }
+                        colorListView.adapter = colorAdapter
+
+                        // Set OnItemClickListener for the icon list
+                        colorListView.setOnItemClickListener { _, _, position, _ ->
+                            dialog.dismiss() // Dismiss the dialog when an icon is clicked
+                        }
+                        dialog.show()
+                        false
+                    }
+                else -> false
+            }
+        }
+        popupMenu.show()
+        true // return true to indicate that the event has been consumed
     }
+}
+
+// get size of list for viewholder
+override fun getItemCount(): Int {
+    return dataset.size
+}
 }

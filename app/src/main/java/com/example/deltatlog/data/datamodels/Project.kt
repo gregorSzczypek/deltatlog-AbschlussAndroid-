@@ -30,6 +30,9 @@ data class Project(
     @Json(name = "strDescriptionProject")
     var description: String = "No description",
 
+    @Json(name = "ColorProject")
+    var color: String = "#163036"
+
 //    @Json(name = "intNumberOfTasks")
 //    val numberOfTasks: Int = tasks.size,
 

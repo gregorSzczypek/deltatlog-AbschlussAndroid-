@@ -3,6 +3,7 @@ import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -26,7 +27,8 @@ class TaskAdapter(
     private var context: Context,
     private var dataset: List<Task>,
     private var navController: NavController,
-    private var projectId: Long
+    private var projectId: Long,
+    private var color: String?
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
 
@@ -64,10 +66,17 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
+        for (i in dataset) {
+            if (i.color != color && color != null) {
+                i.color = color!!
+                viewModel.updateTask(i)
+            }
+        }
+
         holder.taskName.text = item.name
         holder.taskDate.text = item.date
-//        holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
-        holder.taskDuration.text = item.duration.toString()
+        holder.taskCardView.setCardBackgroundColor(Color.parseColor(item.color))
+        holder.taskDuration.text = item.duration
         holder.taskDescription.text = item.notes
 
         // Set an OnTouchListener on the item view for animation
@@ -175,7 +184,7 @@ class TaskAdapter(
 
         // Set an OnCLickListener on the image Button
         holder.playButton.setOnClickListener {
-            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id, item.name))
+            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id, item.name, color))
         }
     }
 

@@ -29,6 +29,7 @@ class TimerFragment : Fragment() {
     private var taskId: Long = 0
     private var projectId: Long = 0
     private var taskName: String? = ""
+    private var color: String? = ""
 
     var seconds = 0
     var isRunning = true
@@ -40,6 +41,7 @@ class TimerFragment : Fragment() {
             taskId = it.getLong("taskId")
             projectId = it.getLong("projectId")
             taskName = it.getString("taskName")
+            color = it.getString("color")
         }
         Log.i("TimerFragment", "Task ID: $taskId")
         Log.i("TimerFragment", "Project ID: ${projectId}")
@@ -97,7 +99,8 @@ class TimerFragment : Fragment() {
 
             findNavController().navigate(
                 TimerFragmentDirections.actionTimerFragmentToProjectDetailFragment(
-                    projectId
+                    projectId,
+                    color
                 )
             )
         }
