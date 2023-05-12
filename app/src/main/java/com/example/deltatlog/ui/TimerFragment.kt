@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Task
@@ -50,6 +53,8 @@ class TimerFragment : Fragment() {
             container,
             false
         )
+        // damit LiveData automatisch observed wird vom layout
+        binding.lifecycleOwner = this.viewLifecycleOwner
         runTimer()
         // Inflate the layout for this fragment
         return binding.root
@@ -57,21 +62,33 @@ class TimerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+
         binding.btnStop.setOnClickListener {
+
             isRunning = false
 
-            val newTimeSeconds = seconds + oldTime
+            viewModel.taskList.observe(
+                viewLifecycleOwner,
+                Observer {
+                    val currentTask = it.filter { it.id == taskId && it.taskProjectId == projectId }[0]
+                    val newTimeSeconds = seconds + currentTask.elapsedTime
+                    currentTask.elapsedTime = newTimeSeconds
 
-//            sharedViewModel.saveTotalTime(newTimeSeconds)
-//            sharedViewModel.saveLastSessionTime(seconds)
+                    val hours = newTimeSeconds / 3600
+                    val minutes = (newTimeSeconds % 3600) / 60
+                    val sec = newTimeSeconds % 60
+                    val timeString = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
+                    currentTask.duration = timeString
+
+                    viewModel.updateTask(currentTask)
+                }
+            )
 
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val sec = seconds % 60
             var time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
-            //Toast.makeText(context, "Session time: $time", Toast.LENGTH_SHORT).show()
-
-//            sharedViewModel.saveLastSessionAdded(false)
+            Toast.makeText(context, "Session time: $time", Toast.LENGTH_SHORT).show()
 
             findNavController().navigate(
                 TimerFragmentDirections.actionTimerFragmentToProjectDetailFragment(

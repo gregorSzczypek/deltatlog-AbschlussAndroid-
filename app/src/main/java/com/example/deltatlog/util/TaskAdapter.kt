@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
+import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.ui.HomeFragmentDirections
@@ -29,6 +31,12 @@ class TaskAdapter(
     private var projectId: Long
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitList(list: List<Task>) {
+        dataset = list
+        notifyDataSetChanged()
+    }
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -52,8 +60,6 @@ class TaskAdapter(
         return ItemViewHolder(adapterLayout)
     }
 
-//    private val timers = mutableMapOf<Long, java.util.Timer>()
-
     // recyclingprocess
     // set parameters
     @SuppressLint("ClickableViewAccessibility")
@@ -66,11 +72,7 @@ class TaskAdapter(
         holder.taskDuration.text = item.duration.toString()
         holder.taskDescription.text = item.notes
 
-//        if (item.isTimerRunning) {
-//            viewModel.startTimer(holder, item, position, item.id, timers)
-//        }
-
-        // Set an OnTouchListener on the item view
+        // Set an OnTouchListener on the item view for animation
         holder.taskCardView.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -100,25 +102,53 @@ class TaskAdapter(
         // set an OnLongClickListener on the item view
         holder.taskCardView.setOnLongClickListener {
 
-            val menuItems = arrayOf("Rename Task", "Delete Task")
-
+            val menuItems = arrayOf("Edit Task", "Delete Task")
             val popupMenu = PopupMenu(context, holder.taskCardView)
             menuItems.forEach { popupMenu.menu.add(it) }
 
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.title) {
-                    "Rename Task" -> {
-                        // Handle Rename task action
-                        // TODO Rename tasks actions should be implemented here
-                        holder.taskName.isEnabled = true
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.title) {
+                        "Edit Task" -> {
+                            // Handle edit project action
+                            // TODO edit actions should be implemented here
+                            val builder = AlertDialog.Builder(context)
+                            val inflater = LayoutInflater.from(context)
+                            val dialogLayout =
+                                inflater.inflate(R.layout.edit_text_dialogue_task, null)
+                            val newProjectName =
+                                dialogLayout.findViewById<EditText>(R.id.input_task_name)
+                            val newDescription =
+                                dialogLayout.findViewById<EditText>(R.id.input_task_description)
 
-                        holder.taskCardView.setOnClickListener {
-                            item.name = holder.taskName.text.toString()
-                            holder.taskName.isEnabled = false
-                            viewModel.updateTask(item)
+                            with(builder) {
+                                setTitle("Update Task")
+                                setPositiveButton("Ok") { dialog, which ->
+                                    val newProjectNameString = newProjectName.text.toString()
+                                    val newDescriptionString = newDescription.text.toString()
+
+                                    if (newProjectNameString != "") {
+                                        item.name = newProjectNameString
+                                    }
+                                    if (newDescriptionString != "") {
+                                        item.notes = newDescriptionString
+                                    }
+
+                                    viewModel.updateTask(item)
+                                    submitList(viewModel.taskList.value!!)
+                                    Toast.makeText(
+                                        context,
+                                        "$newProjectNameString updated",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                setNegativeButton("Cancel") { dialog, which ->
+                                    dialog.dismiss()
+                                }
+                                setView(dialogLayout)
+                            }.show()
+
+                            true
                         }
-                        true
-                    }
 
                     "Delete Task" -> {
                         // Handle delete task action

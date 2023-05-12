@@ -57,7 +57,7 @@ class TaskFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // BackButton Navigation in Toolbar
         binding.materialToolbar.setNavigationOnClickListener{
-            findNavController().navigateUp()
+            findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
         }
 
         val recyclerView = binding.taskList

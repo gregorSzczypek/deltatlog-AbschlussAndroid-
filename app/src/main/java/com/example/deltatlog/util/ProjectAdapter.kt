@@ -187,6 +187,9 @@ class ProjectAdapter(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+                            setNegativeButton("Cancel") { dialog, which ->
+                                dialog.dismiss()
+                            }
                             setView(dialogLayout)
                         }.show()
 

@@ -35,12 +35,6 @@ data class Task(
     @Json(name = "DescriptionTask")
     var description: String = "No Description",
 
-    @Json(name = "IsTimerRunning")
-    var isTimerRunning: Boolean = false,
-
-    @Json(name = "StartTime")
-    var startTime: Long = 0,
-
     @Json(name = "NotesTask")
     var notes: String = "No Notes",
 

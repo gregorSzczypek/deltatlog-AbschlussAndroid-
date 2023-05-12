@@ -35,6 +35,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
 
     val projectList = repository.projectList
     val taskList = repository.taskList
+
     //instanz von firebase
     private val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -144,7 +145,13 @@ class viewModel(application: Application) : AndroidViewModel(application) {
 ////        _loading.value = false
 //    }
 
-    fun signUp(context: Context, email: String, pw: String, pwConfirm: String, navController: NavController) {
+    fun signUp(
+        context: Context,
+        email: String,
+        pw: String,
+        pwConfirm: String,
+        navController: NavController
+    ) {
 
         // Check of valid input and calling register method from firebase object
         if (email.isNotEmpty() && pw.isNotEmpty() && pwConfirm.isNotEmpty()) {
@@ -166,13 +173,18 @@ class viewModel(application: Application) : AndroidViewModel(application) {
             Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
     }
+
     fun login(context: Context, email: String, pw: String, navController: NavController) {
         // Check of valid input and calling login method from firebase object
         if (email.isNotEmpty() && pw.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
                 if (it.isSuccessful) {
                     _currentUser.value = firebaseAuth.currentUser
-                    Toast.makeText(context, "Succesfully signed in user ${firebaseAuth.currentUser?.email}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        "Succesfully signed in user ${firebaseAuth.currentUser?.email}",
+                        Toast.LENGTH_LONG
+                    ).show()
                     navController.navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
                 } else {
                     Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -181,38 +193,6 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         } else {
             Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    fun startTimer(holder: TaskAdapter.ItemViewHolder, item: Task, position: Int, itemId: Long, timers: MutableMap<Long, java.util.Timer>) {
-
-        timers.getOrPut(itemId, {java.util.Timer()})
-        val timer = timers[itemId]
-
-        timer!!.scheduleAtFixedRate(object : TimerTask() {
-            @SuppressLint("SetTextI18n")
-            override fun run() {
-                holder.itemView.post {
-                    val timeInMillis = System.currentTimeMillis() - item.startTime + item.elapsedTime
-                    val seconds = (timeInMillis / 1000).toInt()
-                    val minutes = seconds / 60
-                    val hours = minutes / 60
-                    holder.taskDuration.text =
-                        "${String.format("%02d", hours % 24)}:${String.format("%02d", minutes % 60)}:${String.format(
-                            "%02d",
-                            seconds % 60
-                        )}"
-                }
-            }
-        }, 0, 1000)
-    }
-
-    fun stopTimer(holder: TaskAdapter.ItemViewHolder, item:Task, position: Int, itemId: Long, adapter: TaskAdapter, timers: MutableMap<Long, java.util.Timer>) {
-        val timer = timers[itemId]
-        timer!!.cancel()
-        item.duration = holder.taskDuration.text.toString()
-        adapter.notifyItemChanged(position)
-//        updateTask(item)
-        timers.remove(itemId)
     }
 }
 
