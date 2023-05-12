@@ -39,7 +39,6 @@ class IconAdapter(private val icons: List<Int>, private val context: Context, pr
             onIconClickListener?.invoke(icons[position])
 
         }
-
         return view!!
     }
 }

@@ -13,7 +13,6 @@ import com.example.deltatlog.data.datamodels.Project
 
 @Database(entities = [Project::class], version = 2)
 abstract class ProjectDatabase : RoomDatabase() {
-
     abstract val projectDatabaseDao: ProjectDatabaseDao
 }
 
@@ -30,7 +29,6 @@ fun getDatabase(context: Context): ProjectDatabase {
             )
                 .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
-
         }
     }
     Log.i("DatabaseBuilder", "HERE BUILDING DB")

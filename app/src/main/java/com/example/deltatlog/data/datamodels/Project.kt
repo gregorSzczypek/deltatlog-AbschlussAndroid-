@@ -21,9 +21,6 @@ data class Project(
     @Json(name = "strCustomerProject")
     var nameCustomer: String = "No customer name",
 
-//    @Json(name = "intColorProject")
-//    val color: String = "#ffffff",
-
     @Json(name = "imageProject")
     var image: Int = R.drawable.applogo,
 
@@ -35,8 +32,5 @@ data class Project(
 
 //    @Json(name = "intNumberOfTasks")
 //    val numberOfTasks: Int = tasks.size,
-
-//    @Json(name = "intNumberOfOpenTasks")
-//    val numberOfOpenTasks: Int = 0
 
 )

@@ -1,7 +1,5 @@
 package com.example.deltatlog
 
-import TaskAdapter
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -21,7 +19,6 @@ import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
-import java.util.TimerTask
 
 const val TAG = "SharedViewModel"
 

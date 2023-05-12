@@ -22,7 +22,6 @@ class ProjectAdapter(
     private var context: Context,
     private var dataset: List<Project>
 
-
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
@@ -30,8 +29,6 @@ class ProjectAdapter(
         dataset = list
         notifyDataSetChanged()
     }
-
-    // Define the request code as a constant
 
     // parts of the item which need to be change by adapter
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -79,7 +76,7 @@ class ProjectAdapter(
         holder.descriptionView.text = item.description
         holder.imageView.setImageResource(item.image)
 
-
+        // Set an OnTouchListener on the card view
         holder.projectCardview.setOnClickListener {
 
             val navController = holder.projectCardview.findNavController()
@@ -138,9 +135,7 @@ class ProjectAdapter(
             iconListView.setOnItemClickListener { _, _, position, _ ->
                 dialog.dismiss() // Dismiss the dialog when an icon is clicked
             }
-
             dialog.show()
-
             false
         }
 

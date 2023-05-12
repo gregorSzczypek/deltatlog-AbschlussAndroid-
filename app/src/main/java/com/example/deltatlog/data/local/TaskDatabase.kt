@@ -30,7 +30,6 @@ fun getTaskDatabase(context: Context): TaskDatabase {
             )
                 .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
-
         }
     }
     Log.i("DatabaseBuilder", "here building database")
