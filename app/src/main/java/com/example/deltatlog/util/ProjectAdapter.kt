@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
-import com.example.deltatlog.ui.HomeFragmentDirections
+import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
 
@@ -43,6 +43,7 @@ class ProjectAdapter(
         val descriptionView = view.findViewById<TextView>(R.id.task_description)
 
         val icons = listOf(
+            R.drawable.applogo,
             R.drawable.ellipse_dunkel,
             R.drawable.ellipse_blau,
             R.drawable.ellipse_gelb,
@@ -83,7 +84,7 @@ class ProjectAdapter(
 
             val navController = holder.projectCardview.findNavController()
             navController.navigate(
-                HomeFragmentDirections.actionHomeFragmentToProjectDetailFragment(
+                ProjectFragmentDirections.actionHomeFragmentToProjectDetailFragment(
                     item.id
                 )
             )
@@ -96,8 +97,8 @@ class ProjectAdapter(
                     // Start the animation on the view
                     val animator = ObjectAnimator.ofPropertyValuesHolder(
                         v,
-                        PropertyValuesHolder.ofFloat("scaleX", 0.9f),
-                        PropertyValuesHolder.ofFloat("scaleY", 0.9f),
+                        PropertyValuesHolder.ofFloat("scaleX", 0.975f),
+                        PropertyValuesHolder.ofFloat("scaleY", 0.975f),
                     )
                     animator.duration = 100
                     animator.start()
@@ -121,17 +122,23 @@ class ProjectAdapter(
 
             // Show dialog when a button is clicked
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item_list, null)
+            val dialog = AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
 
             val iconListView = dialogView.findViewById<ListView>(R.id.icon_list)
             val iconAdapter = IconAdapter(holder.icons, context) { icon ->
                 item.image = icon
                 viewModel.updateProject(item)
+                dialog.dismiss()
             }
             iconListView.adapter = iconAdapter
 
-            val dialog = AlertDialog.Builder(context)
-                .setView(dialogView)
-                .create()
+            // Set OnItemClickListener for the icon list
+            iconListView.setOnItemClickListener { _, _, position, _ ->
+                dialog.dismiss() // Dismiss the dialog when an icon is clicked
+            }
+
             dialog.show()
 
             false
@@ -155,10 +162,13 @@ class ProjectAdapter(
                             inflater.inflate(R.layout.edit_text_dialogue_project, null)
                         val newProjectName =
                             dialogLayout.findViewById<EditText>(R.id.input_project_name)
+                        newProjectName.setText(item.name)
                         val newCustomerName =
                             dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
+                        newCustomerName.setText(item.nameCustomer)
                         val newDescription =
                             dialogLayout.findViewById<EditText>(R.id.input_project_description)
+                        newDescription.setText(item.description)
 
                         with(builder) {
                             setTitle("Update Project")

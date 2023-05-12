@@ -12,7 +12,7 @@
         android:layout_margin="10dp"
         android:ems="10"
         android:hint="Enter project name"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="55dp" />
@@ -24,7 +24,7 @@
         android:layout_margin="10dp"
         android:ems="10"
         android:hint="Enter customer name"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/input_project_name"
         tools:layout_editor_absoluteX="55dp" />
@@ -36,7 +36,7 @@
         android:layout_margin="10dp"
         android:ems="10"
         android:hint="Enter project description"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/input_project_customer_name"
         tools:layout_editor_absoluteX="55dp" />

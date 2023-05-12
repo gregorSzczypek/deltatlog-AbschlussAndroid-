@@ -16,14 +16,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
-import com.example.deltatlog.databinding.FragmentHomeBinding
+import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
-class HomeFragment : Fragment() {
+class ProjectFragment : Fragment() {
 
     private val viewModel: viewModel by viewModels()
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
 
@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_home,
+            R.layout.fragment_project,
             container,
             false
         )
@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
                 R.id.logout ->
                 firebaseAuth.signOut()
             }
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+            findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
             if (firebaseAuth.currentUser == null) {
                 Toast.makeText(
                     context,

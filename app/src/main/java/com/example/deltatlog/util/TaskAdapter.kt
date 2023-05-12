@@ -77,8 +77,8 @@ class TaskAdapter(
                     // Start the jump animation on the view
                     val animator = ObjectAnimator.ofPropertyValuesHolder(
                         v,
-                        PropertyValuesHolder.ofFloat("scaleX", 0.9f),
-                        PropertyValuesHolder.ofFloat("scaleY", 0.9f),
+                        PropertyValuesHolder.ofFloat("scaleX", 0.975f),
+                        PropertyValuesHolder.ofFloat("scaleY", 0.975f),
                     )
                     animator.duration = 100
                     animator.start()
@@ -107,29 +107,25 @@ class TaskAdapter(
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.title) {
                         "Edit Task" -> {
-                            // Handle edit project action
-                            // TODO edit actions should be implemented here
                             val builder = AlertDialog.Builder(context)
                             val inflater = LayoutInflater.from(context)
                             val dialogLayout =
                                 inflater.inflate(R.layout.edit_text_dialogue_task, null)
-                            val newProjectName =
+                            val newTaskName =
                                 dialogLayout.findViewById<EditText>(R.id.input_task_name)
-                            val newDescription =
+                            newTaskName.setText(item.name)
+                            val newNote =
                                 dialogLayout.findViewById<EditText>(R.id.input_task_description)
+                            newNote.setText(item.notes)
 
                             with(builder) {
                                 setTitle("Update Task")
                                 setPositiveButton("Ok") { dialog, which ->
-                                    val newProjectNameString = newProjectName.text.toString()
-                                    val newDescriptionString = newDescription.text.toString()
+                                    val newProjectNameString = newTaskName.text.toString()
+                                    val newDescriptionString = newNote.text.toString()
 
-                                    if (newProjectNameString != "") {
                                         item.name = newProjectNameString
-                                    }
-                                    if (newDescriptionString != "") {
                                         item.notes = newDescriptionString
-                                    }
 
                                     viewModel.updateTask(item)
                                     submitList(viewModel.taskList.value!!)
@@ -144,7 +140,6 @@ class TaskAdapter(
                                 }
                                 setView(dialogLayout)
                             }.show()
-
                             true
                         }
 
