@@ -1,25 +1,5 @@
 package com.example.apicalls.adapter
 
-import TaskAdapter
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.annotation.SuppressLint
-import android.content.Context
-import android.os.Looper
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
-import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
-import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.util.Timer
-
 //class TaskAttrAdapter(
 //
 //    private var taskList: List<Task>,

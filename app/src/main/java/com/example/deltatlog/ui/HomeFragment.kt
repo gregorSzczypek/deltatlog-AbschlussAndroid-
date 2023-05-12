@@ -14,7 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class HomeFragment : Fragment() {
 
-    private val viewModel: SharedViewModel by viewModels()
+    private val viewModel: viewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var firebaseAuth: FirebaseAuth
 

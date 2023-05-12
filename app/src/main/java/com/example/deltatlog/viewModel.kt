@@ -27,7 +27,7 @@ const val TAG = "SharedViewModel"
 
 enum class ApiStatus { LOADING, ERROR, DONE }
 
-class SharedViewModel(application: Application) : AndroidViewModel(application) {
+class viewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = getDatabase(application)
     private val taskDatabase = getTaskDatabase(application)

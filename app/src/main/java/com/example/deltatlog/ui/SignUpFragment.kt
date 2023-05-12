@@ -9,14 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentSignUpBinding
 
 
 class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
-    private val sharedViewModel: SharedViewModel by viewModels()
+    private val viewModel: viewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class SignUpFragment : Fragment() {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
             val pwConfirm = binding.inputPw2.text.toString()
-            sharedViewModel.signUp(requireContext(), email, pw, pwConfirm, findNavController())
+            viewModel.signUp(requireContext(), email, pw, pwConfirm, findNavController())
         }
 
         // BackButton Navigation in Toolbar

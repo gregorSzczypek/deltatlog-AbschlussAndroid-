@@ -3,30 +3,30 @@ import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.util.Timer
+import com.example.deltatlog.ui.HomeFragmentDirections
+import com.example.deltatlog.ui.TaskFragmentDirections
 import com.google.android.material.card.MaterialCardView
-import java.util.TimerTask
 
 
 class TaskAdapter(
-    private var sharedViewModel: SharedViewModel,
+    private var viewModel: viewModel,
     private var context: Context,
-    private var dataset: List<Task>
+    private var dataset: List<Task>,
+    private var navController: NavController,
+    private var projectId: Long
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
 
@@ -52,7 +52,7 @@ class TaskAdapter(
         return ItemViewHolder(adapterLayout)
     }
 
-    private val timers = mutableMapOf<Long, java.util.Timer>()
+//    private val timers = mutableMapOf<Long, java.util.Timer>()
 
     // recyclingprocess
     // set parameters
@@ -66,9 +66,9 @@ class TaskAdapter(
         holder.taskDuration.text = item.duration.toString()
         holder.taskDescription.text = item.notes
 
-        if (item.isTimerRunning) {
-            sharedViewModel.startTimer(holder, item, position, item.id, timers)
-        }
+//        if (item.isTimerRunning) {
+//            viewModel.startTimer(holder, item, position, item.id, timers)
+//        }
 
         // Set an OnTouchListener on the item view
         holder.taskCardView.setOnTouchListener { v, event ->
@@ -112,30 +112,37 @@ class TaskAdapter(
                         // TODO Rename tasks actions should be implemented here
                         holder.taskName.isEnabled = true
 
-                        holder.taskCardView.setOnClickListener{
+                        holder.taskCardView.setOnClickListener {
                             item.name = holder.taskName.text.toString()
                             holder.taskName.isEnabled = false
-                            sharedViewModel.updateTask(item)
+                            viewModel.updateTask(item)
                         }
                         true
                     }
+
                     "Delete Task" -> {
                         // Handle delete task action
                         AlertDialog.Builder(context)
                             .setTitle("Confirm Task Deletion")
                             .setMessage("Are you sure you want to delete this Task?")
                             .setPositiveButton("Yes") { dialog, _ ->
-                                sharedViewModel.deleteTask(item)
-                                Toast.makeText(context, "Task ${item.name} deleted", Toast.LENGTH_LONG).show()
+                                viewModel.deleteTask(item)
+                                Toast.makeText(
+                                    context,
+                                    "Task ${item.name} deleted",
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 dialog.dismiss()
                             }
                             .setNegativeButton("No") { dialog, _ ->
-                                Toast.makeText(context, "Deletion cancelled", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Deletion cancelled", Toast.LENGTH_SHORT)
+                                    .show()
                                 dialog.dismiss()
                             }
                             .show()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -144,17 +151,8 @@ class TaskAdapter(
         }
 
         // Set an OnCLickListener on the image Button
-        holder.playButton.setOnClickListener{
-
-            if (item.isTimerRunning) {
-                sharedViewModel.stopTimer(holder, item, position, item.id, this, timers)
-                item.isTimerRunning = false
-                item.elapsedTime += System.currentTimeMillis() - item.startTime
-            } else {
-                sharedViewModel.startTimer(holder, item, position, item.id, timers)
-                item.isTimerRunning = true
-                item.startTime = System.currentTimeMillis()
-            }
+        holder.playButton.setOnClickListener {
+            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id))
         }
     }
 

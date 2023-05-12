@@ -11,14 +11,14 @@ import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.HomeFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
 
 class ProjectAdapter(
-    private var sharedViewModel: SharedViewModel,
+    private var viewModel: viewModel,
     private var context: Context,
     private var dataset: List<Project>
 
@@ -125,7 +125,7 @@ class ProjectAdapter(
             val iconListView = dialogView.findViewById<ListView>(R.id.icon_list)
             val iconAdapter = IconAdapter(holder.icons, context) { icon ->
                 item.image = icon
-                sharedViewModel.updateProject(item)
+                viewModel.updateProject(item)
 //                    Toast.makeText(context, "Icon clicked: ${context.resources.getResourceEntryName(icon)}", Toast.LENGTH_SHORT).show()
 //                    Toast.makeText(context, "Item image: ${item.image.toString()}", Toast.LENGTH_SHORT).show()
             }
@@ -179,8 +179,8 @@ class ProjectAdapter(
                                     item.description = newDescriptionString
                                 }
 
-                                sharedViewModel.updateProject(item)
-                                submitList(sharedViewModel.projectList.value!!)
+                                viewModel.updateProject(item)
+                                submitList(viewModel.projectList.value!!)
                                 Toast.makeText(
                                     context,
                                     "$newProjectNameString updated",
@@ -199,8 +199,8 @@ class ProjectAdapter(
                             .setTitle("Confirm Project Deletion")
                             .setMessage("Are you sure you want to delete this project and all of the related tasks?")
                             .setPositiveButton("Yes") { dialog, _ ->
-                                sharedViewModel.deleteAllTasks(item.id)
-                                sharedViewModel.deleteProject(item)
+                                viewModel.deleteAllTasks(item.id)
+                                viewModel.deleteProject(item)
                                 Toast.makeText(
                                     context,
                                     "Project ${item.name} deleted",

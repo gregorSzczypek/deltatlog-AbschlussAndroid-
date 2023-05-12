@@ -3,23 +3,18 @@ package com.example.deltatlog.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentLoginBinding
-import com.example.deltatlog.databinding.FragmentSignUpBinding
-import com.google.firebase.auth.FirebaseAuth
-import kotlin.concurrent.fixedRateTimer
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    private val sharedViewModel: SharedViewModel by viewModels()
+    private val viewModel: viewModel by viewModels()
     private lateinit var userMail: String
 
     override fun onCreateView(
@@ -44,7 +39,7 @@ class LoginFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
-            sharedViewModel.login(requireContext(), email, pw, findNavController())
+            viewModel.login(requireContext(), email, pw, findNavController())
         }
 
         // BackButton Navigation in Toolbar

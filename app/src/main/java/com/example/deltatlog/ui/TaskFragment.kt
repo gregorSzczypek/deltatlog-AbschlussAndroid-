@@ -15,15 +15,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.SharedViewModel
-import com.example.deltatlog.data.datamodels.Project
+import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
 
 
 class TaskFragment : Fragment() {
 
-    private val viewModel: SharedViewModel by viewModels()
+    private val viewModel: viewModel by viewModels()
     private lateinit var binding: FragmentTaskBinding
     private var projectId: Long = 0
 
@@ -66,7 +65,12 @@ class TaskFragment : Fragment() {
         viewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = TaskAdapter(viewModel, requireContext(), it.filter { it.taskProjectId == projectId })
+                recyclerView.adapter = TaskAdapter(
+                    viewModel,
+                    requireContext(),
+                    it.filter { it.taskProjectId == projectId },
+                    findNavController(),
+                    projectId)
             }
         )
 

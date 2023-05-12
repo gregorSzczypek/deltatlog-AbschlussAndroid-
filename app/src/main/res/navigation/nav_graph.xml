@@ -43,5 +43,22 @@
             app:destination="@id/homeFragment" />
         <argument android:name="projectId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_projectDetailFragment_to_timerFragment"
+            app:destination="@id/timerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.deltatlog.ui.TimerFragment"
+        android:label="TimerFragment" >
+        <action
+            android:id="@+id/action_timerFragment_to_projectDetailFragment"
+            app:destination="@id/projectDetailFragment" />
+        <argument
+            android:name="projectId"
+            app:argType="long" />
+        <argument
+            android:name="taskId"
+            app:argType="long" />
     </fragment>
 </navigation>
