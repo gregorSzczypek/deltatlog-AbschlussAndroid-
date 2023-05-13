@@ -145,6 +145,9 @@ class ProjectAdapter(
                         val newDescription =
                             dialogLayout.findViewById<EditText>(R.id.input_project_description)
                         newDescription.setText(item.description)
+                        val newHomepage =
+                            dialogLayout.findViewById<EditText>(R.id.input_company_homepage)
+                        newHomepage.setText(item.homepage)
 
                         with(builder) {
                             setTitle("Update Project")
@@ -152,6 +155,7 @@ class ProjectAdapter(
                                 val newProjectNameString = newProjectName.text.toString()
                                 val newCustomerNameString = newCustomerName.text.toString()
                                 val newDescriptionString = newDescription.text.toString()
+                                val newHomepageString = newHomepage.text.toString()
 
                                 if (newProjectNameString != "") {
                                     item.name = newProjectNameString
@@ -161,6 +165,10 @@ class ProjectAdapter(
                                 }
                                 if (newDescriptionString != "") {
                                     item.description = newDescriptionString
+                                }
+                                if (newHomepageString != "") {
+                                    item.homepage = newHomepageString
+                                    item.logoUrl = "https://logo.clearbit.com/${item.homepage}"
                                 }
 
                                 viewModel.updateProject(item)
