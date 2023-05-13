@@ -1,14 +1,16 @@
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.deltatlog.R
 
 // IconAdapter.kt
-class ColorAdapter(private val colors: List<String>, private val context: Context, private val onIconClickListener: ((String) -> Unit)? = null
+class ColorAdapter(private val colors: List<Int>, private val context: Context, private val onIconClickListener: ((String) -> Unit)? = null
 ) : BaseAdapter() {
 
     override fun getCount(): Int {
@@ -30,11 +32,13 @@ class ColorAdapter(private val colors: List<String>, private val context: Contex
         }
 
         val iconNameTextView = view?.findViewById<TextView>(R.id.icon_name_text_view)
+        val colorString = "#" + Integer.toHexString(ContextCompat.getColor(context, colors[position])).substring(2).toUpperCase()
 
-        iconNameTextView?.text = colors[position]
+        iconNameTextView?.text = colorString
+        iconNameTextView?.background = ColorDrawable(Color.parseColor(colorString))
 
         iconNameTextView?.setOnClickListener {
-            onIconClickListener?.invoke(colors[position])
+            onIconClickListener?.invoke(colorString)
         }
         return view!!
     }

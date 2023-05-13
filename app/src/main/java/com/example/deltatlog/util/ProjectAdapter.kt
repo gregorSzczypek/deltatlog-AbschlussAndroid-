@@ -9,16 +9,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
-import com.example.deltatlog.data.Repository
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
-import java.util.Locale
 
 
 class ProjectAdapter(
