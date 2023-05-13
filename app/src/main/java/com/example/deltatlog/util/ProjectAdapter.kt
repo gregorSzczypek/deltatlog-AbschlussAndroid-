@@ -164,7 +164,7 @@ class ProjectAdapter(
                                 }
                                 if (newHomepageString != "") {
                                     item.homepage = newHomepageString
-                                    item.logoUrl = "https://logo.clearbit.com/${item.homepage}"
+                                    item.logoUrl = "https://logo.clearbit.com/${item.homepage}?size=200"
                                 }
 
                                 viewModel.updateProject(item)

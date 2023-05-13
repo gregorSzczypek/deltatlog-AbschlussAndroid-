@@ -10,7 +10,6 @@ import androidx.navigation.fragment.NavHostFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
-    private val viewModel: viewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

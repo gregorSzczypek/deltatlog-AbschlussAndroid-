@@ -1,6 +1,7 @@
 package com.example.deltatlog.ui
 
 import TaskAdapter
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +19,6 @@ import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
-
 
 class TaskFragment : Fragment() {
 
@@ -39,15 +39,9 @@ class TaskFragment : Fragment() {
             false
         )
 
-        // damit LiveData automatisch observed wird vom layout
-        binding.lifecycleOwner = this.viewLifecycleOwner
-
-        viewModel.loadTaskData()
-
         // Hole die projectId aus den Argumenten
         projectId = requireArguments().getLong("projectId")
         Log.i("projectID", projectId.toString())
-
         color = requireArguments().getString("color")
 
         binding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
@@ -56,6 +50,7 @@ class TaskFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // BackButton Navigation in Toolbar
@@ -100,7 +95,6 @@ class TaskFragment : Fragment() {
                     if (newTaskDescriptionString != "") {
                         newTask.notes = newTaskDescriptionString
                     }
-
                     viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskNameString created", Toast.LENGTH_SHORT).show()
                 }

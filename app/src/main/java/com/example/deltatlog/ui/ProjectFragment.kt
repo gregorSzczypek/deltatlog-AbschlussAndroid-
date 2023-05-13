@@ -40,7 +40,6 @@ class ProjectFragment : Fragment() {
 
         // observe livedata
         binding.lifecycleOwner = this.viewLifecycleOwner
-        viewModel.loadProjectData() // load projects into DB
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
 
         // Inflate the layout for this fragment
@@ -109,7 +108,7 @@ class ProjectFragment : Fragment() {
                         newProject.homepage = newHomepageString
                     }
 
-                    newProject.logoUrl = "https://logo.clearbit.com/${newProject.homepage}"
+                    newProject.logoUrl = "https://logo.clearbit.com/${newProject.homepage}?size=200"
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
                 }

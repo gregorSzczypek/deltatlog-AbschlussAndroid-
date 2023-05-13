@@ -19,8 +19,6 @@ import kotlinx.coroutines.launch
 
 const val TAG = "SharedViewModel"
 
-enum class ApiStatus { LOADING, ERROR, DONE }
-
 class viewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = getDatabase(application)
@@ -28,18 +26,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(database, taskDatabase)
     val projectList = repository.projectList
     val taskList = repository.taskList
-    //instanz von firebase
     private val firebaseAuth = FirebaseAuth.getInstance()
-
-    fun loadProjectData() {
-        viewModelScope.launch {
-            try {
-                repository.getProjects()
-            } catch (e: Exception) {
-                Log.e(TAG, "Error loading Data: $e")
-            }
-        }
-    }
 
     fun insertProject(project: Project) {
         viewModelScope.launch {
@@ -56,17 +43,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     fun deleteProject(project: Project) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${project.id}")
-            repository.delete(project)
-        }
-    }
-
-    fun loadTaskData() {
-        viewModelScope.launch {
-            try {
-                repository.getTasks()
-            } catch (e: Exception) {
-                Log.e(TAG, "Error loading Data: $e")
-            }
+            repository.deleteProject(project)
         }
     }
 

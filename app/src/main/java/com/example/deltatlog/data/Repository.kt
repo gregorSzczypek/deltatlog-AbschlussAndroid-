@@ -16,13 +16,6 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
     val projectList: LiveData<List<Project>> = database.projectDatabaseDao.getAll()
     val taskList: LiveData<List<Task>> = taskDatabase.taskDatabaseDao.getAll()
 
-    suspend fun getProjects() {
-        withContext(Dispatchers.IO) {
-            val newProjectList = database.projectDatabaseDao.getAll()
-//            database.projectDatabaseDao.insertAll(newProjectList)
-        }
-    }
-
     suspend fun insertProject(project: Project) {
         try {
             database.projectDatabaseDao.insert(project)
@@ -40,17 +33,11 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    suspend fun delete(project: Project) {
+    suspend fun deleteProject(project: Project) {
         try {
             database.projectDatabaseDao.deleteById(project.id)
         } catch (e: Exception) {
             Log.d(TAG, "Failed to delete Database entry: $e")
-        }
-    }
-
-    suspend fun getTasks() {
-        withContext(Dispatchers.IO) {
-            val newTaskList = taskDatabase.taskDatabaseDao.getAll()
         }
     }
 
