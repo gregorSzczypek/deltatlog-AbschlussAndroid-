@@ -42,7 +42,7 @@ class ProjectFragment : Fragment() {
         // observe livedata
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-        viewModel.loadData() // load projects into DB
+        viewModel.loadProjectData() // load projects into DB
 
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
 
@@ -88,6 +88,7 @@ class ProjectFragment : Fragment() {
             val newProjectName = dialogLayout.findViewById<EditText>(R.id.input_project_name)
             val newCustomerName = dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
             val newDescription = dialogLayout.findViewById<EditText>(R.id.input_project_description)
+            val newHomepage = dialogLayout.findViewById<EditText>(R.id.input_company_homepage)
 
             with(builder) {
                 setTitle("New Project")
@@ -95,6 +96,7 @@ class ProjectFragment : Fragment() {
                     val newProjectNameString = newProjectName.text.toString()
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
+                    val newHomepageString = newHomepage.text.toString()
 
                     val newProject = Project()
 
@@ -107,6 +109,11 @@ class ProjectFragment : Fragment() {
                     if (newDescriptionString != "") {
                         newProject.description = newDescriptionString
                     }
+                    if (newHomepageString != "") {
+                        newProject.homepage = newHomepageString
+                    }
+
+                    newProject.logoUrl = "https://logo.clearbit.com/${newProject.homepage}"
 
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()

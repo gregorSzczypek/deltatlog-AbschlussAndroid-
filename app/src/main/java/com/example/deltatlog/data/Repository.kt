@@ -23,7 +23,7 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    suspend fun insert(project: Project) {
+    suspend fun insertProject(project: Project) {
         try {
             database.projectDatabaseDao.insert(project)
             Log.i("New Project", project.toString())
@@ -32,7 +32,7 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-    suspend fun update(project: Project) {
+    suspend fun updateProject(project: Project) {
         try {
             database.projectDatabaseDao.update(project)
         } catch (e: Exception) {
@@ -48,11 +48,9 @@ class Repository(private val database: ProjectDatabase, private val taskDatabase
         }
     }
 
-
     suspend fun getTasks() {
         withContext(Dispatchers.IO) {
             val newTaskList = taskDatabase.taskDatabaseDao.getAll()
-//            database.projectDatabaseDao.insertAll(newProjectList)
         }
     }
 

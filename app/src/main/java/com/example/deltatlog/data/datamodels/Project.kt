@@ -21,6 +21,12 @@ data class Project(
     @Json(name = "strCustomerProject")
     var nameCustomer: String = "No customer name",
 
+    @Json(name = "strHomepage")
+    var homepage: String = "",
+
+    @Json(name = "logoUrl")
+    var logoUrl: String = "",
+
     @Json(name = "imageProject")
     var image: Int = R.drawable.applogo,
 
@@ -35,6 +41,5 @@ data class Project(
 
 //    @Json(name = "intNumberOfTasks")
 //    val numberOfTasks: Int = tasks.size,
-
 
 )

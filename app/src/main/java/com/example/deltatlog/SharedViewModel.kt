@@ -5,8 +5,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.deltatlog.data.Repository
@@ -17,7 +15,6 @@ import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.LoginFragmentDirections
 import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 const val TAG = "SharedViewModel"
@@ -29,53 +26,30 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val database = getDatabase(application)
     private val taskDatabase = getTaskDatabase(application)
     private val repository = Repository(database, taskDatabase)
-
     val projectList = repository.projectList
     val taskList = repository.taskList
-
     //instanz von firebase
     private val firebaseAuth = FirebaseAuth.getInstance()
 
-    //livedata für user in unserer app
-    private val _currentUser = MutableLiveData<FirebaseUser?>(firebaseAuth.currentUser)
-    val currentUser: LiveData<FirebaseUser?>
-        get() = _currentUser
-
-    private val _loading = MutableLiveData<ApiStatus>()
-    val loading: LiveData<ApiStatus>
-        get() = _loading
-
-    val _uri = MutableLiveData<String>()
-    val uri: LiveData<String>
-        get() = _uri
-
-    fun loadData() {
+    fun loadProjectData() {
         viewModelScope.launch {
             try {
                 repository.getProjects()
-                _loading.value = ApiStatus.DONE
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading Data: $e")
-                if (projectList.value.isNullOrEmpty()) {
-                    _loading.value = ApiStatus.ERROR
-                } else {
-                    _loading.value = ApiStatus.DONE
-                }
             }
         }
     }
 
     fun insertProject(project: Project) {
         viewModelScope.launch {
-            repository.insert(project)
-//            _loading.value = true
+            repository.insertProject(project)
         }
     }
 
     fun updateProject(project: Project) {
         viewModelScope.launch {
-            repository.update(project)
-//            _loading.value = true
+            repository.updateProject(project)
         }
     }
 
@@ -83,27 +57,15 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${project.id}")
             repository.delete(project)
-//            _loading.value = true
         }
     }
-
-    fun unsetComplete() {
-//        _loading.value = false
-    }
-
 
     fun loadTaskData() {
         viewModelScope.launch {
             try {
                 repository.getTasks()
-                _loading.value = ApiStatus.DONE
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading Data: $e")
-                if (taskList.value.isNullOrEmpty()) {
-                    _loading.value = ApiStatus.ERROR
-                } else {
-                    _loading.value = ApiStatus.DONE
-                }
             }
         }
     }
@@ -111,14 +73,12 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     fun insertTask(task: Task) {
         viewModelScope.launch {
             repository.insertTask(task)
-//            _loading.value = true
         }
     }
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
             repository.updateTask(task)
-//            _loading.value = true
         }
     }
 
@@ -126,7 +86,6 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${task.id}")
             repository.deleteTask(task)
-//            _loading.value = true
         }
     }
 
@@ -134,13 +93,8 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${projectTaskId}")
             repository.deleteAllTasks(projectTaskId)
-//            _loading.value = true
         }
     }
-
-//    fun unsetComplete() {
-////        _loading.value = false
-//    }
 
     fun signUp(
         context: Context,
@@ -176,7 +130,6 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         if (email.isNotEmpty() && pw.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    _currentUser.value = firebaseAuth.currentUser
                     Toast.makeText(
                         context,
                         "Succesfully signed in user ${firebaseAuth.currentUser?.email}",

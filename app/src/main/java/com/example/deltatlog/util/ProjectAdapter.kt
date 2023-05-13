@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
@@ -39,19 +41,6 @@ class ProjectAdapter(
         val dateView = view.findViewById<TextView>(R.id.date)
         val customerView = view.findViewById<TextView>(R.id.duration)
         val descriptionView = view.findViewById<TextView>(R.id.task_description)
-
-        val icons = listOf(
-            R.drawable.applogo,
-            R.drawable.ellipse_dunkel,
-            R.drawable.ellipse_blau,
-            R.drawable.ellipse_gelb,
-            R.drawable.ellipse_gruen,
-            R.drawable.ellipse_rot,
-            R.drawable.ellipse_orange,
-            R.drawable.ellipse_pink,
-            R.drawable.ellipse_t_rkis,
-            R.drawable.ellipse_schwarz
-        )
 
         val colors = listOf(
             R.color.colorPicker1,
@@ -88,7 +77,11 @@ class ProjectAdapter(
         holder.customerView.text = item.nameCustomer
         holder.dateView.text = item.date
         holder.descriptionView.text = item.description
-        holder.imageView.setImageResource(item.image)
+//        holder.imageView.setImageResource(item.image)
+        holder.imageView.load(item.logoUrl) {
+            error(R.drawable.applogo)
+//            transformations(RoundedCornersTransformation(10f))
+        }
         holder.projectCardview.setCardBackgroundColor(Color.parseColor(item.color))
 
         // Set an OnTouchListener on the card view
@@ -126,31 +119,6 @@ class ProjectAdapter(
                     animator.start()
                 }
             }
-            false
-        }
-
-        holder.imageView.setOnLongClickListener {
-            Toast.makeText(context, "Image clicked long", Toast.LENGTH_SHORT).show()
-
-            // Show dialog when a button is clicked
-            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item_list, null)
-            val dialog = AlertDialog.Builder(context)
-                .setView(dialogView)
-                .create()
-
-            val iconListView = dialogView.findViewById<ListView>(R.id.icon_list)
-            val iconAdapter = IconAdapter(holder.icons, context) { icon ->
-                item.image = icon
-                viewModel.updateProject(item)
-                dialog.dismiss()
-            }
-            iconListView.adapter = iconAdapter
-
-            // Set OnItemClickListener for the icon list
-            iconListView.setOnItemClickListener { _, _, position, _ ->
-                dialog.dismiss() // Dismiss the dialog when an icon is clicked
-            }
-            dialog.show()
             false
         }
 
@@ -258,6 +226,8 @@ class ProjectAdapter(
                         colorListView.setOnItemClickListener { _, _, position, _ ->
                             dialog.dismiss() // Dismiss the dialog when an icon is clicked
                         }
+
+
                         dialog.show()
                         false
                     }
