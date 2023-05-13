@@ -19,7 +19,6 @@ import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
 
-
 class ProjectAdapter(
     private var viewModel: viewModel,
     private var context: Context,
@@ -77,16 +76,14 @@ class ProjectAdapter(
         holder.customerView.text = item.nameCustomer
         holder.dateView.text = item.date
         holder.descriptionView.text = item.description
-//        holder.imageView.setImageResource(item.image)
         holder.imageView.load(item.logoUrl) {
             error(R.drawable.applogo)
-//            transformations(RoundedCornersTransformation(10f))
+            transformations(RoundedCornersTransformation(30f))
         }
         holder.projectCardview.setCardBackgroundColor(Color.parseColor(item.color))
 
         // Set an OnTouchListener on the card view
         holder.projectCardview.setOnClickListener {
-
             val navController = holder.projectCardview.findNavController()
             navController.navigate(
                 ProjectFragmentDirections.actionHomeFragmentToProjectDetailFragment(
@@ -123,10 +120,9 @@ class ProjectAdapter(
         }
 
         holder.projectCardview.setOnLongClickListener {
-
             val menuItems = arrayOf("Edit Project", "Change Color", "Delete Project")
-
             val popupMenu = PopupMenu(context, holder.projectCardview)
+
             menuItems.forEach { popupMenu.menu.add(it) }
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -184,7 +180,6 @@ class ProjectAdapter(
                             }
                             setView(dialogLayout)
                         }.show()
-
                         true
                     }
 
@@ -234,21 +229,20 @@ class ProjectAdapter(
                         colorListView.setOnItemClickListener { _, _, position, _ ->
                             dialog.dismiss() // Dismiss the dialog when an icon is clicked
                         }
-
-
                         dialog.show()
                         false
                     }
-                else -> false
-            }
-        }
-        popupMenu.show()
-        true // return true to indicate that the event has been consumed
-    }
-}
 
-// get size of list for viewholder
-override fun getItemCount(): Int {
-    return dataset.size
-}
+                    else -> false
+                }
+            }
+            popupMenu.show()
+            true // return true to indicate that the event has been consumed
+        }
+    }
+
+    // get size of list for viewholder
+    override fun getItemCount(): Int {
+        return dataset.size
+    }
 }

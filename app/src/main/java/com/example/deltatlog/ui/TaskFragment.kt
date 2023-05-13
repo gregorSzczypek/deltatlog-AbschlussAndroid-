@@ -92,7 +92,6 @@ class TaskFragment : Fragment() {
                 setPositiveButton("Ok") {dialog, which ->
                     val newTaskNameString = newTaskName.text.toString()
                     val newTaskDescriptionString = newTaskDescription.text.toString()
-
                     val newTask = Task(taskProjectId = projectId, color = color.toString())
 
                     if (newTaskNameString != "") {
@@ -101,6 +100,7 @@ class TaskFragment : Fragment() {
                     if (newTaskDescriptionString != "") {
                         newTask.notes = newTaskDescriptionString
                     }
+
                     viewModel.insertTask(newTask)
                     Toast.makeText(context, "$newTaskNameString created", Toast.LENGTH_SHORT).show()
                 }

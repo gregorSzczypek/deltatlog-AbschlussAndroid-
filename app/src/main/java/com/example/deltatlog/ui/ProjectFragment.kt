@@ -26,7 +26,6 @@ class ProjectFragment : Fragment() {
     private lateinit var binding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,9 +40,7 @@ class ProjectFragment : Fragment() {
 
         // observe livedata
         binding.lifecycleOwner = this.viewLifecycleOwner
-
         viewModel.loadProjectData() // load projects into DB
-
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
 
         // Inflate the layout for this fragment
@@ -97,7 +94,6 @@ class ProjectFragment : Fragment() {
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
                     val newHomepageString = newHomepage.text.toString()
-
                     val newProject = Project()
 
                     if (newProjectNameString != "") {
@@ -114,7 +110,6 @@ class ProjectFragment : Fragment() {
                     }
 
                     newProject.logoUrl = "https://logo.clearbit.com/${newProject.homepage}"
-
                     viewModel.insertProject(newProject)
                     Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT).show()
                 }

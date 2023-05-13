@@ -33,7 +33,6 @@ class SignUpFragment : Fragment() {
             container,
             false
         )
-
         // Inflate the layout for this fragment
         return binding.root
     }

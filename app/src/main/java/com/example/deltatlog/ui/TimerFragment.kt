@@ -86,11 +86,9 @@ class TimerFragment : Fragment() {
                     val sec = newTimeSeconds % 60
                     val timeString = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
                     currentTask.duration = timeString
-
                     viewModel.updateTask(currentTask)
                 }
             )
-
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val sec = seconds % 60
@@ -123,7 +121,7 @@ class TimerFragment : Fragment() {
                 val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
                 timerTextView.text = time
 
-                // Stopp handler for 1 second
+                // Stop handler for 1 second
                 handler.postDelayed(r, 1000)
             }
         }

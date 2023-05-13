@@ -51,11 +51,9 @@ class TaskAdapter(
     // create new viewholders
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskAdapter.ItemViewHolder {
 
-
         // inflate item layout
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_task, parent, false)
-
         // return viewholder
         return ItemViewHolder(adapterLayout)
     }
@@ -108,11 +106,9 @@ class TaskAdapter(
 
         // set an OnLongClickListener on the item view
         holder.taskCardView.setOnLongClickListener {
-
             val menuItems = arrayOf("Edit Task", "Delete Task")
             val popupMenu = PopupMenu(context, holder.taskCardView)
             menuItems.forEach { popupMenu.menu.add(it) }
-
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.title) {
                         "Edit Task" -> {
@@ -174,7 +170,6 @@ class TaskAdapter(
                             .show()
                         true
                     }
-
                     else -> false
                 }
             }
