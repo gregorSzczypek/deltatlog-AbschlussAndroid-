@@ -5,9 +5,9 @@
     <color name="white">#FFFFFF</color>
 
     <!--    custom colors light mode -->
-    <color name="bg_low_sat">#A5E3F1</color>
+    <color name="bg_low_sat">#D0E287</color>
     <color name="bg_mid_sat">#6ABCCE</color>
-    <color name="bg_high_sat">#2C99B1</color>
+    <color name="bg_high_sat">#8276A4</color>
 
     <color name="btn_alert_lowest_sat">#FFEEEE</color>
     <color name="btn_alert_low_sat">#FBC7C7</color>
@@ -16,10 +16,23 @@
 
     <color name="btn_normal_low_sat">#FFF9E9</color>
     <color name="btn_normal_mid_sat">#FFF3D3</color>
-    <color name="btn_normal_high_sat">#FFEEC3</color>
+    <color name="btn_normal_high_sat">#E87C4D</color>
 
     <color name="borders_low_sat">#E6E6E6</color>
     <color name="borders_mid_sat">#CACACA</color>
     <color name="borders_high_sat">#8B8B8B</color>
+
+<!--    Colors for color pickers-->
+    <color name="colorPicker1">#F15668</color>
+    <color name="colorPicker2">#C7BECF</color>
+    <color name="colorPicker3">#8276A4</color>
+    <color name="colorPicker4">#FBE5AB</color>
+    <color name="colorPicker5">#FFED56</color>
+    <color name="colorPicker6">#11A1BC</color>
+    <color name="colorPicker7">#0BE2D3</color>
+    <color name="colorPicker8">#FABEE4</color>
+    <color name="colorPicker9">#000000</color>
+    <color name="colorPicker10">#E87C4D</color>
+
 
 </resources>

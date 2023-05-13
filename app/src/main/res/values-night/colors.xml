@@ -5,9 +5,9 @@
     <color name="white">#000000</color>
 
     <!--    custom colors night mode -->
-    <color name="bg_low_sat">#16434E</color>
+    <color name="bg_low_sat">#000000</color>
     <color name="bg_mid_sat">#163036</color>
-    <color name="bg_high_sat">#07272E</color>
+    <color name="bg_high_sat">#000000</color>
 
     <color name="btn_alert_lowest_sat">#FFEEEE</color>
     <color name="btn_alert_low_sat">#CA6969</color>
@@ -21,5 +21,17 @@
     <color name="borders_low_sat">#E6E6E6</color>
     <color name="borders_mid_sat">#838383</color>
     <color name="borders_high_sat">#434343</color>
+
+    <!--    Colors for color pickers-->
+    <color name="colorPicker1">#F15668</color>
+    <color name="colorPicker2">#C7BECF</color>
+    <color name="colorPicker3">#8276A4</color>
+    <color name="colorPicker4">#FBE5AB</color>
+    <color name="colorPicker5">#FFED56</color>
+    <color name="colorPicker6">#11A1BC</color>
+    <color name="colorPicker7">#0BE2D3</color>
+    <color name="colorPicker8">#FABEE4</color>
+    <color name="colorPicker9">#000000</color>
+    <color name="colorPicker10">#E87C4D</color>
 
 </resources>

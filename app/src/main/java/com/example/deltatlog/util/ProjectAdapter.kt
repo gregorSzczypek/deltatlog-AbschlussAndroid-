@@ -57,10 +57,16 @@ class ProjectAdapter(
         )
 
         val colors = listOf(
-            "#B26464",
-            "#93C164",
-            "#295074",
-            "#DFCE32"
+            R.color.colorPicker1,
+            R.color.colorPicker2,
+            R.color.colorPicker3,
+            R.color.colorPicker4,
+            R.color.colorPicker5,
+            R.color.colorPicker6,
+            R.color.colorPicker7,
+            R.color.colorPicker8,
+            R.color.colorPicker9,
+            R.color.colorPicker10,
         )
     }
 
