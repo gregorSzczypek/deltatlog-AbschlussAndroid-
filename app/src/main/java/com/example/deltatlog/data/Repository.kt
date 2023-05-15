@@ -2,19 +2,50 @@ package com.example.deltatlog.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.deltatlog.data.datamodels.Logo
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.ProjectDatabase
 import com.example.deltatlog.data.local.TaskDatabase
+import com.example.deltatlog.data.remote.LogoApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.awaitResponse
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 val TAG = "Repository"
 
-class Repository(private val database: ProjectDatabase, private val taskDatabase: TaskDatabase) {
+class Repository(
+    private val database: ProjectDatabase,
+    private val taskDatabase: TaskDatabase,
+    private val api: LogoApi
+) {
+    val API_KEY = "sk_1c15a6f5d0a52350c5e50ff9abcb24b1"
+    val authHeader = "Bearer $API_KEY"
 
+    // TODO Müssen die nächsten zwei Zeilen live data sein??
     val projectList: LiveData<List<Project>> = database.projectDatabaseDao.getAll()
     val taskList: LiveData<List<Task>> = taskDatabase.taskDatabaseDao.getAll()
+
+    val logo = MutableLiveData<Logo>()
+    suspend fun getLogo(companyName: String) {
+        try {
+            logo.value = api.retrofitService.getLogo(companyName, authHeader)
+
+            Log.d("Repository","(2) " + logo.value!!.name)
+            Log.d("Repository","(3) " + logo.value!!.domain)
+            Log.d("Repository","(4) " + logo.value!!.logo)
+
+        } catch (e: Exception){
+            Log.d("Repository", "API Call failed: $e")
+        }
+    }
 
     suspend fun insertProject(project: Project) {
         try {

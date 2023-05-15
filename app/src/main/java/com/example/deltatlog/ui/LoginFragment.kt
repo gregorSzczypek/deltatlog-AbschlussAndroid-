@@ -7,15 +7,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentLoginBinding
+import com.example.deltatlog.viewModel
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: viewModel by viewModels()
-    private lateinit var userMail: String
 
     override fun onCreateView(
         inflater: LayoutInflater,

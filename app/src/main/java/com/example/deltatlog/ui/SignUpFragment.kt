@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentSignUpBinding
+import com.example.deltatlog.viewModel
 
 
 class SignUpFragment : Fragment() {

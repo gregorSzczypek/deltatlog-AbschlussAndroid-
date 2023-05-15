@@ -2,20 +2,29 @@ package com.example.deltatlog
 
 import android.app.Application
 import android.content.Context
+import android.media.tv.TvContract
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.deltatlog.data.Repository
+import com.example.deltatlog.data.datamodels.Logo
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
+import com.example.deltatlog.data.remote.LogoApi
+import com.example.deltatlog.data.remote.LogoApiService
 import com.example.deltatlog.ui.LoginFragmentDirections
 import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Callback
+import retrofit2.Retrofit
 
 const val TAG = "SharedViewModel"
 
@@ -23,10 +32,21 @@ class viewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = getDatabase(application)
     private val taskDatabase = getTaskDatabase(application)
-    private val repository = Repository(database, taskDatabase)
+    private val repository = Repository(database, taskDatabase, LogoApi)
     val projectList = repository.projectList
     val taskList = repository.taskList
     private val firebaseAuth = FirebaseAuth.getInstance()
+
+
+    val logoLiveData: LiveData<Logo> = repository.logo
+
+    fun loadLogo(companyName: String, callback: () -> Unit) {
+        viewModelScope.launch {
+            Log.d(TAG, "(1) API CALL")
+            repository.getLogo(companyName)
+            callback.invoke()
+        }
+    }
 
     fun insertProject(project: Project) {
         viewModelScope.launch {

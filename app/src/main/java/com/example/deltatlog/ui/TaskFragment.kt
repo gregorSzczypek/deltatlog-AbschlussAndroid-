@@ -16,9 +16,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.databinding.FragmentTaskBinding
+import com.example.deltatlog.viewModel
 
 class TaskFragment : Fragment() {
 

@@ -10,15 +10,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.viewModel
-import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.databinding.FragmentTimerBinding
-import kotlinx.coroutines.processNextEventInCurrentThread
 import java.util.Locale
 
 

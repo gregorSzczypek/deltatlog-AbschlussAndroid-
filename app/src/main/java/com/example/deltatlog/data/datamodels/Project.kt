@@ -21,6 +21,9 @@ data class Project(
     @Json(name = "strCustomerProject")
     var nameCustomer: String = "No customer name",
 
+    @Json(name = "strCompanyName")
+    var companyName: String = "",
+
     @Json(name = "strHomepage")
     var homepage: String = "",
 
