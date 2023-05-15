@@ -27,7 +27,7 @@ class Repository(
     val logo = MutableLiveData<Logo>()
     suspend fun getLogo(companyName: String) {
         try {
-            logo.value = api.retrofitService.getLogo(companyName, authHeader)
+            logo.value = api.retrofitService.getLogo(companyName, authHeader = authHeader)
 
             Log.d("Repository","(2) " + logo.value!!.name)
             Log.d("Repository","(3) " + logo.value!!.domain)

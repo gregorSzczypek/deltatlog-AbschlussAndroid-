@@ -26,7 +26,9 @@ private val retrofit = Retrofit.Builder()
 
 interface LogoApiService {
     @GET("find?name=")
-    suspend fun getLogo(@Query("name") name: String, @Header("Authorization") authHeader: String): Logo
+    suspend fun getLogo(@Query("name") name: String,
+                        @Header("Authorization") authHeader: String
+    ): Logo
 }
 
 object LogoApi {
