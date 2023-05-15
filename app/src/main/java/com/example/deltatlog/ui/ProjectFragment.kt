@@ -110,14 +110,36 @@ class ProjectFragment : Fragment() {
                     val newCompanyNameString = newCompanyName.text.toString()
                     val newProject = Project()
 
-//                    Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
+                    if (newCompanyNameString != "") {
+                        viewModel.loadLogo(newCompanyNameString) {
+                            Log.d("ProjectFragment", "(5) Here updating logourl")
+                            Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
 
-                    // TODO TIMING ISSUE FIXEN
-//                    viewModel.loadLogo(newCompanyNameString) // Die coroutine im viewmodel braucht zu lange
-                    viewModel.loadLogo(newCompanyNameString) {
-                        Log.d("ProjectFragment", "(5) Here updating logourl")
-                        Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
-                        newProject.logoUrl = viewModel.logoLiveData.value!!.logo
+                            newProject.logoUrl = viewModel.logoLiveData.value!!.logo
+
+                            if (newProjectNameString != "") {
+                                newProject.name = newProjectNameString
+                            }
+                            if (newCustomerNameString != "") {
+                                newProject.nameCustomer = newCustomerNameString
+                            }
+                            if (newDescriptionString != "") {
+                                newProject.description = newDescriptionString
+                            }
+                            if (newCompanyNameString != "") {
+                                newProject.companyName = newCompanyNameString
+                            }
+                            Log.d("ProjectFragment", newProject.logoUrl)
+
+                            viewModel.insertProject(newProject)
+                            Toast.makeText(
+                                context,
+                                "$newProjectNameString created",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    } else {
 
                         if (newProjectNameString != "") {
                             newProject.name = newProjectNameString
@@ -134,7 +156,11 @@ class ProjectFragment : Fragment() {
                         Log.d("ProjectFragment", newProject.logoUrl)
 
                         viewModel.insertProject(newProject)
-                        Toast.makeText(context, "$newProjectNameString created", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            context,
+                            "$newProjectNameString created",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                 }

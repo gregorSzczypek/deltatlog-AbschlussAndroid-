@@ -12,8 +12,7 @@ import retrofit2.http.Query
 
 val BASE_URL = "https://company.clearbit.com/v1/domains/"
 
-//val API_KEY = "sk_1c15a6f5d0a52350c5e50ff9abcb24b1"
-//val authHeader = "Bearer $API_KEY"
+//API_KEY = "sk_1c15a6f5d0a52350c5e50ff9abcb24b1"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())

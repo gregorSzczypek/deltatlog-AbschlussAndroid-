@@ -9,15 +9,6 @@ import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.ProjectDatabase
 import com.example.deltatlog.data.local.TaskDatabase
 import com.example.deltatlog.data.remote.LogoApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.awaitResponse
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 val TAG = "Repository"
 
@@ -44,6 +35,7 @@ class Repository(
 
         } catch (e: Exception){
             Log.d("Repository", "API Call failed: $e")
+            logo.value = Logo("nothing", "nothing", "nothing")
         }
     }
 

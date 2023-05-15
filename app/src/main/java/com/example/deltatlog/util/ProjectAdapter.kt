@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -153,26 +154,59 @@ class ProjectAdapter(
                                 val newDescriptionString = newDescription.text.toString()
                                 val newCompanyNameString = newCompanyName.text.toString()
 
-                                if (newProjectNameString != "") {
-                                    item.name = newProjectNameString
-                                }
-                                if (newCustomerNameString != "") {
-                                    item.nameCustomer = newCustomerNameString
-                                }
-                                if (newDescriptionString != "") {
-                                    item.description = newDescriptionString
-                                }
                                 if (newCompanyNameString != "") {
-                                    item.companyName = newCompanyNameString
-                                }
+                                    viewModel.loadLogo(newCompanyNameString) {
+                                        Log.d("ProjectFragment", "(5) Here updating logourl")
+                                        Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
 
-                                viewModel.updateProject(item)
-                                submitList(viewModel.projectList.value!!)
-                                Toast.makeText(
-                                    context,
-                                    "$newProjectNameString updated",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                        item.logoUrl = viewModel.logoLiveData.value!!.logo
+
+                                        if (newProjectNameString != "") {
+                                            item.name = newProjectNameString
+                                        }
+                                        if (newCustomerNameString != "") {
+                                            item.nameCustomer = newCustomerNameString
+                                        }
+                                        if (newDescriptionString != "") {
+                                            item.description = newDescriptionString
+                                        }
+                                        if (newCompanyNameString != "") {
+                                            item.companyName = newCompanyNameString
+                                        }
+                                        Log.d("ProjectFragment", item.logoUrl)
+
+                                        viewModel.updateProject(item)
+                                        Toast.makeText(
+                                            context,
+                                            "$newProjectNameString updated",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    }
+                                } else {
+
+                                    if (newProjectNameString != "") {
+                                        item.name = newProjectNameString
+                                    }
+                                    if (newCustomerNameString != "") {
+                                        item.nameCustomer = newCustomerNameString
+                                    }
+                                    if (newDescriptionString != "") {
+                                        item.description = newDescriptionString
+                                    }
+                                    if (newCompanyNameString != "") {
+                                        item.companyName = newCompanyNameString
+                                    }
+                                    Log.d("ProjectFragment", item.logoUrl)
+
+                                    viewModel.updateProject(item)
+                                    Toast.makeText(
+                                        context,
+                                        "$newProjectNameString created",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
                             }
                             setNegativeButton("Cancel") { dialog, which ->
                                 dialog.dismiss()
