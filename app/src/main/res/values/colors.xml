@@ -22,17 +22,28 @@
     <color name="borders_mid_sat">#CACACA</color>
     <color name="borders_high_sat">#8B8B8B</color>
 
-<!--    Colors for color pickers-->
-    <color name="colorPicker1">#F15668</color>
-    <color name="colorPicker2">#C7BECF</color>
-    <color name="colorPicker3">#8276A4</color>
-    <color name="colorPicker4">#FBE5AB</color>
-    <color name="colorPicker5">#FFED56</color>
+    <!--    Colors for color pickers-->
+    <color name="colorPicker1">#54948B</color>
+    <color name="colorPicker2">#7BAD44</color>
+    <color name="colorPicker3">#3ABA34</color>
+    <color name="colorPicker4">#C1BD55</color>
+    <color name="colorPicker5">#3CAAA5</color>
     <color name="colorPicker6">#11A1BC</color>
-    <color name="colorPicker7">#0BE2D3</color>
-    <color name="colorPicker8">#FABEE4</color>
-    <color name="colorPicker9">#BF6EB1</color>
-    <color name="colorPicker10">#E87C4D</color>
+    <color name="colorPicker7">#43C9E1</color>
+    <color name="colorPicker8">#A1A7FD</color>
+    <color name="colorPicker9">#9E6EE4</color>
+    <color name="colorPicker10">#8276A4</color>
+    <color name="colorPicker11">#DD5A21</color>
+    <color name="colorPicker12">#E87C4D</color>
+    <color name="colorPicker13">#B58D5F</color>
+    <color name="colorPicker14">#EAA554</color>
+    <color name="colorPicker15">#D3007F</color>
+    <color name="colorPicker16">#F334B0</color>
+    <color name="colorPicker17">#FD84C9</color>
+    <color name="colorPicker18">#F27781</color>
+    <color name="colorPicker19">#8E8E8E</color>
+    <color name="colorPicker20">#AEAEAE</color>
+
 
 
 </resources>

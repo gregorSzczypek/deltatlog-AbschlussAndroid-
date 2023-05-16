@@ -34,7 +34,7 @@ class ColorAdapter(private val colors: List<Int>, private val context: Context, 
         val iconNameTextView = view?.findViewById<TextView>(R.id.icon_name_text_view)
         val colorString = "#" + Integer.toHexString(ContextCompat.getColor(context, colors[position])).substring(2).toUpperCase()
 
-        iconNameTextView?.text = colorString
+//        iconNameTextView?.text = colorString
         iconNameTextView?.background = ColorDrawable(Color.parseColor(colorString))
 
         iconNameTextView?.setOnClickListener {

@@ -53,6 +53,16 @@ class ProjectAdapter(
             R.color.colorPicker8,
             R.color.colorPicker9,
             R.color.colorPicker10,
+            R.color.colorPicker11,
+            R.color.colorPicker12,
+            R.color.colorPicker13,
+            R.color.colorPicker14,
+            R.color.colorPicker15,
+            R.color.colorPicker16,
+            R.color.colorPicker17,
+            R.color.colorPicker18,
+            R.color.colorPicker19,
+            R.color.colorPicker20,
         )
     }
 
