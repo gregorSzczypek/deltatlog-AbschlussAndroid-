@@ -31,6 +31,11 @@ class TimerFragment : Fragment() {
     var seconds = 0
     var isRunning = true
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("seconds", seconds)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,6 +66,11 @@ class TimerFragment : Fragment() {
         binding.tvTaskName.setTextColor(Color.parseColor(color))
         // damit LiveData automatisch observed wird vom layout
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds", 0)
+        }
+
         runTimer()
         // Inflate the layout for this fragment
         return binding.root
