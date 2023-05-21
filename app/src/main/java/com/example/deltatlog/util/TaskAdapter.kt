@@ -165,15 +165,15 @@ class TaskAdapter(
                                 ) { it ->
                                     val filteredTaskList = it.filter { it.taskProjectId == projectId }
                                     val size = filteredTaskList.size.toLong()
-                                    Log.d("TaskAdapter", "size: ${size.toString()}")
-                                    Log.d("TaskAdapter", "projectid: ${projectId.toString()}")
+                                    Log.d("TaskAdapter", "size: ${size}")
+                                    Log.d("TaskAdapter", "projectid: ${projectId}")
                                     viewModel.taskObserverTriggered = 1
                                     viewModel.projectList.observe(
                                         lifeCycleOwner
                                     ) {
                                         if (viewModel.taskObserverTriggered == 1) {
                                             val project = it.find { it.id == projectId }
-                                            Log.d("TaskAdapter", "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks.toString()}")
+                                            Log.d("TaskAdapter", "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks}")
                                             Log.d("TaskAdapter", "inif size: ${size}")
                                             project!!.numberOfTasks = size
                                             viewModel.updateProject(project)

@@ -1,5 +1,6 @@
 package com.example.deltatlog.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,8 +14,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
-import com.example.deltatlog.viewModel
 import com.example.deltatlog.databinding.FragmentTimerBinding
+import com.example.deltatlog.viewModel
 import java.util.Locale
 
 
@@ -55,6 +56,9 @@ class TimerFragment : Fragment() {
             container,
             false
         )
+
+        binding.tvTimer.setTextColor(Color.parseColor(color))
+        binding.tvTaskName.setTextColor(Color.parseColor(color))
         // damit LiveData automatisch observed wird vom layout
         binding.lifecycleOwner = this.viewLifecycleOwner
         runTimer()
