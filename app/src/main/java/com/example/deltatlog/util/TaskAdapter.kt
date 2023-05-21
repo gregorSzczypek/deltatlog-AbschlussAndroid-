@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
@@ -24,6 +26,7 @@ import com.google.android.material.card.MaterialCardView
 
 class TaskAdapter(
     private var viewModel: viewModel,
+    private val lifeCycleOwner: LifecycleOwner,
     private var context: Context,
     private var dataset: List<Task>,
     private var navController: NavController,
@@ -155,6 +158,32 @@ class TaskAdapter(
                             .setMessage("Are you sure you want to delete this Task?")
                             .setPositiveButton("Yes") { dialog, _ ->
                                 viewModel.deleteTask(item)
+
+                                // Update number of tasks in the project in question
+                                viewModel.taskList.observe(
+                                    lifeCycleOwner
+                                ) { it ->
+                                    val filteredTaskList = it.filter { it.taskProjectId == projectId }
+                                    val size = filteredTaskList.size.toLong()
+                                    Log.d("TaskAdapter", "size: ${size.toString()}")
+                                    Log.d("TaskAdapter", "projectid: ${projectId.toString()}")
+                                    viewModel.taskObserverTriggered = 1
+                                    viewModel.projectList.observe(
+                                        lifeCycleOwner
+                                    ) {
+                                        if (viewModel.taskObserverTriggered == 1) {
+                                            val project = it.find { it.id == projectId }
+                                            Log.d("TaskAdapter", "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks.toString()}")
+                                            Log.d("TaskAdapter", "inif size: ${size}")
+                                            project!!.numberOfTasks = size
+                                            viewModel.updateProject(project)
+                                            viewModel.taskObserverTriggered = 0
+                                            Log.d("TaskAdapter", "in if")
+                                        }
+                                        Log.d("TaskAdapter", "projectid: triggered")
+                                    }
+                                }
+
                                 Toast.makeText(
                                     context,
                                     "Task ${item.name} deleted",

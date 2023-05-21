@@ -6,6 +6,7 @@ import android.media.tv.TvContract
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -36,9 +37,8 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     val projectList = repository.projectList
     val taskList = repository.taskList
     private val firebaseAuth = FirebaseAuth.getInstance()
-
-
     val logoLiveData: LiveData<Logo> = repository.logo
+    var taskObserverTriggered = 0
 
     fun loadLogo(companyName: String, callback: () -> Unit) {
         viewModelScope.launch {

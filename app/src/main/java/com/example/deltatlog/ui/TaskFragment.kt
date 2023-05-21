@@ -54,7 +54,7 @@ class TaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // BackButton Navigation in Toolbar
-        binding.materialToolbar.setNavigationOnClickListener{
+        binding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
         }
 
@@ -65,6 +65,7 @@ class TaskFragment : Fragment() {
             Observer {
                 recyclerView.adapter = TaskAdapter(
                     viewModel,
+                    viewLifecycleOwner,
                     requireContext(),
                     it.filter { it.taskProjectId == projectId },
                     findNavController(),
@@ -74,17 +75,18 @@ class TaskFragment : Fragment() {
             }
         )
 
-        binding.floatingActionButton.setOnClickListener{
+        binding.floatingActionButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_task, null)
             val newTaskName = dialogLayout.findViewById<EditText>(R.id.input_task_name)
-            val newTaskDescription = dialogLayout.findViewById<EditText>(R.id.input_task_description)
+            val newTaskDescription =
+                dialogLayout.findViewById<EditText>(R.id.input_task_description)
 
             with(builder) {
                 setTitle("New Task")
-                setPositiveButton("Ok") {dialog, which ->
+                setPositiveButton("Ok") { dialog, which ->
                     val newTaskNameString = newTaskName.text.toString()
                     val newTaskDescriptionString = newTaskDescription.text.toString()
                     val newTask = Task(taskProjectId = projectId, color = color.toString())
@@ -96,11 +98,38 @@ class TaskFragment : Fragment() {
                         newTask.notes = newTaskDescriptionString
                     }
                     viewModel.insertTask(newTask)
+
+                    // Update number of tasks in the project in question
+                    viewModel.taskList.observe(
+                        viewLifecycleOwner
+                    ) { it ->
+                        val filteredTaskList = it.filter { it.taskProjectId == projectId }
+                        val size = filteredTaskList.size.toLong()
+                        Log.d("TaskFragment", "size: ${size.toString()}")
+                        Log.d("TaskFragment", "projectid: ${projectId.toString()}")
+                        viewModel.taskObserverTriggered = 1
+                        viewModel.projectList.observe(
+                            viewLifecycleOwner
+                        ) {
+                            if (viewModel.taskObserverTriggered == 1) {
+                                val project = it.find { it.id == projectId }
+                                Log.d("TaskFragment", "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks.toString()}")
+                                Log.d("TaskFragment", "inif size: ${size}")
+                                project!!.numberOfTasks = size
+                                viewModel.updateProject(project)
+                                viewModel.taskObserverTriggered = 0
+                                Log.d("TaskFragment", "in if")
+                            }
+                            Log.d("TaskFragment", "projectid: triggered")
+                        }
+                    }
+
                     Toast.makeText(context, "$newTaskNameString created", Toast.LENGTH_SHORT).show()
                 }
-                setNegativeButton("Cancel") {dialog, which ->
+                setNegativeButton("Cancel") { dialog, which ->
                     dialog.dismiss()
-                    Toast.makeText(context, "Task creation cancelled by user", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Task creation cancelled by user", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 setView(dialogLayout)
                 show()

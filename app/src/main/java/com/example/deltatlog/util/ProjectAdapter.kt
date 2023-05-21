@@ -41,6 +41,7 @@ class ProjectAdapter(
         val dateView = view.findViewById<TextView>(R.id.date)
         val customerView = view.findViewById<TextView>(R.id.duration)
         val descriptionView = view.findViewById<TextView>(R.id.task_description)
+        val numberOfTasks = view.findViewById<TextView>(R.id.tv_total_task_amount)
 
         val colors = listOf(
             R.color.colorPicker1,
@@ -92,6 +93,8 @@ class ProjectAdapter(
             transformations(RoundedCornersTransformation(30f))
         }
         holder.projectCardview.setCardBackgroundColor(Color.parseColor(item.color))
+        holder.numberOfTasks.text = item.numberOfTasks.toString()
+
 
         // Set an OnTouchListener on the card view
         holder.projectCardview.setOnClickListener {
