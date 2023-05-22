@@ -180,7 +180,10 @@ class ProjectAdapter(
                                 if (newCompanyNameString != "") {
                                     viewModel.loadLogo(newCompanyNameString) {
                                         Log.d("ProjectFragment", "(5) Here updating logourl")
-                                        Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
+                                        Log.d(
+                                            "ProjectFragment",
+                                            viewModel.logoLiveData.value!!.logo
+                                        )
 
                                         item.logoUrl = viewModel.logoLiveData.value!!.logo
 
@@ -216,8 +219,19 @@ class ProjectAdapter(
                                             .collection("projects")
                                             .document(item.id.toString())
                                             .update(updates)
-                                            .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                            .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+                                            .addOnSuccessListener {
+                                                Log.d(
+                                                    "update",
+                                                    "DocumentSnapshot successfully updated!"
+                                                )
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w(
+                                                    "update",
+                                                    "Error updating document",
+                                                    e
+                                                )
+                                            }
 
                                         Toast.makeText(
                                             context,
@@ -259,8 +273,19 @@ class ProjectAdapter(
                                         .collection("projects")
                                         .document(item.id.toString())
                                         .update(updates)
-                                        .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                        .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "update",
+                                                "DocumentSnapshot successfully updated!"
+                                            )
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w(
+                                                "update",
+                                                "Error updating document",
+                                                e
+                                            )
+                                        }
 
                                     Toast.makeText(
                                         context,
@@ -378,8 +403,19 @@ class ProjectAdapter(
                                 .collection("projects")
                                 .document(item.id.toString())
                                 .update("color", item.color)
-                                .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "update",
+                                        "DocumentSnapshot successfully updated!"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        "update",
+                                        "Error updating document",
+                                        e
+                                    )
+                                }
 
 
                             this.notifyItemChanged(position)
