@@ -21,8 +21,8 @@ class Repository(
     val authHeader = "Bearer $API_KEY"
 
     // TODO Müssen die nächsten zwei Zeilen live data sein??
-    val projectList: LiveData<List<Project>> = database.projectDatabaseDao.getAll()
-    val taskList: LiveData<List<Task>> = taskDatabase.taskDatabaseDao.getAll()
+    val projectList = database.projectDatabaseDao.getAll()
+    val taskList = taskDatabase.taskDatabaseDao.getAll()
 
     val logo = MutableLiveData<Logo>()
     suspend fun getLogo(companyName: String) {

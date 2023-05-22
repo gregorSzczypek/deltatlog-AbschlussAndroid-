@@ -137,6 +137,8 @@ class ProjectFragment : Fragment() {
                             Log.d("ProjectFragment", newProject.logoUrl)
 
                             viewModel.insertProject(newProject)
+                        }
+
                             val project2Add = viewModel.projectList.value!!.last()
 
                             // TODO add Project to firebase
@@ -172,7 +174,6 @@ class ProjectFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
-                        }
                     } else {
 
                         if (newProjectNameString != "") {
