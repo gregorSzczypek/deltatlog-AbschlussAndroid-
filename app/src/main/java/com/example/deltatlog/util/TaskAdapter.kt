@@ -22,6 +22,9 @@ import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.ui.TaskFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class TaskAdapter(
@@ -158,6 +161,30 @@ class TaskAdapter(
                             .setMessage("Are you sure you want to delete this Task?")
                             .setPositiveButton("Yes") { dialog, _ ->
                                 viewModel.deleteTask(item)
+                                // TODO deletion of a task
+                                val db = Firebase.firestore
+                                val firebaseAuth = FirebaseAuth.getInstance()
+                                val currentUserId = firebaseAuth.currentUser!!.uid
+
+                                val task2Delete = item
+
+                                db.collection("users").document(currentUserId)
+                                    .collection("tasks")
+                                    .document(task2Delete.id.toString())
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "firebase",
+                                            "DocumentSnapshot successfully deleted!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            "firebase",
+                                            "Error deleting document",
+                                            e
+                                        )
+                                    }
 
                                 // Update number of tasks in the project in question
                                 viewModel.taskList.observe(
