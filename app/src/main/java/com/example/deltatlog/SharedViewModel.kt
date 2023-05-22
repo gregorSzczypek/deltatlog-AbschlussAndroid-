@@ -21,6 +21,8 @@ import com.example.deltatlog.data.remote.LogoApiService
 import com.example.deltatlog.ui.LoginFragmentDirections
 import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,6 +39,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     val projectList = repository.projectList
     val taskList = repository.taskList
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val db = Firebase.firestore
     val logoLiveData: LiveData<Logo> = repository.logo
     var taskObserverTriggered = 0
 

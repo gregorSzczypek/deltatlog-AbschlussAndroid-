@@ -26,11 +26,13 @@ import com.example.deltatlog.data.remote.LogoApi
 import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 
 
 class ProjectFragment : Fragment() {
@@ -38,6 +40,7 @@ class ProjectFragment : Fragment() {
     private val viewModel: viewModel by viewModels()
     private lateinit var binding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private val db = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +67,7 @@ class ProjectFragment : Fragment() {
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserEmail = firebaseAuth.currentUser?.email
+        val currentUserId = firebaseAuth.currentUser!!.uid
         // Set onClickListener on menu item logout
         binding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -133,8 +137,34 @@ class ProjectFragment : Fragment() {
                             Log.d("ProjectFragment", newProject.logoUrl)
 
                             viewModel.insertProject(newProject)
+                            val project2Add = viewModel.projectList.value!!.last()
 
                             // TODO add Project to firebase
+                            Log.d("ProjectFragment", currentUserEmail!!)
+                            Log.d("ProjectFragment", currentUserId!!.toString())
+
+                            val firebaseItem2Add = hashMapOf(
+                                "id" to project2Add.id,
+                                "name" to project2Add.name,
+                                "date" to project2Add.date,
+                                "nameCustomer" to project2Add.nameCustomer,
+                                "companyName" to project2Add.companyName,
+                                "homepage" to project2Add.homepage,
+                                "logoUrl" to project2Add.logoUrl,
+                                "image" to project2Add.image,
+                                "date" to project2Add.date,
+                                "description" to project2Add.description,
+                                "color" to project2Add.color,
+                                "numberOfTasks" to project2Add.numberOfTasks,
+                                "totalTime" to project2Add.totalTime
+                            )
+
+                            Log.d("firebasePID", project2Add.id.toString())
+
+                            db.collection("users").document(currentUserId).collection("projects").document(project2Add.id.toString())
+                                .set(firebaseItem2Add)
+                                .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
+                                .addOnFailureListener { e -> Log.w("firebase", "Error writing document", e) }
 
                             Toast.makeText(
                                 context,
@@ -160,6 +190,33 @@ class ProjectFragment : Fragment() {
                         Log.d("ProjectFragment", newProject.logoUrl)
 
                         viewModel.insertProject(newProject)
+                        val project2Add = viewModel.projectList.value!!.last()
+
+                        Log.d("ProjectFragment", currentUserEmail!!)
+                        Log.d("ProjectFragment", currentUserId!!.toString())
+
+                        val firebaseItem2Add = hashMapOf(
+                            "id" to project2Add.id,
+                            "name" to project2Add.name,
+                            "date" to project2Add.date,
+                            "nameCustomer" to project2Add.nameCustomer,
+                            "companyName" to project2Add.companyName,
+                            "homepage" to project2Add.homepage,
+                            "logoUrl" to project2Add.logoUrl,
+                            "image" to project2Add.image,
+                            "date" to project2Add.date,
+                            "description" to project2Add.description,
+                            "color" to project2Add.color,
+                            "numberOfTasks" to project2Add.numberOfTasks,
+                            "totalTime" to project2Add.totalTime
+                        )
+                        Log.d("firebasePID", project2Add.id.toString())
+                        db.collection("users").document(currentUserId).collection("projects").document(project2Add.id.toString())
+                            .set(firebaseItem2Add)
+                            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { e -> Log.w("firebase", "Error writing document", e) }
+
+
                         Toast.makeText(
                             context,
                             "$newProjectNameString created",
@@ -168,8 +225,6 @@ class ProjectFragment : Fragment() {
                             .show()
                     }
                 }
-
-
                 setNegativeButton("Cancel") { dialog, which ->
                     dialog.dismiss()
                     Toast.makeText(
