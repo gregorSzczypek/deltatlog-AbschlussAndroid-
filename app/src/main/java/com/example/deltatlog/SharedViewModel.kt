@@ -71,9 +71,10 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertTask(task: Task) {
+    fun insertTask(task: Task, callback: () -> Unit) {
         viewModelScope.launch {
             repository.insertTask(task)
+            callback.invoke()
         }
     }
 

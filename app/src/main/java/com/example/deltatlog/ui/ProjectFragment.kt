@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class ProjectFragment : Fragment() {
 
     private val viewModel: viewModel by viewModels()

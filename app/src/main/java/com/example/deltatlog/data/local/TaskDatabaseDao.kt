@@ -26,6 +26,9 @@ interface TaskDatabaseDao {
     @Query("SELECT * FROM taskTable")
     fun getAll(): LiveData<List<Task>>
 
+    @Query("SELECT * FROM taskTable")
+    fun getAllNLD(): List<Task>
+
     //Todo: Delete by id
     @Query("DELETE FROM taskTable WHERE id = :id")
     suspend fun deleteById(id: Long)
