@@ -146,6 +146,24 @@ class TaskAdapter(
                                         item.notes = newDescriptionString
 
                                     viewModel.updateTask(item)
+
+                                    // TODO update edits of tastsk in Firebase
+                                    val db = Firebase.firestore
+                                    val firebaseAuth = FirebaseAuth.getInstance()
+                                    val currentUserId = firebaseAuth.currentUser!!.uid
+                                    val updates = mutableMapOf<String, Any>(
+                                        "name" to item.name,
+                                        "notes" to item.notes
+                                    )
+
+                                    // TODO Update task changes in firebase
+                                    db.collection("users").document(currentUserId)
+                                        .collection("tasks")
+                                        .document(item.id.toString())
+                                        .update(updates)
+                                        .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                        .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+
                                     submitList(viewModel.taskList.value!!)
                                     Toast.makeText(
                                         context,
