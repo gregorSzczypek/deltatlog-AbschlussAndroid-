@@ -23,6 +23,9 @@ interface ProjectDatabaseDao {
     @Query("SELECT * FROM projectTable")
     fun getAll(): LiveData<List<Project>>
 
+    @Query("SELECT * FROM projectTable")
+    fun getAllNLD(): List<Project>
+
     //Todo: Delete by id
     @Query("DELETE FROM projectTable WHERE id = :id")
     suspend fun deleteById(id: Long)

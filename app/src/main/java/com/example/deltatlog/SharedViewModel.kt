@@ -51,9 +51,10 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertProject(project: Project) {
+    fun insertProject(project: Project, callback: () -> Unit) {
         viewModelScope.launch {
             repository.insertProject(project)
+            callback.invoke()
         }
     }
 
