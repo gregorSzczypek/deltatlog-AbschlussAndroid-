@@ -19,11 +19,14 @@ import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class ProjectAdapter(
     private var viewModel: viewModel,
     private var context: Context,
-    private var dataset: List<Project>
+    private var dataset: List<Project>,
 
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
@@ -237,6 +240,31 @@ class ProjectAdapter(
                             .setPositiveButton("Yes") { dialog, _ ->
                                 viewModel.deleteAllTasks(item.id)
                                 viewModel.deleteProject(item)
+
+                                val db = Firebase.firestore
+                                val firebaseAuth = FirebaseAuth.getInstance()
+                                val currentUserId = firebaseAuth.currentUser!!.uid
+
+                                val project2Delete = item
+
+                                db.collection("users").document(currentUserId)
+                                    .collection("projects")
+                                    .document(project2Delete.id.toString())
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "firebase",
+                                            "DocumentSnapshot successfully deleted!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            "firebase",
+                                            "Error deleting document",
+                                            e
+                                        )
+                                    }
+
                                 Toast.makeText(
                                     context,
                                     "Project ${item.name} deleted",
