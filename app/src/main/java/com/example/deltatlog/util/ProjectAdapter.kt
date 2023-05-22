@@ -369,6 +369,19 @@ class ProjectAdapter(
                             item.color = color
                             viewModel.updateProject(item)
 
+                            val db = Firebase.firestore
+                            val firebaseAuth = FirebaseAuth.getInstance()
+                            val currentUserId = firebaseAuth.currentUser!!.uid
+
+                            // TODO changes in color in firebase
+                            db.collection("users").document(currentUserId)
+                                .collection("projects")
+                                .document(item.id.toString())
+                                .update("color", item.color)
+                                .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+
+
                             this.notifyItemChanged(position)
                             dialog.dismiss()
                         }
