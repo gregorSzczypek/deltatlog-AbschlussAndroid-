@@ -199,6 +199,26 @@ class ProjectAdapter(
                                         Log.d("ProjectFragment", item.logoUrl)
 
                                         viewModel.updateProject(item)
+
+                                        val db = Firebase.firestore
+                                        val firebaseAuth = FirebaseAuth.getInstance()
+                                        val currentUserId = firebaseAuth.currentUser!!.uid
+                                        val updates = mutableMapOf<String, Any>(
+                                            "name" to item.name,
+                                            "nameCustomer" to item.nameCustomer,
+                                            "description" to item.description,
+                                            "companyName" to item.companyName,
+                                            "logoUrl" to item.logoUrl
+                                        )
+
+                                        // TODO Update project changes in firebase
+                                        db.collection("users").document(currentUserId)
+                                            .collection("projects")
+                                            .document(item.id.toString())
+                                            .update(updates)
+                                            .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                            .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+
                                         Toast.makeText(
                                             context,
                                             "$newProjectNameString updated",
@@ -223,9 +243,28 @@ class ProjectAdapter(
                                     Log.d("ProjectFragment", item.logoUrl)
 
                                     viewModel.updateProject(item)
+
+                                    val db = Firebase.firestore
+                                    val firebaseAuth = FirebaseAuth.getInstance()
+                                    val currentUserId = firebaseAuth.currentUser!!.uid
+                                    val updates = mutableMapOf<String, Any>(
+                                        "name" to newProjectNameString,
+                                        "nameCustomer" to newCustomerNameString,
+                                        "description" to newDescriptionString,
+                                        "companyName" to newCompanyNameString
+                                    )
+
+                                    // TODO Update project changes in firebase
+                                    db.collection("users").document(currentUserId)
+                                        .collection("projects")
+                                        .document(item.id.toString())
+                                        .update(updates)
+                                        .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                        .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+
                                     Toast.makeText(
                                         context,
-                                        "$newProjectNameString created",
+                                        "$newProjectNameString updated",
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
