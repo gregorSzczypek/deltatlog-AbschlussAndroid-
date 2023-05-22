@@ -26,6 +26,7 @@ import com.example.deltatlog.data.remote.LogoApi
 import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -132,6 +133,9 @@ class ProjectFragment : Fragment() {
                             Log.d("ProjectFragment", newProject.logoUrl)
 
                             viewModel.insertProject(newProject)
+
+                            // TODO add Project to firebase
+
                             Toast.makeText(
                                 context,
                                 "$newProjectNameString created",

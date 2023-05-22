@@ -42,7 +42,7 @@ data class Project(
     @Json(name = "ColorProject")
     var color: String = "#54948B",
 
-    @Json(name = "intNumberOfTasks")
+    @Json(name = "longNumberOfTasks")
     var numberOfTasks: Long = 0,
 
     @Json(name = "strTotalTime")
