@@ -82,7 +82,7 @@ class ProjectFragment : Fragment() {
         viewModel.projectList.observe(
             viewLifecycleOwner,
             Observer {
-                recyclerView.adapter = ProjectAdapter(viewModel, requireContext(), it)
+                recyclerView.adapter = ProjectAdapter(viewModel, requireContext(), it, lifecycleScope)
             }
         )
         binding.floatingActionButton.setOnClickListener {

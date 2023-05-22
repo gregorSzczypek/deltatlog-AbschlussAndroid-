@@ -161,7 +161,7 @@ class TaskAdapter(
                             .setMessage("Are you sure you want to delete this Task?")
                             .setPositiveButton("Yes") { dialog, _ ->
                                 viewModel.deleteTask(item)
-                                // TODO deletion of a task
+
                                 val db = Firebase.firestore
                                 val firebaseAuth = FirebaseAuth.getInstance()
                                 val currentUserId = firebaseAuth.currentUser!!.uid

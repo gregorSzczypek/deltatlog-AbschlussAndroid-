@@ -17,16 +17,23 @@ import coil.transform.RoundedCornersTransformation
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
+import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProjectAdapter(
     private var viewModel: viewModel,
     private var context: Context,
     private var dataset: List<Project>,
+    private val coroutineScope: CoroutineScope
 
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
@@ -238,12 +245,41 @@ class ProjectAdapter(
                             .setTitle("Confirm Project Deletion")
                             .setMessage("Are you sure you want to delete this project and all of the related tasks?")
                             .setPositiveButton("Yes") { dialog, _ ->
-                                viewModel.deleteAllTasks(item.id)
-                                viewModel.deleteProject(item)
-
                                 val db = Firebase.firestore
                                 val firebaseAuth = FirebaseAuth.getInstance()
                                 val currentUserId = firebaseAuth.currentUser!!.uid
+                                val taskDataBase = getTaskDatabase(context)
+
+                                coroutineScope.launch {
+                                    viewModel.deleteAllTasks(item.id)
+                                    val allTasks = withContext(Dispatchers.IO) {
+                                        taskDataBase.taskDatabaseDao.getAllNLD()
+                                    }
+                                    val tasks2Delete =
+                                        allTasks.filter { it.taskProjectId == item.id }
+
+                                    for (i in tasks2Delete) {
+                                        db.collection("users").document(currentUserId)
+                                            .collection("tasks")
+                                            .document(i.id.toString())
+                                            .delete()
+                                            .addOnSuccessListener {
+                                                Log.d(
+                                                    "firebase",
+                                                    "DocumentSnapshot successfully deleted!"
+                                                )
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w(
+                                                    "firebase",
+                                                    "Error deleting document",
+                                                    e
+                                                )
+                                            }
+                                    }
+                                }
+
+                                viewModel.deleteProject(item)
 
                                 val project2Delete = item
 
