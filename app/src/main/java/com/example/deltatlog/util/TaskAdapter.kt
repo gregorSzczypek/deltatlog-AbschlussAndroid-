@@ -20,11 +20,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
+import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.TaskFragmentDirections
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class TaskAdapter(
@@ -34,7 +40,8 @@ class TaskAdapter(
     private var dataset: List<Task>,
     private var navController: NavController,
     private var projectId: Long,
-    private var color: String?
+    private var color: String?,
+    private val coroutineScope: CoroutineScope
 
 ) : RecyclerView.Adapter<TaskAdapter.ItemViewHolder>() {
 
@@ -184,6 +191,19 @@ class TaskAdapter(
                                             "Error deleting document",
                                             e
                                         )
+                                    }
+                                coroutineScope.launch {
+                                val size = withContext(Dispatchers.IO) {
+                                    getTaskDatabase(context).taskDatabaseDao.getAllNLD().filter { it.taskProjectId == projectId }.size
+                                }
+
+                                // TODO Update project changes in firebase
+                                db.collection("users").document(currentUserId)
+                                    .collection("projects")
+                                    .document(projectId.toString())
+                                    .update("numberOfTasks", size)
+                                    .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                    .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
                                     }
 
                                 // Update number of tasks in the project in question

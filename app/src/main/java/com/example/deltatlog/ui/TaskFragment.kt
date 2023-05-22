@@ -83,7 +83,8 @@ class TaskFragment : Fragment() {
                     it.filter { it.taskProjectId == projectId },
                     findNavController(),
                     projectId,
-                    color
+                    color,
+                    lifecycleScope
                 )
             }
         )
@@ -156,6 +157,17 @@ class TaskFragment : Fragment() {
                                         e
                                     )
                                 }
+                            val size = withContext(Dispatchers.IO) {
+                                getTaskDatabase(context).taskDatabaseDao.getAllNLD().filter { it.taskProjectId == projectId }.size
+                            }
+
+                            // TODO Update project changes in firebase
+                            db.collection("users").document(currentUserId)
+                                .collection("projects")
+                                .document(projectId.toString())
+                                .update("numberOfTasks", size)
+                                .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                                .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
 
                             // Update number of tasks in the project in question
                             viewModel.taskList.observe(
