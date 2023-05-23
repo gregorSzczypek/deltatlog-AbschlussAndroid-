@@ -29,4 +29,10 @@ interface ProjectDatabaseDao {
     //Todo: Delete by id
     @Query("DELETE FROM projectTable WHERE id = :id")
     suspend fun deleteById(id: Long)
+
+    @Query("DELETE FROM projectTable")
+    suspend fun deleteAllProjects()
+
+    @Delete
+    suspend fun deleteProjects(projects: List<Project>)
 }

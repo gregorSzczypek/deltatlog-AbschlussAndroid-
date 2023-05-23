@@ -7,12 +7,12 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="zhizx8pbsojb5975" />
+            <value value="fa36de78" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-05-22T22:52:34.863778Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-05-23T09:34:10.749683Z" />
     <runningDeviceTargetsSelectedWithDialog>
       <Target>
         <type value="RUNNING_DEVICE_TARGET" />
@@ -29,6 +29,15 @@
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
             <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_UpsideDownCake.avd" />
+          </Key>
+        </deviceKey>
+      </Target>
+      <Target>
+        <type value="RUNNING_DEVICE_TARGET" />
+        <deviceKey>
+          <Key>
+            <type value="SERIAL_NUMBER" />
+            <value value="zhizx8pbsojb5975" />
           </Key>
         </deviceKey>
       </Target>
