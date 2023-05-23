@@ -38,7 +38,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(database, taskDatabase, LogoApi)
     val projectList = repository.projectList
     val taskList = repository.taskList
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    var firebaseAuth = FirebaseAuth.getInstance()
     private val db = Firebase.firestore
     val logoLiveData: LiveData<Logo> = repository.logo
     var taskObserverTriggered = 0

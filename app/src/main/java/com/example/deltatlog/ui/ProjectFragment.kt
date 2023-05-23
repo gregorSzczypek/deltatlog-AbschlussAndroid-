@@ -23,6 +23,7 @@ import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,7 @@ class ProjectFragment : Fragment() {
     private lateinit var binding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = Firebase.firestore
+    private var snapshotListener: ListenerRegistration? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +49,6 @@ class ProjectFragment : Fragment() {
             container,
             false
         )
-
         // observe livedata
         binding.lifecycleOwner = this.viewLifecycleOwner
         binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
@@ -66,6 +67,7 @@ class ProjectFragment : Fragment() {
 
         // Set onClickListener on menu item logout
         binding.materialToolbar.setOnMenuItemClickListener {
+            destroySnapListener()
             when (it.itemId) {
                 R.id.logout ->
                     firebaseAuth.signOut()
@@ -302,7 +304,7 @@ class ProjectFragment : Fragment() {
             viewModel.databaseDeleted = true
         }
 
-        projectCollection.addSnapshotListener { snapshot, exception ->
+        snapshotListener = projectCollection.addSnapshotListener { snapshot, exception ->
             if (exception != null) {
                 // Handle error
                 return@addSnapshotListener
@@ -311,7 +313,7 @@ class ProjectFragment : Fragment() {
             val projects = mutableListOf<Project>()
 
             for (doc in snapshot?.documents ?: emptyList()) {
-                val id = doc.id.toLong()
+                val id = doc.getLong("id") ?: 0
                 val name = doc.getString("name") ?: ""
                 val nameCustomer = doc.getString("nameCustomer") ?: ""
                 val companyName = doc.getString("companyName") ?: ""
@@ -360,5 +362,8 @@ class ProjectFragment : Fragment() {
                 }
             }
         }
+    }
+    fun destroySnapListener() {
+        snapshotListener?.remove()
     }
 }
