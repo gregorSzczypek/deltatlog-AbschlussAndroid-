@@ -42,6 +42,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val db = Firebase.firestore
     val logoLiveData: LiveData<Logo> = repository.logo
     var taskObserverTriggered = 0
+    var databaseDeleted = false
 
     fun loadLogo(companyName: String, callback: () -> Unit) {
         viewModelScope.launch {

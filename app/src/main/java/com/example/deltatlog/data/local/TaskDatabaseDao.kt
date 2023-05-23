@@ -35,4 +35,10 @@ interface TaskDatabaseDao {
 
     @Query("DELETE FROM taskTable WHERE taskProjectId = :id")
     suspend fun deleteAllTasks(id: Long)
+
+    @Query("DELETE FROM taskTable")
+    suspend fun deleteAllTasks()
+
+    @Delete
+    suspend fun deleteTasks(tasks: List<Task>)
 }

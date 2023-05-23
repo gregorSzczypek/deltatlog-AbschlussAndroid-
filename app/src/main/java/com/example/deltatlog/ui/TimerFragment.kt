@@ -16,6 +16,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentTimerBinding
 import com.example.deltatlog.viewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 
@@ -97,6 +100,19 @@ class TimerFragment : Fragment() {
                     val timeString = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
                     currentTask.duration = timeString
                     viewModel.updateTask(currentTask)
+
+                    // TODO update edits of task in Firebase
+                    val db = Firebase.firestore
+                    val firebaseAuth = FirebaseAuth.getInstance()
+                    val currentUserId = firebaseAuth.currentUser!!.uid
+
+                    // TODO Update task changes in firebase
+                    db.collection("users").document(currentUserId)
+                        .collection("tasks")
+                        .document(currentTask.id.toString())
+                        .update("duration", currentTask.duration)
+                        .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
+                        .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
                 }
             )
             val hours = seconds / 3600

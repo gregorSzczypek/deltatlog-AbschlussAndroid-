@@ -16,7 +16,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.room.withTransaction
 import com.example.deltatlog.R
+import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTaskBinding
@@ -124,7 +126,7 @@ class TaskFragment : Fragment() {
 
                             val task2Add = taskList.last()
 
-                            Log.d("ProjectFragment", currentUserId)
+                            Log.d("TaskFragment", currentUserId)
 
                             val firebaseItem2Add = hashMapOf(
                                 "id" to task2Add.id,
@@ -216,6 +218,66 @@ class TaskFragment : Fragment() {
                 }
                 setView(dialogLayout)
                 show()
+            }
+        }
+        // here firebase stuff
+        val db = Firebase.firestore
+        val projectCollection = db.collection("users").document(currentUserId)
+            .collection("tasks")
+        val database = getTaskDatabase(requireContext())
+
+        // TODO Snapshot listener for firebase changes
+
+        projectCollection.addSnapshotListener { snapshot, exception ->
+            if (exception != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            val tasks = mutableListOf<Task>()
+
+            for (doc in snapshot?.documents ?: emptyList()) {
+                val id = doc.id.toLong()
+                val taskProjectId = doc.getLong("taskProjectId")?: 0
+                val name = doc.getString("name") ?: ""
+                val color = doc.getString("color") ?: ""
+                val date = doc.getString("date") ?: ""
+                val duration = doc.getString("duration") ?: ""
+                val description = doc.getString("description") ?: ""
+                val notes = doc.getString("notes") ?: ""
+                val elapsedTime = doc.getLong("elapsedTime")?: 0
+
+                val task = Task(
+                    id,
+                    taskProjectId,
+                    name,
+                    color,
+                    date,
+                    duration,
+                    description,
+                    notes,
+                    elapsedTime,
+                )
+                tasks.add(task)
+            }
+
+            // Update the local Room database
+            lifecycleScope.launch {
+                // Run the database operation within a transaction
+                database.withTransaction {
+                    // Retrieve the current projects from the database
+                    val currentTasks = database.taskDatabaseDao.getAllNLD()
+
+                    // Compare the projects from Firestore with the current projects
+                    val tasksToDelete = currentTasks.filter { it !in tasks }
+                    val tasksToInsert = tasks.filter { it !in currentTasks}
+
+                    // Delete projects that are no longer present in Firestore
+                    database.taskDatabaseDao.deleteTasks(tasksToDelete)
+
+                    // Insert new projects from Firestore
+                    database.taskDatabaseDao.insertAll(tasksToInsert)
+                }
             }
         }
     }
