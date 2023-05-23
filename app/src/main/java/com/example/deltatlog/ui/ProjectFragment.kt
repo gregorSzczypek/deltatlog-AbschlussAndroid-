@@ -61,7 +61,7 @@ class ProjectFragment : Fragment() {
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserEmail = firebaseAuth.currentUser?.email
-        val currentUserId = firebaseAuth.currentUser!!.uid
+        var currentUserId = firebaseAuth.currentUser!!.uid
 
 
         // Set onClickListener on menu item logout
@@ -72,6 +72,7 @@ class ProjectFragment : Fragment() {
             }
             findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
             if (firebaseAuth.currentUser == null) {
+                viewModel.databaseDeleted = false
                 Toast.makeText(
                     context,
                     "Successfully logged out user $currentUserEmail",
@@ -131,6 +132,7 @@ class ProjectFragment : Fragment() {
                                 newProject.companyName = newCompanyNameString
                             }
                             Log.d("ProjectFragment", newProject.logoUrl)
+                            Log.d("userID", currentUserId)
 
                             viewModel.insertProject(newProject) {
 
@@ -283,6 +285,7 @@ class ProjectFragment : Fragment() {
         }
         // here firebase stuff
         val db = Firebase.firestore
+        currentUserId = firebaseAuth.currentUser!!.uid
         val projectCollection = db.collection("users").document(currentUserId)
             .collection("projects")
 

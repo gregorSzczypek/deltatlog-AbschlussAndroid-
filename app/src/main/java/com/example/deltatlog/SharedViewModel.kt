@@ -129,6 +129,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun login(context: Context, email: String, pw: String, navController: NavController) {
+        databaseDeleted = false
         // Check of valid input and calling login method from firebase object
         if (email.isNotEmpty() && pw.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {

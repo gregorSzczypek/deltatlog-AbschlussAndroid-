@@ -34,11 +34,14 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.databaseDeleted = false
+
         // // this click listener performs the login procedure in firebase after checks of valid input
         binding.btnLogin.setOnClickListener {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
             viewModel.login(requireContext(), email, pw, findNavController())
+            viewModel.databaseDeleted = false
         }
 
         // BackButton Navigation in Toolbar
