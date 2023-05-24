@@ -69,9 +69,32 @@ class TaskFragment : Fragment() {
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserId = firebaseAuth.currentUser!!.uid
+        val currentUserEmail = firebaseAuth.currentUser!!.email
         // BackButton Navigation in Toolbar
         binding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
+        }
+
+        // Set onClickListener on menu item logout
+        binding.materialToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.logout -> {
+                    firebaseAuth.signOut()
+                    findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
+                    if (firebaseAuth.currentUser == null) {
+                        viewModel.databaseDeleted = false
+                        Toast.makeText(
+                            context,
+                            "Successfully logged out user $currentUserEmail",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                R.id.export -> {
+
+                }
+            }
+            true
         }
 
         val recyclerView = binding.taskList
