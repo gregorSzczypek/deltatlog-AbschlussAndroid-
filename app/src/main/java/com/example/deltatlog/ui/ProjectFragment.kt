@@ -2,6 +2,7 @@ package com.example.deltatlog.ui
 
 import ProjectAdapter
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -29,6 +31,9 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 
 class ProjectFragment : Fragment() {
 
@@ -82,11 +87,9 @@ class ProjectFragment : Fragment() {
                     }
                 }
                 R.id.export -> {
-                    Toast.makeText(
-                        context,
-                        "Clicked Export",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    viewModel.projectList.value?.let { projects ->
+                        exportToCSV(projects)
+                    }
                 }
             }
             true
@@ -373,5 +376,44 @@ class ProjectFragment : Fragment() {
     }
     fun destroySnapListener() {
         snapshotListener?.remove()
+    }
+
+    private fun convertToCSV(projects: List<Project>): String {
+        val header = "ID,Name,NameCustomer,CompanyName,Homepage,LogoUrl,Image,Date,Description,Color,NumberOfTasks,TotalTime\n"
+        val rows = projects.joinToString("\n") { project ->
+            "${project.id},${project.name},${project.nameCustomer},${project.companyName},${project.homepage}," +
+                    "${project.logoUrl},${project.image},${project.date},${project.description},${project.color}," +
+                    "${project.numberOfTasks},${project.totalTime}"
+        }
+        return header + rows
+    }
+
+    private fun exportToCSV(projects: List<Project>) {
+        val csvData = convertToCSV(projects)
+
+        val filename = "project_database.csv"
+        val file = File(requireContext().externalCacheDir, filename)
+
+        try {
+            FileWriter(file).use { writer ->
+                writer.append(csvData)
+            }
+            Toast.makeText(requireContext(), "CSV file exported", Toast.LENGTH_SHORT).show()
+            sendEmail(file)
+        } catch (e: IOException) {
+            Toast.makeText(requireContext(), "Failed to export CSV file", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
+        }
+    }
+
+    private fun sendEmail(file: File) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/csv"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Project Database CSV")
+        intent.putExtra(Intent.EXTRA_TEXT, "Please find attached the project database in CSV format.")
+        val uri = FileProvider.getUriForFile(requireContext(), "com.example.deltatlog.fileprovider", file)
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+        startActivity(Intent.createChooser(intent, "Send Email"))
     }
 }
