@@ -3,6 +3,7 @@ package com.example.deltatlog.ui
 import TaskAdapter
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -30,6 +32,8 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.apache.commons.csv.CSVFormat
+import java.io.File
 
 class TaskFragment : Fragment() {
 
@@ -91,7 +95,8 @@ class TaskFragment : Fragment() {
                     }
                 }
                 R.id.export -> {
-
+                    // Handle export menu item click
+                    exportTasksToCSV()
                 }
             }
             true
@@ -297,4 +302,67 @@ class TaskFragment : Fragment() {
             }
         }
     }
+
+    private fun exportTasksToCSV() {
+        // Retrieve the tasks related to the current project from the ViewModel
+        val tasks = viewModel.taskList.value?.filter { it.taskProjectId == projectId }
+
+        if (tasks != null && tasks.isNotEmpty()) {
+            // Create a CSV file using Apache Commons CSV library
+            val csvFile = File(requireContext().cacheDir, "tasks.csv")
+            val csvWriter = CSVFormat.DEFAULT.withHeader(
+                "Task ID",
+                "Task Project ID",
+                "Task Name",
+                "Color",
+                "Date",
+                "Duration",
+                "Description",
+                "Notes",
+                "Elapsed Time"
+            ).print(csvFile.writer())
+
+            // Write each task to the CSV file
+            for (task in tasks) {
+                csvWriter.printRecord(
+                    task.id,
+                    task.taskProjectId,
+                    task.name,
+                    task.color,
+                    task.date,
+                    task.duration,
+                    task.description,
+                    task.notes,
+                    task.elapsedTime
+                )
+            }
+
+            // Close the CSV writer
+            csvWriter.close()
+
+            // Send the CSV file via email
+            val emailIntent = Intent(Intent.ACTION_SEND)
+            emailIntent.type = "text/csv"
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tasks for Project")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Please find attached the tasks for the project.")
+            emailIntent.putExtra(
+                Intent.EXTRA_STREAM,
+                FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".fileprovider", csvFile)
+            )
+
+            // Grant read permission to the receiving app
+            emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+            // Check if there is an email app available to handle the intent
+            if (emailIntent.resolveActivity(requireContext().packageManager) != null) {
+                startActivity(Intent.createChooser(emailIntent, "Send Email"))
+            } else {
+                Toast.makeText(requireContext(), "No email app found.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "No tasks found for the project.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 }
