@@ -20,6 +20,7 @@ import androidx.room.withTransaction
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
+import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.viewModel
@@ -159,45 +160,37 @@ class TaskFragment : Fragment() {
                                         e
                                     )
                                 }
-                            val size = withContext(Dispatchers.IO) {
-                                getTaskDatabase(context).taskDatabaseDao.getAllNLD().filter { it.taskProjectId == projectId }.size
-                            }
 
-                            // TODO Update project changes in firebase
-                            db.collection("users").document(currentUserId)
-                                .collection("projects")
-                                .document(projectId.toString())
-                                .update("numberOfTasks", size)
-                                .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
-
-                            // Update number of tasks in the project in question
-                            viewModel.taskList.observe(
-                                viewLifecycleOwner
-                            ) { it ->
-                                val filteredTaskList = it.filter { it.taskProjectId == projectId }
-                                val size = filteredTaskList.size.toLong()
-                                Log.d("TaskFragment", "size: ${size.toString()}")
-                                Log.d("TaskFragment", "projectid: ${projectId.toString()}")
-                                viewModel.taskObserverTriggered = 1
-                                viewModel.projectList.observe(
-                                    viewLifecycleOwner
-                                ) {
-                                    if (viewModel.taskObserverTriggered == 1) {
-                                        val project = it.find { it.id == projectId }
-                                        Log.d(
-                                            "TaskFragment",
-                                            "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks.toString()}"
-                                        )
-                                        Log.d("TaskFragment", "inif size: ${size}")
-                                        project!!.numberOfTasks = size
-                                        viewModel.updateProject(project)
-                                        viewModel.taskObserverTriggered = 0
-                                        Log.d("TaskFragment", "in if")
-                                    }
-                                    Log.d("TaskFragment", "projectid: triggered")
+                            //TODO HERE UPDATE NR OF TASKS
+                                val project = withContext(Dispatchers.IO) {
+                                    getDatabase(context).projectDatabaseDao.getAllNLD()
+                                        .find { it.id == projectId }
                                 }
-                            }
+                                val tasksSize = withContext(Dispatchers.IO) {
+                                    getTaskDatabase(context).taskDatabaseDao.getAllNLD()
+                                        .filter { it.taskProjectId == projectId }.size
+                                }
+                                project!!.numberOfTasks = tasksSize.toLong()
+                                viewModel.updateProject(project)
+
+                                // TODO Update project changes in firebase
+                                db.collection("users").document(currentUserId)
+                                    .collection("projects")
+                                    .document(projectId.toString())
+                                    .update("numberOfTasks", tasksSize)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "update",
+                                            "DocumentSnapshot successfully updated!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            "update",
+                                            "Error updating document",
+                                            e
+                                        )
+                                    }
 
                             Toast.makeText(
                                 context,

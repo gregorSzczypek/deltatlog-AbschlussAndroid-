@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
+import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.TaskFragmentDirections
 import com.google.android.material.card.MaterialCardView
@@ -122,62 +123,73 @@ class TaskAdapter(
             val menuItems = arrayOf("Edit Task", "Delete Task")
             val popupMenu = PopupMenu(context, holder.taskCardView)
             menuItems.forEach { popupMenu.menu.add(it) }
-                popupMenu.setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.title) {
-                        "Edit Task" -> {
-                            val builder = AlertDialog.Builder(context)
-                            val inflater = LayoutInflater.from(context)
-                            val dialogLayout =
-                                inflater.inflate(R.layout.edit_text_dialogue_task, null)
-                            val newTaskName =
-                                dialogLayout.findViewById<EditText>(R.id.input_task_name)
-                            newTaskName.setText(item.name)
-                            val newNote =
-                                dialogLayout.findViewById<EditText>(R.id.input_task_description)
-                            newNote.setText(item.notes)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.title) {
+                    "Edit Task" -> {
+                        val builder = AlertDialog.Builder(context)
+                        val inflater = LayoutInflater.from(context)
+                        val dialogLayout =
+                            inflater.inflate(R.layout.edit_text_dialogue_task, null)
+                        val newTaskName =
+                            dialogLayout.findViewById<EditText>(R.id.input_task_name)
+                        newTaskName.setText(item.name)
+                        val newNote =
+                            dialogLayout.findViewById<EditText>(R.id.input_task_description)
+                        newNote.setText(item.notes)
 
-                            with(builder) {
-                                setTitle("Update Task")
-                                setPositiveButton("Ok") { dialog, which ->
-                                    val newProjectNameString = newTaskName.text.toString()
-                                    val newDescriptionString = newNote.text.toString()
+                        with(builder) {
+                            setTitle("Update Task")
+                            setPositiveButton("Ok") { dialog, which ->
+                                val newProjectNameString = newTaskName.text.toString()
+                                val newDescriptionString = newNote.text.toString()
 
-                                        item.name = newProjectNameString
-                                        item.notes = newDescriptionString
+                                item.name = newProjectNameString
+                                item.notes = newDescriptionString
 
-                                    viewModel.updateTask(item)
+                                viewModel.updateTask(item)
 
-                                    // TODO update edits of tastsk in Firebase
-                                    val db = Firebase.firestore
-                                    val firebaseAuth = FirebaseAuth.getInstance()
-                                    val currentUserId = firebaseAuth.currentUser!!.uid
-                                    val updates = mutableMapOf<String, Any>(
-                                        "name" to item.name,
-                                        "notes" to item.notes
-                                    )
+                                // TODO update edits of tastsk in Firebase
+                                val db = Firebase.firestore
+                                val firebaseAuth = FirebaseAuth.getInstance()
+                                val currentUserId = firebaseAuth.currentUser!!.uid
+                                val updates = mutableMapOf<String, Any>(
+                                    "name" to item.name,
+                                    "notes" to item.notes
+                                )
 
-                                    // TODO Update task changes in firebase
-                                    db.collection("users").document(currentUserId)
-                                        .collection("tasks")
-                                        .document(item.id.toString())
-                                        .update(updates)
-                                        .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                        .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+                                // TODO Update task changes in firebase
+                                db.collection("users").document(currentUserId)
+                                    .collection("tasks")
+                                    .document(item.id.toString())
+                                    .update(updates)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "update",
+                                            "DocumentSnapshot successfully updated!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            "update",
+                                            "Error updating document",
+                                            e
+                                        )
+                                    }
 
-                                    submitList(viewModel.taskList.value!!)
-                                    Toast.makeText(
-                                        context,
-                                        "$newProjectNameString updated",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                setNegativeButton("Cancel") { dialog, which ->
-                                    dialog.dismiss()
-                                }
-                                setView(dialogLayout)
-                            }.show()
-                            true
-                        }
+                                submitList(viewModel.taskList.value!!)
+                                Toast.makeText(
+                                    context,
+                                    "$newProjectNameString updated",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            setNegativeButton("Cancel") { dialog, which ->
+                                dialog.dismiss()
+                            }
+                            setView(dialogLayout)
+                        }.show()
+                        true
+                    }
 
                     "Delete Task" -> {
                         // Handle delete task action
@@ -210,43 +222,38 @@ class TaskAdapter(
                                             e
                                         )
                                     }
+
+                                //TODO HERE UPDATE NR OF TASKS
                                 coroutineScope.launch {
-                                val size = withContext(Dispatchers.IO) {
-                                    getTaskDatabase(context).taskDatabaseDao.getAllNLD().filter { it.taskProjectId == projectId }.size
-                                }
-
-                                // TODO Update project changes in firebase
-                                db.collection("users").document(currentUserId)
-                                    .collection("projects")
-                                    .document(projectId.toString())
-                                    .update("numberOfTasks", size)
-                                    .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
-                                    .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
+                                    val project = withContext(Dispatchers.IO) {
+                                        getDatabase(context).projectDatabaseDao.getAllNLD()
+                                            .find { it.id == projectId }
                                     }
+                                    val tasksSize = withContext(Dispatchers.IO) {
+                                        getTaskDatabase(context).taskDatabaseDao.getAllNLD()
+                                            .filter { it.taskProjectId == projectId }.size
+                                    }
+                                    project!!.numberOfTasks = tasksSize.toLong()
+                                    viewModel.updateProject(project)
 
-                                // Update number of tasks in the project in question
-                                viewModel.taskList.observe(
-                                    lifeCycleOwner
-                                ) { it ->
-                                    val filteredTaskList = it.filter { it.taskProjectId == projectId }
-                                    val size = filteredTaskList.size.toLong()
-                                    Log.d("TaskAdapter", "size: ${size}")
-                                    Log.d("TaskAdapter", "projectid: ${projectId}")
-                                    viewModel.taskObserverTriggered = 1
-                                    viewModel.projectList.observe(
-                                        lifeCycleOwner
-                                    ) {
-                                        if (viewModel.taskObserverTriggered == 1) {
-                                            val project = it.find { it.id == projectId }
-                                            Log.d("TaskAdapter", "inif nrtasks it: ${it.find { it.id == projectId }!!.numberOfTasks}")
-                                            Log.d("TaskAdapter", "inif size: ${size}")
-                                            project!!.numberOfTasks = size
-                                            viewModel.updateProject(project)
-                                            viewModel.taskObserverTriggered = 0
-                                            Log.d("TaskAdapter", "in if")
+                                    // TODO Update project changes in firebase
+                                    db.collection("users").document(currentUserId)
+                                        .collection("projects")
+                                        .document(projectId.toString())
+                                        .update("numberOfTasks", tasksSize)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "update",
+                                                "DocumentSnapshot successfully updated!"
+                                            )
                                         }
-                                        Log.d("TaskAdapter", "projectid: triggered")
-                                    }
+                                        .addOnFailureListener { e ->
+                                            Log.w(
+                                                "update",
+                                                "Error updating document",
+                                                e
+                                            )
+                                        }
                                 }
 
                                 Toast.makeText(
@@ -264,6 +271,7 @@ class TaskAdapter(
                             .show()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -273,7 +281,14 @@ class TaskAdapter(
 
         // Set an OnCLickListener on the image Button
         holder.playButton.setOnClickListener {
-            navController.navigate(TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(projectId, item.id, item.name, color))
+            navController.navigate(
+                TaskFragmentDirections.actionProjectDetailFragmentToTimerFragment(
+                    projectId,
+                    item.id,
+                    item.name,
+                    color
+                )
+            )
         }
     }
 
