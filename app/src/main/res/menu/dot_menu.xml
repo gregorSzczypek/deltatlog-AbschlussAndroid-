@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/settings"
-        android:title="Settings" />
+        android:id="@+id/export"
+        android:title="Export" />
 
     <item
         android:id="@+id/logout"

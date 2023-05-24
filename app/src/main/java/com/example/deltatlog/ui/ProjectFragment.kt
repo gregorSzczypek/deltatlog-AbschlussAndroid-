@@ -69,17 +69,25 @@ class ProjectFragment : Fragment() {
         binding.materialToolbar.setOnMenuItemClickListener {
             destroySnapListener()
             when (it.itemId) {
-                R.id.logout ->
+                R.id.logout -> {
                     firebaseAuth.signOut()
-            }
-            findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
-            if (firebaseAuth.currentUser == null) {
-                viewModel.databaseDeleted = false
-                Toast.makeText(
-                    context,
-                    "Successfully logged out user $currentUserEmail",
-                    Toast.LENGTH_LONG
-                ).show()
+                    findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
+                    if (firebaseAuth.currentUser == null) {
+                        viewModel.databaseDeleted = false
+                        Toast.makeText(
+                            context,
+                            "Successfully logged out user $currentUserEmail",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                R.id.export -> {
+                    Toast.makeText(
+                        context,
+                        "Clicked Export",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
             true
         }
