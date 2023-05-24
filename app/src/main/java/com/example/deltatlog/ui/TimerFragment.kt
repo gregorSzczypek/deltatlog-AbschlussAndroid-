@@ -105,12 +105,15 @@ class TimerFragment : Fragment() {
                     val db = Firebase.firestore
                     val firebaseAuth = FirebaseAuth.getInstance()
                     val currentUserId = firebaseAuth.currentUser!!.uid
+                    val updates = mapOf(
+                        "duration" to currentTask.duration,
+                        "elapsedTime" to currentTask.elapsedTime)
 
                     // TODO Update task changes in firebase
                     db.collection("users").document(currentUserId)
                         .collection("tasks")
                         .document(currentTask.id.toString())
-                        .update("duration", currentTask.duration)
+                        .update(updates)
                         .addOnSuccessListener { Log.d("update", "DocumentSnapshot successfully updated!") }
                         .addOnFailureListener { e -> Log.w("update", "Error updating document", e) }
                 }
