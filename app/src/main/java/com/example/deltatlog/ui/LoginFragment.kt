@@ -13,44 +13,48 @@ import com.example.deltatlog.viewModel
 
 class LoginFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
-    private val viewModel: viewModel by viewModels()
+    // Variable to hold the binding for the fragment
+    private lateinit var LoginBinding: FragmentLoginBinding
+    // ViewModel instance associated with the fragment
+    private val LoginViewModel: viewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
+        // Inflate the fragment's layout using data binding
+        LoginBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_login,
             container,
             false
         )
-        // Inflate the layout for this fragment
-        return binding.root
+        // Return the root view of the fragment
+        return LoginBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.databaseDeleted = false
-
-        // // this click listener performs the login procedure in firebase after checks of valid input
-        binding.btnLogin.setOnClickListener {
-            val email = binding.inputEmailAdress.text.toString()
-            val pw = binding.inputPw1.text.toString()
-            viewModel.login(requireContext(), email, pw, findNavController())
-            viewModel.databaseDeleted = false
+        // click listener for the login button
+        LoginBinding.btnLogin.setOnClickListener {
+            // get the entered email adress
+            val email = LoginBinding.inputEmailAdress.text.toString()
+            // get the entered password
+            val pw = LoginBinding.inputPw1.text.toString()
+            // perform the login procedure
+            LoginViewModel.login(requireContext(), email, pw, findNavController())
         }
 
-        // BackButton Navigation in Toolbar
-        binding.materialToolbar.setNavigationOnClickListener {
+        // BackButton listener Navigation in Toolbar
+        LoginBinding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
 
-        // Navigation to sign up page in case user is not a member yet
-        binding.tvNotRegistered.setOnClickListener {
+        // Click listener for the "Not registered?" text view
+        LoginBinding.tvNotRegistered.setOnClickListener {
+            // Navigate to the sign-up fragment
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
         }
     }

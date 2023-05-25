@@ -37,8 +37,9 @@ import java.io.IOException
 
 class ProjectFragment : Fragment() {
 
-    private val viewModel: viewModel by viewModels()
-    private lateinit var binding: FragmentProjectBinding
+    // ViewModels, bindings, and Firebase components
+    private val ProjectFragmentViewModel: viewModel by viewModels()
+    private lateinit var ProjectFragmentBinding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = Firebase.firestore
     private var snapshotListener: ListenerRegistration? = null
@@ -48,18 +49,20 @@ class ProjectFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
+        // Inflate the fragment layout and initialize the binding object
+        ProjectFragmentBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_project,
             container,
             false
         )
-        // observe livedata
-        binding.lifecycleOwner = this.viewLifecycleOwner
-        binding.projectList.setHasFixedSize(true) // set fixed size for recycler view
+        // Set the lifecycle owner for data binding
+        ProjectFragmentBinding.lifecycleOwner = this.viewLifecycleOwner
+        // set fixed size for recycler view
+        ProjectFragmentBinding.projectList.setHasFixedSize(true)
 
-        // Inflate the layout for this fragment
-        return binding.root
+        // Return the root view of the fragment
+        return ProjectFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,14 +74,14 @@ class ProjectFragment : Fragment() {
 
 
         // Set onClickListener on menu item logout
-        binding.materialToolbar.setOnMenuItemClickListener {
+        ProjectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             destroySnapListener()
             when (it.itemId) {
                 R.id.logout -> {
                     firebaseAuth.signOut()
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                     if (firebaseAuth.currentUser == null) {
-                        viewModel.databaseDeleted = false
+                        ProjectFragmentViewModel.databaseDeleted = false
                         Toast.makeText(
                             context,
                             "Successfully logged out user $currentUserEmail",
@@ -87,7 +90,7 @@ class ProjectFragment : Fragment() {
                     }
                 }
                 R.id.export -> {
-                    viewModel.projectList.value?.let { projects ->
+                    ProjectFragmentViewModel.projectList.value?.let { projects ->
                         exportToCSV(projects)
                     }
                 }
@@ -95,16 +98,18 @@ class ProjectFragment : Fragment() {
             true
         }
 
-        val recyclerView = binding.projectList
+        val recyclerView = ProjectFragmentBinding.projectList
 
-        viewModel.projectList.observe(
+        ProjectFragmentViewModel.projectList.observe(
             viewLifecycleOwner,
             Observer {
                 recyclerView.adapter =
-                    ProjectAdapter(viewModel, requireContext(), it, lifecycleScope)
+                    ProjectAdapter(ProjectFragmentViewModel, requireContext(), it, lifecycleScope)
             }
         )
-        binding.floatingActionButton.setOnClickListener {
+
+        // Handle click event for adding a new project
+        ProjectFragmentBinding.floatingActionButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
@@ -123,14 +128,15 @@ class ProjectFragment : Fragment() {
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
                     val newCompanyNameString = newCompanyName.text.toString()
+                    // create new Project instance
                     val newProject = Project()
 
                     if (newCompanyNameString != "") {
-                        viewModel.loadLogo(newCompanyNameString) {
+                        ProjectFragmentViewModel.loadLogo(newCompanyNameString) {
                             Log.d("ProjectFragment", "(5) Here updating logourl")
-                            Log.d("ProjectFragment", viewModel.logoLiveData.value!!.logo)
+                            Log.d("ProjectFragment", ProjectFragmentViewModel.logoLiveData.value!!.logo)
 
-                            newProject.logoUrl = viewModel.logoLiveData.value!!.logo
+                            newProject.logoUrl = ProjectFragmentViewModel.logoLiveData.value!!.logo
 
                             if (newProjectNameString != "") {
                                 newProject.name = newProjectNameString
@@ -147,7 +153,7 @@ class ProjectFragment : Fragment() {
                             Log.d("ProjectFragment", newProject.logoUrl)
                             Log.d("userID", currentUserId)
 
-                            viewModel.insertProject(newProject) {
+                            ProjectFragmentViewModel.insertProject(newProject) {
 
                                 val database = getDatabase(context)
 
@@ -225,7 +231,7 @@ class ProjectFragment : Fragment() {
                         }
                         Log.d("ProjectFragment", newProject.logoUrl)
 
-                        viewModel.insertProject(newProject) {
+                        ProjectFragmentViewModel.insertProject(newProject) {
 
                             val database = getDatabase(context)
 
@@ -307,12 +313,12 @@ class ProjectFragment : Fragment() {
         val database = getDatabase(requireContext())
         val taskDatabase = getTaskDatabase(requireContext())
 
-        if (viewModel.databaseDeleted == false) {
+        if (ProjectFragmentViewModel.databaseDeleted == false) {
             lifecycleScope.launch {
                 database.projectDatabaseDao.deleteAllProjects()
                 taskDatabase.taskDatabaseDao.deleteAllTasks()
             }
-            viewModel.databaseDeleted = true
+            ProjectFragmentViewModel.databaseDeleted = true
         }
 
         snapshotListener = projectCollection.addSnapshotListener { snapshot, exception ->

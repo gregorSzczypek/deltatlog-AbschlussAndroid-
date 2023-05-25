@@ -18,10 +18,6 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel: viewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,14 +29,14 @@ class SignUpFragment : Fragment() {
             container,
             false
         )
-        // Inflate the layout for this fragment
+        // Return the root view of the fragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // this click listener performs the sign up procedure in firebase after checks of valid input a user is created
+        // set click listener to sign button and check validity of inputs - a user is created
         binding.btnSignMeUp.setOnClickListener {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()

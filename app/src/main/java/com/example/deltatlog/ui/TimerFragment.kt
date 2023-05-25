@@ -22,8 +22,8 @@ import java.util.Locale
 
 class TimerFragment : Fragment() {
 
-    private lateinit var binding: FragmentTimerBinding
-    private val viewModel: viewModel by viewModels()
+    private lateinit var timerBinding: FragmentTimerBinding
+    private val TimerViewModel: viewModel by viewModels()
     private val firebaseManager = FirebaseManager()
     private var taskId: Long = 0
     private var projectId: Long = 0
@@ -58,18 +58,18 @@ class TimerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment using DataBindingUtil
-        binding = DataBindingUtil.inflate(
+        timerBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_timer,
             container,
             false
         )
         // Set text colors based on the provided color
-        binding.tvTimer.setTextColor(Color.parseColor(color))
-        binding.tvTaskName.setTextColor(Color.parseColor(color))
+        timerBinding.tvTimer.setTextColor(Color.parseColor(color))
+        timerBinding.tvTaskName.setTextColor(Color.parseColor(color))
 
         // To automatically observe LiveData in the layout
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        timerBinding.lifecycleOwner = this.viewLifecycleOwner
 
         // Restore the saved instance state if available
         if (savedInstanceState != null) {
@@ -80,20 +80,20 @@ class TimerFragment : Fragment() {
         runTimer()
 
         // Return the root view of the inflated layout
-        return binding.root
+        return timerBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         // Set the task name in the text view
-        binding.tvTaskName.text = taskName
+        timerBinding.tvTaskName.text = taskName
 
         // Handle the stop button click
-        binding.btnStop.setOnClickListener {
+        timerBinding.btnStop.setOnClickListener {
 
             isRunning = false
 
-            viewModel.taskList.observe(
+            TimerViewModel.taskList.observe(
                 viewLifecycleOwner,
                 Observer {
                     // Retrieve the current task from the list
@@ -113,7 +113,7 @@ class TimerFragment : Fragment() {
 
                     // Update the duration and elapsed time of the task in the ViewModel
                     currentTask.duration = timeString
-                    viewModel.updateTask(currentTask)
+                    TimerViewModel.updateTask(currentTask)
 
                     // Prepare the updates to be sent to Firebase
                     val updates = mapOf(
@@ -129,7 +129,7 @@ class TimerFragment : Fragment() {
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val sec = seconds % 60
-            var time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
+            val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
 
             // Display a toast with the session time
             Toast.makeText(context, "Session time: $time", Toast.LENGTH_SHORT).show()
@@ -145,7 +145,7 @@ class TimerFragment : Fragment() {
 
     private fun runTimer() {
 
-        val timerTextView = binding.tvTimer
+        val timerTextView = timerBinding.tvTimer
         val handler = Handler()
         val r = Runnable { runTimer() }
 
