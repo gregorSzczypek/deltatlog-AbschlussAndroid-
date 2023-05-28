@@ -41,7 +41,6 @@ class TaskFragment : Fragment() {
     private var color: String? = ""
     private lateinit var firebaseAuth: FirebaseAuth
     private val firebaseManager = FirebaseManager()
-    private val db = Firebase.firestore
     private val exportManager = ExportManager()
     private lateinit var taskSnapshotListener: TaskSnapshotListener
 
@@ -88,7 +87,6 @@ class TaskFragment : Fragment() {
                     taskSnapshotListener.stopListening()
                     firebaseManager.logOut(
                         firebaseAuth,
-                        taskFragmentViewModel,
                         currentUserEmail!!,
                         requireContext()
                     )
@@ -199,7 +197,13 @@ class TaskFragment : Fragment() {
                             val minutes = (totalTime % 3600) / 60
                             val sec = totalTime % 60
                             val timeString =
-                                String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
+                                String.format(
+                                    Locale.getDefault(),
+                                    "%02d:%02d:%02d",
+                                    hours,
+                                    minutes,
+                                    sec
+                                )
 
                             Log.e("totalTime", timeString)
 

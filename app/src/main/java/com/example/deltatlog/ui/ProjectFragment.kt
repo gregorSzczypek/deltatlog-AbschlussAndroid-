@@ -37,7 +37,6 @@ class ProjectFragment : Fragment() {
     private lateinit var projectFragmentBinding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private val firebaseManager = FirebaseManager()
-    private val db = Firebase.firestore
     private val exportManager = ExportManager()
     private lateinit var projectSnapshotListener: ProjectSnapshotListener
 
@@ -67,7 +66,6 @@ class ProjectFragment : Fragment() {
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserEmail = firebaseAuth.currentUser?.email
-        var currentUserId = firebaseAuth.currentUser!!.uid
         projectSnapshotListener = ProjectSnapshotListener(this, firebaseAuth.currentUser!!.uid)
 
 
@@ -78,7 +76,6 @@ class ProjectFragment : Fragment() {
                     projectSnapshotListener.stopListening()
                     firebaseManager.logOut(
                         firebaseAuth,
-                        projectFragmentViewModel,
                         currentUserEmail!!,
                         requireContext()
                     )
@@ -158,7 +155,6 @@ class ProjectFragment : Fragment() {
                             newProject.companyName = newCompanyNameString
                         }
                         Log.d("ProjectFragment", newProject.logoUrl)
-                        Log.d("userID", currentUserId)
 
                         projectFragmentViewModel.insertProject(newProject) {
 
@@ -175,7 +171,6 @@ class ProjectFragment : Fragment() {
                                 val project2Add = projectList.last()
 
                                 Log.d("ProjectFragment", currentUserEmail!!)
-                                Log.d("ProjectFragment", currentUserId)
 
                                 val attributes = hashMapOf<String, Any>(
                                     "id" to project2Add.id,

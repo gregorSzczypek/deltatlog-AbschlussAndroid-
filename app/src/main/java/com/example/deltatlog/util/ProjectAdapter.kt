@@ -39,12 +39,6 @@ class ProjectAdapter(
 
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: List<Project>) {
-        dataset = list
-        notifyDataSetChanged()
-    }
-
     // parts of the item which need to be change by adapter
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val imageView = view.findViewById<ImageView>(R.id.start_button)
@@ -194,7 +188,10 @@ class ProjectAdapter(
                                             "logoUrl" to item.logoUrl
                                         )
                                         val firebaseManager = FirebaseManager()
-                                        firebaseManager.updateProjectChanges(item.id.toString(), updates)
+                                        firebaseManager.updateProjectChanges(
+                                            item.id.toString(),
+                                            updates
+                                        )
 
                                         Toast.makeText(
                                             context,

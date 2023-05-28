@@ -145,7 +145,6 @@ class FirebaseManager {
 
     fun logOut(
         firebaseAuth: FirebaseAuth,
-        projectFragmentViewModel: viewModel,
         currentUserEmail: String,
         context: Context
     ) {
