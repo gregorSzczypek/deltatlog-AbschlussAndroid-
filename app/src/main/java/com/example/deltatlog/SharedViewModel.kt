@@ -24,7 +24,30 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     val projectList = repository.projectList
     val taskList = repository.taskList
     val logoLiveData: LiveData<Logo> = repository.logo
-//    var databaseDeleted = false
+
+    //    var databaseDeleted = false
+    val colors = listOf(
+        R.color.colorPicker1,
+        R.color.colorPicker2,
+        R.color.colorPicker3,
+        R.color.colorPicker4,
+        R.color.colorPicker5,
+        R.color.colorPicker6,
+        R.color.colorPicker7,
+        R.color.colorPicker8,
+        R.color.colorPicker9,
+        R.color.colorPicker10,
+        R.color.colorPicker11,
+        R.color.colorPicker12,
+        R.color.colorPicker13,
+        R.color.colorPicker14,
+        R.color.colorPicker15,
+        R.color.colorPicker16,
+        R.color.colorPicker17,
+        R.color.colorPicker18,
+        R.color.colorPicker19,
+        R.color.colorPicker20,
+    )
 
     fun loadLogo(companyName: String, callback: () -> Unit) {
         viewModelScope.launch {

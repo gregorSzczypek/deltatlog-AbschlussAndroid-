@@ -55,29 +55,6 @@ class ProjectAdapter(
         val descriptionView = view.findViewById<TextView>(R.id.task_description)
         val numberOfTasks = view.findViewById<TextView>(R.id.tv_total_task_amount)
         val totalTime = view.findViewById<TextView>(R.id.tv_total_task_time)
-
-        val colors = listOf(
-            R.color.colorPicker1,
-            R.color.colorPicker2,
-            R.color.colorPicker3,
-            R.color.colorPicker4,
-            R.color.colorPicker5,
-            R.color.colorPicker6,
-            R.color.colorPicker7,
-            R.color.colorPicker8,
-            R.color.colorPicker9,
-            R.color.colorPicker10,
-            R.color.colorPicker11,
-            R.color.colorPicker12,
-            R.color.colorPicker13,
-            R.color.colorPicker14,
-            R.color.colorPicker15,
-            R.color.colorPicker16,
-            R.color.colorPicker17,
-            R.color.colorPicker18,
-            R.color.colorPicker19,
-            R.color.colorPicker20,
-        )
     }
 
     // create new viewholders
@@ -242,9 +219,7 @@ class ProjectAdapter(
                             .setTitle("Confirm Project Deletion")
                             .setMessage("Are you sure you want to delete this project and all of the related tasks?")
                             .setPositiveButton("Yes") { dialog, _ ->
-                                val db = Firebase.firestore
-                                val firebaseAuth = FirebaseAuth.getInstance()
-                                val currentUserId = firebaseAuth.currentUser!!.uid
+
                                 val taskDataBase = getTaskDatabase(context)
 
                                 coroutineScope.launch {
@@ -291,33 +266,16 @@ class ProjectAdapter(
                             .create()
 
                         val colorListView = dialogView.findViewById<ListView>(R.id.color_list)
-                        val colorAdapter = ColorAdapter(holder.colors, context) { color ->
+                        val colorAdapter = ColorAdapter(viewModel.colors, context) { color ->
                             item.color = color
                             viewModel.updateProject(item)
 
-                            val db = Firebase.firestore
-                            val firebaseAuth = FirebaseAuth.getInstance()
-                            val currentUserId = firebaseAuth.currentUser!!.uid
 
-                            // TODO changes in color in firebase
-                            db.collection("users").document(currentUserId)
-                                .collection("projects")
-                                .document(item.id.toString())
-                                .update("color", item.color)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        "update",
-                                        "DocumentSnapshot successfully updated!"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        "update",
-                                        "Error updating document",
-                                        e
-                                    )
-                                }
+                            // Update changes into firebase storage
+                            val updates = mapOf<String, Any>("color" to item.color)
+                            val firebaseManager = FirebaseManager()
 
+                            firebaseManager.updateProjectChanges(item.id.toString(), updates)
 
                             this.notifyItemChanged(position)
                             dialog.dismiss()
