@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.room.withTransaction
 import com.example.deltatlog.ExportManager
+import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getDatabase
@@ -37,9 +38,11 @@ class ProjectFragment : Fragment() {
     private val projectFragmentViewModel: viewModel by viewModels()
     private lateinit var projectFragmentBinding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private val firebaseManager = FirebaseManager()
     private val db = Firebase.firestore
     private var snapshotListener: ListenerRegistration? = null
     private val exportManager = ExportManager()
+    private lateinit var projectSnapshotListener: ProjectSnapshotListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,23 +71,16 @@ class ProjectFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserEmail = firebaseAuth.currentUser?.email
         var currentUserId = firebaseAuth.currentUser!!.uid
+        projectSnapshotListener = ProjectSnapshotListener(this, firebaseAuth.currentUser!!.uid)
 
 
         // Set onClickListener on menu item logout
         projectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
-            destroySnapListener()
             when (it.itemId) {
                 R.id.logout -> {
-                    firebaseAuth.signOut()
+                    projectSnapshotListener.stopListening()
+                    firebaseManager.logOut(firebaseAuth, projectFragmentViewModel, currentUserEmail!!, requireContext())
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
-                    if (firebaseAuth.currentUser == null) {
-                        projectFragmentViewModel.databaseDeleted = false
-                        Toast.makeText(
-                            context,
-                            "Successfully logged out user $currentUserEmail",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
                 }
                 R.id.export -> {
                     projectFragmentViewModel.projectList.value?.let { projects ->
@@ -298,82 +294,10 @@ class ProjectFragment : Fragment() {
                 show()
             }
         }
-        // here firebase stuff
-        currentUserId = firebaseAuth.currentUser!!.uid
-        val projectCollection = db.collection("users").document(currentUserId)
-            .collection("projects")
 
-        // TODO Snapshot listener for firebase changes
-
-        val database = getDatabase(requireContext())
+        val projectDatabase = getDatabase(requireContext())
         val taskDatabase = getTaskDatabase(requireContext())
-
-        if (projectFragmentViewModel.databaseDeleted == false) {
-            lifecycleScope.launch {
-                database.projectDatabaseDao.deleteAllProjects()
-                taskDatabase.taskDatabaseDao.deleteAllTasks()
-            }
-            projectFragmentViewModel.databaseDeleted = true
-        }
-
-        snapshotListener = projectCollection.addSnapshotListener { snapshot, exception ->
-            if (exception != null) {
-                // Handle error
-                return@addSnapshotListener
-            }
-
-            val projects = mutableListOf<Project>()
-
-            for (doc in snapshot?.documents ?: emptyList()) {
-                val id = doc.getLong("id") ?: 0
-                val name = doc.getString("name") ?: ""
-                val nameCustomer = doc.getString("nameCustomer") ?: ""
-                val companyName = doc.getString("companyName") ?: ""
-                val homepage = doc.getString("homepage") ?: ""
-                val logoUrl = doc.getString("logoUrl") ?: ""
-                val image = doc.getLong("image")?.toInt() ?: 0
-                val date = doc.getString("date") ?: ""
-                val description = doc.getString("description") ?: ""
-                val color = doc.getString("color") ?: ""
-                val numberOfTasks = doc.getLong("numberOfTasks")?.toInt() ?: 0
-                val totalTime = doc.getString("totalTime") ?: ""
-
-                val project = Project(
-                    id,
-                    name,
-                    nameCustomer,
-                    companyName,
-                    homepage,
-                    logoUrl,
-                    image.toInt(),
-                    date,
-                    description,
-                    color,
-                    numberOfTasks.toLong(),
-                    totalTime
-                )
-                projects.add(project)
-            }
-
-            // Update the local Room database
-            lifecycleScope.launch {
-                // Run the database operation within a transaction
-                database.withTransaction {
-                    // Retrieve the current projects from the database
-                    val currentProjects = database.projectDatabaseDao.getAllNLD()
-
-                    // Compare the projects from Firestore with the current projects
-                    val projectsToDelete = currentProjects.filter { it !in projects }
-                    val projectsToInsert = projects.filter { it !in currentProjects }
-
-                    // Delete projects that are no longer present in Firestore
-                    database.projectDatabaseDao.deleteProjects(projectsToDelete)
-
-                    // Insert new projects from Firestore
-                    database.projectDatabaseDao.insertAll(projectsToInsert)
-                }
-            }
-        }
+        projectSnapshotListener.startListening(taskDatabase, projectDatabase, requireContext())
     }
     fun destroySnapListener() {
         snapshotListener?.remove()
