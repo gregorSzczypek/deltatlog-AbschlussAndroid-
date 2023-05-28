@@ -18,7 +18,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.room.withTransaction
 import com.example.deltatlog.ExportManager
+import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
+import com.example.deltatlog.TaskSnapshotListener
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
@@ -38,8 +40,10 @@ class TaskFragment : Fragment() {
     private var projectId: Long = 0
     private var color: String? = ""
     private lateinit var firebaseAuth: FirebaseAuth
+    private val firebaseManager = FirebaseManager()
     private val db = Firebase.firestore
     private val exportManager = ExportManager()
+    private lateinit var taskSnapshotListener: TaskSnapshotListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +75,7 @@ class TaskFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserId = firebaseAuth.currentUser!!.uid
         val currentUserEmail = firebaseAuth.currentUser!!.email
+        taskSnapshotListener = TaskSnapshotListener(this, currentUserId)
         // BackButton Navigation in Toolbar
         taskFragmentBinding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
@@ -80,16 +85,13 @@ class TaskFragment : Fragment() {
         taskFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
-                    firebaseAuth.signOut()
-                    findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
-                    if (firebaseAuth.currentUser == null) {
-                        taskFragmentViewModel.databaseDeleted = false
-                        Toast.makeText(
-                            context,
-                            "Successfully logged out user $currentUserEmail",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    taskSnapshotListener.stopListening()
+                    firebaseManager.logOut(
+                        firebaseAuth,
+                        taskFragmentViewModel,
+                        currentUserEmail!!,
+                        requireContext()
+                    )
                 }
                 R.id.export -> {
                     // Retrieve the tasks related to the current project from the ViewModel
@@ -201,7 +203,6 @@ class TaskFragment : Fragment() {
                                 project!!.numberOfTasks = tasksSize.toLong()
                                 taskFragmentViewModel.updateProject(project)
 
-                                // TODO Update project changes in firebase
                                 db.collection("users").document(currentUserId)
                                     .collection("projects")
                                     .document(projectId.toString())
@@ -242,64 +243,7 @@ class TaskFragment : Fragment() {
             }
         }
         // here firebase stuff
-        val db = Firebase.firestore
-        val projectCollection = db.collection("users").document(currentUserId)
-            .collection("tasks")
         val database = getTaskDatabase(requireContext())
-
-        // TODO Snapshot listener for firebase changes
-
-        projectCollection.addSnapshotListener { snapshot, exception ->
-            if (exception != null) {
-                // Handle error
-                return@addSnapshotListener
-            }
-
-            val tasks = mutableListOf<Task>()
-
-            for (doc in snapshot?.documents ?: emptyList()) {
-                val id = doc.id.toLong()
-                val taskProjectId = doc.getLong("taskProjectId")?: 0
-                val name = doc.getString("name") ?: ""
-                val color = doc.getString("color") ?: ""
-                val date = doc.getString("date") ?: ""
-                val duration = doc.getString("duration") ?: ""
-                val description = doc.getString("description") ?: ""
-                val notes = doc.getString("notes") ?: ""
-                val elapsedTime = doc.getLong("elapsedTime")?: 0
-
-                val task = Task(
-                    id,
-                    taskProjectId,
-                    name,
-                    color,
-                    date,
-                    duration,
-                    description,
-                    notes,
-                    elapsedTime,
-                )
-                tasks.add(task)
-            }
-
-            // Update the local Room database
-            lifecycleScope.launch {
-                // Run the database operation within a transaction
-                database.withTransaction {
-                    // Retrieve the current projects from the database
-                    val currentTasks = database.taskDatabaseDao.getAllNLD()
-
-                    // Compare the projects from Firestore with the current projects
-                    val tasksToDelete = currentTasks.filter { it !in tasks }
-                    val tasksToInsert = tasks.filter { it !in currentTasks}
-
-                    // Delete projects that are no longer present in Firestore
-                    database.taskDatabaseDao.deleteTasks(tasksToDelete)
-
-                    // Insert new projects from Firestore
-                    database.taskDatabaseDao.insertAll(tasksToInsert)
-                }
-            }
-        }
+        taskSnapshotListener.startListening(database)
     }
 }
