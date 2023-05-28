@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
@@ -182,13 +183,15 @@ class ProjectAdapter(
 
                                 if (newCompanyNameString != "") {
                                     viewModel.loadLogo(newCompanyNameString) {
-                                        Log.d("ProjectFragment", "(5) Here updating logourl")
-                                        Log.d(
-                                            "ProjectFragment",
-                                            viewModel.logoLiveData.value!!.logo
-                                        )
+                                        if (newCompanyNameString != "") {
+                                            Log.d("ProjectFragment", "(5) Here updating logourl")
+                                            Log.d(
+                                                "ProjectFragment",
+                                                viewModel.logoLiveData.value!!.logo
+                                            )
 
-                                        item.logoUrl = viewModel.logoLiveData.value!!.logo
+                                            item.logoUrl = viewModel.logoLiveData.value!!.logo
+                                        }
 
                                         if (newProjectNameString != "") {
                                             item.name = newProjectNameString
@@ -206,9 +209,6 @@ class ProjectAdapter(
 
                                         viewModel.updateProject(item)
 
-                                        val db = Firebase.firestore
-                                        val firebaseAuth = FirebaseAuth.getInstance()
-                                        val currentUserId = firebaseAuth.currentUser!!.uid
                                         val updates = mutableMapOf<String, Any>(
                                             "name" to item.name,
                                             "nameCustomer" to item.nameCustomer,
@@ -216,25 +216,8 @@ class ProjectAdapter(
                                             "companyName" to item.companyName,
                                             "logoUrl" to item.logoUrl
                                         )
-
-                                        // TODO Update project changes in firebase
-                                        db.collection("users").document(currentUserId)
-                                            .collection("projects")
-                                            .document(item.id.toString())
-                                            .update(updates)
-                                            .addOnSuccessListener {
-                                                Log.d(
-                                                    "update",
-                                                    "DocumentSnapshot successfully updated!"
-                                                )
-                                            }
-                                            .addOnFailureListener { e ->
-                                                Log.w(
-                                                    "update",
-                                                    "Error updating document",
-                                                    e
-                                                )
-                                            }
+                                        val firebaseManager = FirebaseManager()
+                                        firebaseManager.updateProjectChanges(item.id.toString(), updates)
 
                                         Toast.makeText(
                                             context,
@@ -243,59 +226,6 @@ class ProjectAdapter(
                                         )
                                             .show()
                                     }
-                                } else {
-
-                                    if (newProjectNameString != "") {
-                                        item.name = newProjectNameString
-                                    }
-                                    if (newCustomerNameString != "") {
-                                        item.nameCustomer = newCustomerNameString
-                                    }
-                                    if (newDescriptionString != "") {
-                                        item.description = newDescriptionString
-                                    }
-                                    if (newCompanyNameString != "") {
-                                        item.companyName = newCompanyNameString
-                                    }
-                                    Log.d("ProjectFragment", item.logoUrl)
-
-                                    viewModel.updateProject(item)
-
-                                    val db = Firebase.firestore
-                                    val firebaseAuth = FirebaseAuth.getInstance()
-                                    val currentUserId = firebaseAuth.currentUser!!.uid
-                                    val updates = mutableMapOf<String, Any>(
-                                        "name" to newProjectNameString,
-                                        "nameCustomer" to newCustomerNameString,
-                                        "description" to newDescriptionString,
-                                        "companyName" to newCompanyNameString
-                                    )
-
-                                    // TODO Update project changes in firebase
-                                    db.collection("users").document(currentUserId)
-                                        .collection("projects")
-                                        .document(item.id.toString())
-                                        .update(updates)
-                                        .addOnSuccessListener {
-                                            Log.d(
-                                                "update",
-                                                "DocumentSnapshot successfully updated!"
-                                            )
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.w(
-                                                "update",
-                                                "Error updating document",
-                                                e
-                                            )
-                                        }
-
-                                    Toast.makeText(
-                                        context,
-                                        "$newProjectNameString updated",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
                                 }
                             }
                             setNegativeButton("Cancel") { dialog, which ->

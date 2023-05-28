@@ -19,9 +19,9 @@ class FirebaseManager {
 
     private val db = Firebase.firestore
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val currentUserId = firebaseAuth.currentUser?.uid
 
     fun updateTaskChanges(taskId: String, updates: Map<String, Any>) {
-        val currentUserId = firebaseAuth.currentUser?.uid
         currentUserId?.let {
             db.collection("users")
                 .document(currentUserId)
@@ -37,7 +37,32 @@ class FirebaseManager {
         }
     }
 
-    fun logOut(firebaseAuth: FirebaseAuth, projectFragmentViewModel: viewModel, currentUserEmail: String, context: Context) {
+    fun updateProjectChanges(projectId: String, updates: Map<String, Any>) {
+        currentUserId?.let {
+            db.collection("users")
+                .document(currentUserId)
+                .collection("projects")
+                .document(projectId)
+                .update(updates)
+                .addOnSuccessListener {
+                    Log.d("firebaseManager", "DocumentSnapshot successfully updated!")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("firebaseManager", "Error updating document", e)
+                }
+        }
+    }
+
+    fun deleteTask() {
+
+    }
+
+    fun logOut(
+        firebaseAuth: FirebaseAuth,
+        projectFragmentViewModel: viewModel,
+        currentUserEmail: String,
+        context: Context
+    ) {
         firebaseAuth.signOut()
         if (firebaseAuth.currentUser == null) {
 //            projectFragmentViewModel.databaseDeleted = false
