@@ -27,12 +27,8 @@ class ExportManager {
                 "Name",
                 "NameCustomer",
                 "CompanyName",
-                "Homepage",
-                "LogoUrl",
-                "Image",
                 "Date",
                 "Description",
-                "Color",
                 "NumberOfTasks",
                 "TotalTime"
             ).print(csvFile.writer())
@@ -44,12 +40,8 @@ class ExportManager {
                     project.name,
                     project.nameCustomer,
                     project.companyName,
-                    project.homepage,
-                    project.logoUrl,
-                    project.image,
                     project.date,
                     project.description,
-                    project.color,
                     project.numberOfTasks,
                     project.totalTime
                 )
@@ -76,29 +68,21 @@ class ExportManager {
             // Create a CSV file using Apache Commons CSV library
             val csvFile = File(context.cacheDir, "task_database.csv")
             val csvWriter = CSVFormat.DEFAULT.withHeader(
-                "Task ID",
-                "Task Project ID",
+                "Project ID",
                 "Task Name",
-                "Color",
                 "Date",
                 "Duration",
-                "Description",
                 "Notes",
-                "Elapsed Time"
             ).print(csvFile.writer())
 
             // Write each task to the CSV file
             for (task in tasks) {
                 csvWriter.printRecord(
-                    task.id,
                     task.taskProjectId,
                     task.name,
-                    task.color,
                     task.date,
                     task.duration,
-                    task.description,
                     task.notes,
-                    task.elapsedTime
                 )
             }
 
