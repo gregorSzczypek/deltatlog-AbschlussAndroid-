@@ -8,43 +8,71 @@ import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import org.apache.commons.csv.CSVFormat
 import java.io.File
-import java.io.FileWriter
-import java.io.IOException
 
 class ExportManager {
 
-    private fun convertProjectsToCSV(projects: List<Project>): String {
-        val header =
-            "ID,Name,NameCustomer,CompanyName,Homepage,LogoUrl,Image,Date,Description,Color,NumberOfTasks,TotalTime\n"
-        val rows = projects.joinToString("\n") { project ->
-            "${project.id},${project.name},${project.nameCustomer},${project.companyName},${project.homepage}," +
-                    "${project.logoUrl},${project.image},${project.date},${project.description},${project.color}," +
-                    "${project.numberOfTasks},${project.totalTime}"
-        }
-        return header + rows
-    }
-
     fun exportProjectsToCSV(projects: List<Project>, context: Context) {
-        val csvData = convertProjectsToCSV(projects)
 
-        val filename = "project_database.csv"
-        val file = File(context.externalCacheDir, filename)
+        // Export the list of projects to a CSV file
+        // - Create a CSV file using Apache Commons CSV library
+        // - Write each task to the CSV file
+        // - Show a toast message indicating the export status
+        // - Send an email with the CSV file as an attachment
 
-        try {
-            FileWriter(file).use { writer ->
-                writer.append(csvData)
+        if (projects.isNotEmpty()) {
+            // Create a CSV file using Apache Commons CSV library
+            val csvFile = File(context.cacheDir, "project_database.csv")
+            val csvWriter = CSVFormat.DEFAULT.withHeader(
+                "ID",
+                "Name",
+                "NameCustomer",
+                "CompanyName",
+                "Homepage",
+                "LogoUrl",
+                "Image",
+                "Date",
+                "Description",
+                "Color",
+                "NumberOfTasks",
+                "TotalTime"
+            ).print(csvFile.writer())
+
+            // Write each task to the CSV file
+            for (project in projects) {
+                csvWriter.printRecord(
+                    project.id,
+                    project.name,
+                    project.nameCustomer,
+                    project.companyName,
+                    project.homepage,
+                    project.logoUrl,
+                    project.image,
+                    project.date,
+                    project.description,
+                    project.color,
+                    project.numberOfTasks,
+                    project.totalTime
+                )
             }
-            Toast.makeText(context, "CSV file exported", Toast.LENGTH_SHORT).show()
-            sendEmail(file, context, "project database")
-        } catch (e: IOException) {
-            Toast.makeText(context, "Failed to export CSV file", Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
+
+            // Close the CSV writer
+            csvWriter.close()
+            sendEmail(csvFile, context, "project database")
+        }
+        else {
+            Toast.makeText(context, "No projects found!.", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun exportTasksToCSV(tasks: List<Task>, context: Context) {
 
-        if (tasks != null && tasks.isNotEmpty()) {
+        // Export the list of tasks to a CSV file
+        // - Create a CSV file using Apache Commons CSV library
+        // - Write each task to the CSV file
+        // - Show a toast message indicating the export status
+        // - Send an email with the CSV file as an attachment
+
+        if (tasks.isNotEmpty()) {
             // Create a CSV file using Apache Commons CSV library
             val csvFile = File(context.cacheDir, "task_database.csv")
             val csvWriter = CSVFormat.DEFAULT.withHeader(
@@ -84,6 +112,13 @@ class ExportManager {
     }
 
     fun sendEmail(file: File, context: Context, naming: String) {
+
+        // Create an email intent with the necessary data
+        // - Set the email type as "text/csv"
+        // - Set the subject and body of the email
+        // - Attach the CSV file using a FileProvider
+        // - Start an activity to choose an email app and send the email
+
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/csv"
             intent.putExtra(Intent.EXTRA_SUBJECT, "$naming CSV")

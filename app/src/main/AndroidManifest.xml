@@ -36,4 +36,14 @@
         </provider>
 
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/csv" />
+        </intent>
+        <provider
+            android:authorities="com.example.deltatlog.fileprovider"
+            android:name="androidx.core.content.FileProvider" />
+    </queries>
 </manifest>
