@@ -2,7 +2,6 @@ package com.example.deltatlog.ui
 
 import ProjectAdapter
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,13 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.room.withTransaction
+import com.example.deltatlog.ExportManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getDatabase
@@ -31,18 +30,16 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
 
 class ProjectFragment : Fragment() {
 
     // ViewModels, bindings, and Firebase components
-    private val ProjectFragmentViewModel: viewModel by viewModels()
-    private lateinit var ProjectFragmentBinding: FragmentProjectBinding
+    private val projectFragmentViewModel: viewModel by viewModels()
+    private lateinit var projectFragmentBinding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = Firebase.firestore
     private var snapshotListener: ListenerRegistration? = null
+    private val exportManager = ExportManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,19 +47,19 @@ class ProjectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the fragment layout and initialize the binding object
-        ProjectFragmentBinding = DataBindingUtil.inflate(
+        projectFragmentBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_project,
             container,
             false
         )
         // Set the lifecycle owner for data binding
-        ProjectFragmentBinding.lifecycleOwner = this.viewLifecycleOwner
+        projectFragmentBinding.lifecycleOwner = this.viewLifecycleOwner
         // set fixed size for recycler view
-        ProjectFragmentBinding.projectList.setHasFixedSize(true)
+        projectFragmentBinding.projectList.setHasFixedSize(true)
 
         // Return the root view of the fragment
-        return ProjectFragmentBinding.root
+        return projectFragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,14 +71,14 @@ class ProjectFragment : Fragment() {
 
 
         // Set onClickListener on menu item logout
-        ProjectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
+        projectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             destroySnapListener()
             when (it.itemId) {
                 R.id.logout -> {
                     firebaseAuth.signOut()
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                     if (firebaseAuth.currentUser == null) {
-                        ProjectFragmentViewModel.databaseDeleted = false
+                        projectFragmentViewModel.databaseDeleted = false
                         Toast.makeText(
                             context,
                             "Successfully logged out user $currentUserEmail",
@@ -90,26 +87,26 @@ class ProjectFragment : Fragment() {
                     }
                 }
                 R.id.export -> {
-                    ProjectFragmentViewModel.projectList.value?.let { projects ->
-                        exportToCSV(projects)
+                    projectFragmentViewModel.projectList.value?.let { projects ->
+                        exportManager.exportProjectsToCSV(projects, requireContext())
                     }
                 }
             }
             true
         }
 
-        val recyclerView = ProjectFragmentBinding.projectList
+        val recyclerView = projectFragmentBinding.projectList
 
-        ProjectFragmentViewModel.projectList.observe(
+        projectFragmentViewModel.projectList.observe(
             viewLifecycleOwner,
             Observer {
                 recyclerView.adapter =
-                    ProjectAdapter(ProjectFragmentViewModel, requireContext(), it, lifecycleScope)
+                    ProjectAdapter(projectFragmentViewModel, requireContext(), it, lifecycleScope)
             }
         )
 
         // Handle click event for adding a new project
-        ProjectFragmentBinding.floatingActionButton.setOnClickListener {
+        projectFragmentBinding.floatingActionButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
@@ -132,11 +129,11 @@ class ProjectFragment : Fragment() {
                     val newProject = Project()
 
                     if (newCompanyNameString != "") {
-                        ProjectFragmentViewModel.loadLogo(newCompanyNameString) {
+                        projectFragmentViewModel.loadLogo(newCompanyNameString) {
                             Log.d("ProjectFragment", "(5) Here updating logourl")
-                            Log.d("ProjectFragment", ProjectFragmentViewModel.logoLiveData.value!!.logo)
+                            Log.d("ProjectFragment", projectFragmentViewModel.logoLiveData.value!!.logo)
 
-                            newProject.logoUrl = ProjectFragmentViewModel.logoLiveData.value!!.logo
+                            newProject.logoUrl = projectFragmentViewModel.logoLiveData.value!!.logo
 
                             if (newProjectNameString != "") {
                                 newProject.name = newProjectNameString
@@ -153,7 +150,7 @@ class ProjectFragment : Fragment() {
                             Log.d("ProjectFragment", newProject.logoUrl)
                             Log.d("userID", currentUserId)
 
-                            ProjectFragmentViewModel.insertProject(newProject) {
+                            projectFragmentViewModel.insertProject(newProject) {
 
                                 val database = getDatabase(context)
 
@@ -231,7 +228,7 @@ class ProjectFragment : Fragment() {
                         }
                         Log.d("ProjectFragment", newProject.logoUrl)
 
-                        ProjectFragmentViewModel.insertProject(newProject) {
+                        projectFragmentViewModel.insertProject(newProject) {
 
                             val database = getDatabase(context)
 
@@ -250,7 +247,6 @@ class ProjectFragment : Fragment() {
                                 val firebaseItem2Add = hashMapOf(
                                     "id" to project2Add.id,
                                     "name" to project2Add.name,
-                                    "date" to project2Add.date,
                                     "nameCustomer" to project2Add.nameCustomer,
                                     "companyName" to project2Add.companyName,
                                     "homepage" to project2Add.homepage,
@@ -303,7 +299,6 @@ class ProjectFragment : Fragment() {
             }
         }
         // here firebase stuff
-        val db = Firebase.firestore
         currentUserId = firebaseAuth.currentUser!!.uid
         val projectCollection = db.collection("users").document(currentUserId)
             .collection("projects")
@@ -313,12 +308,12 @@ class ProjectFragment : Fragment() {
         val database = getDatabase(requireContext())
         val taskDatabase = getTaskDatabase(requireContext())
 
-        if (ProjectFragmentViewModel.databaseDeleted == false) {
+        if (projectFragmentViewModel.databaseDeleted == false) {
             lifecycleScope.launch {
                 database.projectDatabaseDao.deleteAllProjects()
                 taskDatabase.taskDatabaseDao.deleteAllTasks()
             }
-            ProjectFragmentViewModel.databaseDeleted = true
+            projectFragmentViewModel.databaseDeleted = true
         }
 
         snapshotListener = projectCollection.addSnapshotListener { snapshot, exception ->
@@ -382,44 +377,5 @@ class ProjectFragment : Fragment() {
     }
     fun destroySnapListener() {
         snapshotListener?.remove()
-    }
-
-    private fun convertToCSV(projects: List<Project>): String {
-        val header = "ID,Name,NameCustomer,CompanyName,Homepage,LogoUrl,Image,Date,Description,Color,NumberOfTasks,TotalTime\n"
-        val rows = projects.joinToString("\n") { project ->
-            "${project.id},${project.name},${project.nameCustomer},${project.companyName},${project.homepage}," +
-                    "${project.logoUrl},${project.image},${project.date},${project.description},${project.color}," +
-                    "${project.numberOfTasks},${project.totalTime}"
-        }
-        return header + rows
-    }
-
-    private fun exportToCSV(projects: List<Project>) {
-        val csvData = convertToCSV(projects)
-
-        val filename = "project_database.csv"
-        val file = File(requireContext().externalCacheDir, filename)
-
-        try {
-            FileWriter(file).use { writer ->
-                writer.append(csvData)
-            }
-            Toast.makeText(requireContext(), "CSV file exported", Toast.LENGTH_SHORT).show()
-            sendEmail(file)
-        } catch (e: IOException) {
-            Toast.makeText(requireContext(), "Failed to export CSV file", Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
-        }
-    }
-
-    private fun sendEmail(file: File) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/csv"
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Project Database CSV")
-        intent.putExtra(Intent.EXTRA_TEXT, "Please find attached the project database in CSV format.")
-        val uri = FileProvider.getUriForFile(requireContext(), "com.example.deltatlog.fileprovider", file)
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-
-        startActivity(Intent.createChooser(intent, "Send Email"))
     }
 }

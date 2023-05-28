@@ -3,7 +3,6 @@ package com.example.deltatlog.ui
 import TaskAdapter
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,15 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.room.withTransaction
+import com.example.deltatlog.ExportManager
 import com.example.deltatlog.R
-import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
@@ -32,24 +30,23 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.apache.commons.csv.CSVFormat
-import java.io.File
 
 class TaskFragment : Fragment() {
 
-    private val viewModel: viewModel by viewModels()
-    private lateinit var binding: FragmentTaskBinding
+    private val taskFragmentViewModel: viewModel by viewModels()
+    private lateinit var taskFragmentBinding: FragmentTaskBinding
     private var projectId: Long = 0
     private var color: String? = ""
     private lateinit var firebaseAuth: FirebaseAuth
     private val db = Firebase.firestore
+    private val exportManager = ExportManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
+        taskFragmentBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_task,
             container,
@@ -61,10 +58,10 @@ class TaskFragment : Fragment() {
         Log.i("projectID", projectId.toString())
         color = requireArguments().getString("color")
 
-        binding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
+        taskFragmentBinding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
 
         // Inflate the layout for this fragment
-        return binding.root
+        return taskFragmentBinding.root
     }
 
     @SuppressLint("InflateParams")
@@ -75,18 +72,18 @@ class TaskFragment : Fragment() {
         val currentUserId = firebaseAuth.currentUser!!.uid
         val currentUserEmail = firebaseAuth.currentUser!!.email
         // BackButton Navigation in Toolbar
-        binding.materialToolbar.setNavigationOnClickListener {
+        taskFragmentBinding.materialToolbar.setNavigationOnClickListener {
             findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
         }
 
         // Set onClickListener on menu item logout
-        binding.materialToolbar.setOnMenuItemClickListener {
+        taskFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
                     firebaseAuth.signOut()
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                     if (firebaseAuth.currentUser == null) {
-                        viewModel.databaseDeleted = false
+                        taskFragmentViewModel.databaseDeleted = false
                         Toast.makeText(
                             context,
                             "Successfully logged out user $currentUserEmail",
@@ -95,20 +92,23 @@ class TaskFragment : Fragment() {
                     }
                 }
                 R.id.export -> {
+                    // Retrieve the tasks related to the current project from the ViewModel
                     // Handle export menu item click
-                    exportTasksToCSV()
+                    taskFragmentViewModel.taskList.value?.let { tasks ->
+                        exportManager.exportTasksToCSV(tasks, requireContext())
+                    }
                 }
             }
             true
         }
 
-        val recyclerView = binding.taskList
+        val recyclerView = taskFragmentBinding.taskList
 
-        viewModel.taskList.observe(
+        taskFragmentViewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
                 recyclerView.adapter = TaskAdapter(
-                    viewModel,
+                    taskFragmentViewModel,
                     viewLifecycleOwner,
                     requireContext(),
                     it.filter { it.taskProjectId == projectId },
@@ -120,7 +120,7 @@ class TaskFragment : Fragment() {
             }
         )
 
-        binding.floatingActionButton.setOnClickListener {
+        taskFragmentBinding.floatingActionButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(context)
             val inflater = layoutInflater
@@ -142,7 +142,7 @@ class TaskFragment : Fragment() {
                     if (newTaskDescriptionString != "") {
                         newTask.notes = newTaskDescriptionString
                     }
-                    viewModel.insertTask(newTask) {
+                    taskFragmentViewModel.insertTask(newTask) {
 
                         val database = getTaskDatabase(context)
 
@@ -199,7 +199,7 @@ class TaskFragment : Fragment() {
                                         .filter { it.taskProjectId == projectId }.size
                                 }
                                 project!!.numberOfTasks = tasksSize.toLong()
-                                viewModel.updateProject(project)
+                                taskFragmentViewModel.updateProject(project)
 
                                 // TODO Update project changes in firebase
                                 db.collection("users").document(currentUserId)
@@ -302,67 +302,4 @@ class TaskFragment : Fragment() {
             }
         }
     }
-
-    private fun exportTasksToCSV() {
-        // Retrieve the tasks related to the current project from the ViewModel
-        val tasks = viewModel.taskList.value?.filter { it.taskProjectId == projectId }
-
-        if (tasks != null && tasks.isNotEmpty()) {
-            // Create a CSV file using Apache Commons CSV library
-            val csvFile = File(requireContext().cacheDir, "tasks.csv")
-            val csvWriter = CSVFormat.DEFAULT.withHeader(
-                "Task ID",
-                "Task Project ID",
-                "Task Name",
-                "Color",
-                "Date",
-                "Duration",
-                "Description",
-                "Notes",
-                "Elapsed Time"
-            ).print(csvFile.writer())
-
-            // Write each task to the CSV file
-            for (task in tasks) {
-                csvWriter.printRecord(
-                    task.id,
-                    task.taskProjectId,
-                    task.name,
-                    task.color,
-                    task.date,
-                    task.duration,
-                    task.description,
-                    task.notes,
-                    task.elapsedTime
-                )
-            }
-
-            // Close the CSV writer
-            csvWriter.close()
-
-            // Send the CSV file via email
-            val emailIntent = Intent(Intent.ACTION_SEND)
-            emailIntent.type = "text/csv"
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tasks for Project")
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "Please find attached the tasks for the project.")
-            emailIntent.putExtra(
-                Intent.EXTRA_STREAM,
-                FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".fileprovider", csvFile)
-            )
-
-            // Grant read permission to the receiving app
-            emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-            // Check if there is an email app available to handle the intent
-            if (emailIntent.resolveActivity(requireContext().packageManager) != null) {
-                startActivity(Intent.createChooser(emailIntent, "Send Email"))
-            } else {
-                Toast.makeText(requireContext(), "No email app found.", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(requireContext(), "No tasks found for the project.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
 }
