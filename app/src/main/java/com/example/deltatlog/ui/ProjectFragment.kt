@@ -177,7 +177,7 @@ class ProjectFragment : Fragment() {
                                 Log.d("ProjectFragment", currentUserEmail!!)
                                 Log.d("ProjectFragment", currentUserId)
 
-                                val firebaseItem2Add = hashMapOf(
+                                val attributes = hashMapOf<String, Any>(
                                     "id" to project2Add.id,
                                     "name" to project2Add.name,
                                     "date" to project2Add.date,
@@ -194,24 +194,7 @@ class ProjectFragment : Fragment() {
                                 )
 
                                 Log.d("firebasePID", project2Add.id.toString())
-
-                                db.collection("users").document(currentUserId)
-                                    .collection("projects")
-                                    .document(project2Add.id.toString())
-                                    .set(firebaseItem2Add)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "firebase",
-                                            "DocumentSnapshot successfully written!"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(
-                                            "firebase",
-                                            "Error writing document",
-                                            e
-                                        )
-                                    }
+                                firebaseManager.addProject(project2Add, attributes)
 
                                 Toast.makeText(
                                     context,

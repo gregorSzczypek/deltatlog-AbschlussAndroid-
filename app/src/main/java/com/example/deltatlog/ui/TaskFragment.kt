@@ -161,7 +161,7 @@ class TaskFragment : Fragment() {
 
                             Log.d("TaskFragment", currentUserId)
 
-                            val firebaseItem2Add = hashMapOf(
+                            val attributes = hashMapOf<String, Any>(
                                 "id" to task2Add.id,
                                 "taskProjectId" to task2Add.taskProjectId,
                                 "name" to task2Add.name,
@@ -175,25 +175,9 @@ class TaskFragment : Fragment() {
 
                             Log.d("firebasePTID", task2Add.id.toString())
 
-                            db.collection("users").document(currentUserId)
-                                .collection("tasks")
-                                .document(task2Add.id.toString())
-                                .set(firebaseItem2Add)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        "firebase",
-                                        "DocumentSnapshot successfully written!"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        "firebase",
-                                        "Error writing document",
-                                        e
-                                    )
-                                }
+                            firebaseManager.addTask(task2Add, attributes)
 
-                            //TODO HERE UPDATE NR OF TASKS
+                            // Update number of tasks in project Object
                             val project = withContext(Dispatchers.IO) {
                                 getDatabase(context).projectDatabaseDao.getAllNLD()
                                     .find { it.id == projectId }
@@ -228,23 +212,7 @@ class TaskFragment : Fragment() {
                                 "totalTime" to timeString
                             )
 
-                            db.collection("users").document(currentUserId)
-                                .collection("projects")
-                                .document(projectId.toString())
-                                .update(updates)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        "update",
-                                        "DocumentSnapshot successfully updated!"
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(
-                                        "update",
-                                        "Error updating document",
-                                        e
-                                    )
-                                }
+                            firebaseManager.updateProjectChanges(project.id.toString(), updates)
 
                             Toast.makeText(
                                 context,

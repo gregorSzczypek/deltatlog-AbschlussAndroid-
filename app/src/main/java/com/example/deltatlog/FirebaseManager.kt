@@ -99,6 +99,50 @@ class FirebaseManager {
         }
     }
 
+    fun addTask(task: Task, attributes: HashMap<String, Any>) {
+        currentUserId?.let {
+            db.collection("users").document(currentUserId)
+                .collection("tasks")
+                .document(task.id.toString())
+                .set(attributes)
+                .addOnSuccessListener {
+                    Log.d(
+                        "firebase",
+                        "DocumentSnapshot successfully written!"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(
+                        "firebase",
+                        "Error writing document",
+                        e
+                    )
+                }
+        }
+    }
+
+    fun addProject(project: Project, attributes: HashMap<String, Any>) {
+        currentUserId?.let {
+            db.collection("users").document(currentUserId)
+                .collection("projects")
+                .document(project.id.toString())
+                .set(attributes)
+                .addOnSuccessListener {
+                    Log.d(
+                        "firebase",
+                        "DocumentSnapshot successfully written!"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(
+                        "firebase",
+                        "Error writing document",
+                        e
+                    )
+                }
+        }
+    }
+
     fun logOut(
         firebaseAuth: FirebaseAuth,
         projectFragmentViewModel: viewModel,
