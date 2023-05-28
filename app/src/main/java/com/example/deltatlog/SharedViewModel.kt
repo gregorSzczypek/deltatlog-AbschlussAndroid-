@@ -38,9 +38,8 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(database, taskDatabase, LogoApi)
     val projectList = repository.projectList
     val taskList = repository.taskList
-    var firebaseAuth = FirebaseAuth.getInstance()
     val logoLiveData: LiveData<Logo> = repository.logo
-    var databaseDeleted = false
+//    var databaseDeleted = false
 
     fun loadLogo(companyName: String, callback: () -> Unit) {
         viewModelScope.launch {
@@ -94,56 +93,6 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${projectTaskId}")
             repository.deleteAllTasks(projectTaskId)
-        }
-    }
-
-    fun signUp(
-        context: Context,
-        email: String,
-        pw: String,
-        pwConfirm: String,
-        navController: NavController
-    ) {
-
-        // Check of valid input and calling register method from firebase object
-        if (email.isNotEmpty() && pw.isNotEmpty() && pwConfirm.isNotEmpty()) {
-
-            if (pw == pwConfirm) {
-                firebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Toast.makeText(context, "Succesfully registered", Toast.LENGTH_SHORT).show()
-                        // Navigation to login page after registration
-                        navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToLoginFragment())
-                    } else {
-                        Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(context, "Password is not matching", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun login(context: Context, email: String, pw: String, navController: NavController) {
-        databaseDeleted = false
-        // Check of valid input and calling login method from firebase object
-        if (email.isNotEmpty() && pw.isNotEmpty()) {
-            firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(
-                        context,
-                        "Succesfully signed in user ${firebaseAuth.currentUser?.email}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    navController.navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-                } else {
-                    Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
     }
 }

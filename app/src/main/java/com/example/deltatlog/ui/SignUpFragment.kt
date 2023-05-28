@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentSignUpBinding
 import com.example.deltatlog.viewModel
@@ -17,6 +18,7 @@ class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel: viewModel by viewModels()
+    private val firebaseManager = FirebaseManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +43,7 @@ class SignUpFragment : Fragment() {
             val email = binding.inputEmailAdress.text.toString()
             val pw = binding.inputPw1.text.toString()
             val pwConfirm = binding.inputPw2.text.toString()
-            viewModel.signUp(requireContext(), email, pw, pwConfirm, findNavController())
+            firebaseManager.signUp(requireContext(), email, pw, pwConfirm, findNavController())
         }
 
         // BackButton Navigation in Toolbar

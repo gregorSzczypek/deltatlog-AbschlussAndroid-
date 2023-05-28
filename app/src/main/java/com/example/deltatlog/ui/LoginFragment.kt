@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
 import com.example.deltatlog.viewModel
@@ -17,6 +18,7 @@ class LoginFragment : Fragment() {
     private lateinit var LoginBinding: FragmentLoginBinding
     // ViewModel instance associated with the fragment
     private val LoginViewModel: viewModel by viewModels()
+    private val firebaseManager = FirebaseManager()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +46,7 @@ class LoginFragment : Fragment() {
             // get the entered password
             val pw = LoginBinding.inputPw1.text.toString()
             // perform the login procedure
-            LoginViewModel.login(requireContext(), email, pw, findNavController())
+            firebaseManager.login(requireContext(), email, pw, findNavController())
         }
 
         // BackButton listener Navigation in Toolbar
