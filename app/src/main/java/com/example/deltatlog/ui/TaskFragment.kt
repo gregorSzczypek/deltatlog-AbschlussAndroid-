@@ -67,7 +67,6 @@ class TaskFragment : Fragment() {
         // Inflate the layout for this fragment
         return taskFragmentBinding.root
     }
-
     @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,6 +91,7 @@ class TaskFragment : Fragment() {
                         currentUserEmail!!,
                         requireContext()
                     )
+                    findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
                 }
                 R.id.export -> {
                     // Retrieve the tasks related to the current project from the ViewModel

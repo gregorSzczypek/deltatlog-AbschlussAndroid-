@@ -50,6 +50,9 @@
             android:name="color"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_projectDetailFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/timerFragment"
