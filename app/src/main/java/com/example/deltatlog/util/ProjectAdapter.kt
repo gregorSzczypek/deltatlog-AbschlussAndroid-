@@ -28,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 
 class ProjectAdapter(
     private var viewModel: viewModel,
@@ -52,6 +53,7 @@ class ProjectAdapter(
         val customerView = view.findViewById<TextView>(R.id.duration)
         val descriptionView = view.findViewById<TextView>(R.id.task_description)
         val numberOfTasks = view.findViewById<TextView>(R.id.tv_total_task_amount)
+        val totalTime = view.findViewById<TextView>(R.id.tv_total_task_time)
 
         val colors = listOf(
             R.color.colorPicker1,
@@ -104,6 +106,7 @@ class ProjectAdapter(
         }
         holder.projectCardview.setCardBackgroundColor(Color.parseColor(item.color))
         holder.numberOfTasks.text = item.numberOfTasks.toString()
+        holder.totalTime.text = item.totalTime
 
 
         // Set an OnTouchListener on the card view

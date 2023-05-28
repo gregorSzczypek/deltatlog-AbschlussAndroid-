@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.room.withTransaction
 import com.example.deltatlog.ExportManager
 import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
@@ -32,6 +31,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class TaskFragment : Fragment() {
 
@@ -67,6 +67,7 @@ class TaskFragment : Fragment() {
         // Inflate the layout for this fragment
         return taskFragmentBinding.root
     }
+
     @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,6 +94,7 @@ class TaskFragment : Fragment() {
                     )
                     findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
                 }
+
                 R.id.export -> {
                     // Retrieve the tasks related to the current project from the ViewModel
                     // Handle export menu item click
@@ -192,34 +194,57 @@ class TaskFragment : Fragment() {
                                 }
 
                             //TODO HERE UPDATE NR OF TASKS
-                                val project = withContext(Dispatchers.IO) {
-                                    getDatabase(context).projectDatabaseDao.getAllNLD()
-                                        .find { it.id == projectId }
-                                }
-                                val tasksSize = withContext(Dispatchers.IO) {
-                                    getTaskDatabase(context).taskDatabaseDao.getAllNLD()
-                                        .filter { it.taskProjectId == projectId }.size
-                                }
-                                project!!.numberOfTasks = tasksSize.toLong()
-                                taskFragmentViewModel.updateProject(project)
+                            val project = withContext(Dispatchers.IO) {
+                                getDatabase(context).projectDatabaseDao.getAllNLD()
+                                    .find { it.id == projectId }
+                            }
+                            val tasks = withContext(Dispatchers.IO) {
+                                getTaskDatabase(context).taskDatabaseDao.getAllNLD()
+                                    .filter { it.taskProjectId == projectId }
+                            }
+                            val tasksSize = tasks.size
 
-                                db.collection("users").document(currentUserId)
-                                    .collection("projects")
-                                    .document(projectId.toString())
-                                    .update("numberOfTasks", tasksSize)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "update",
-                                            "DocumentSnapshot successfully updated!"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(
-                                            "update",
-                                            "Error updating document",
-                                            e
-                                        )
-                                    }
+                            project!!.numberOfTasks = tasksSize.toLong()
+                            var totalTime = 0L
+
+                            for (i in tasks) {
+                                totalTime += i.elapsedTime
+                            }
+
+                            val hours = totalTime / 3600
+                            val minutes = (totalTime % 3600) / 60
+                            val sec = totalTime % 60
+                            val timeString =
+                                String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
+
+                            Log.e("totalTime", timeString)
+
+                            project.totalTime = timeString
+
+                            taskFragmentViewModel.updateProject(project)
+
+                            val updates = mutableMapOf<String, Any>(
+                                "numberOfTasks" to tasksSize,
+                                "totalTime" to timeString
+                            )
+
+                            db.collection("users").document(currentUserId)
+                                .collection("projects")
+                                .document(projectId.toString())
+                                .update(updates)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "update",
+                                        "DocumentSnapshot successfully updated!"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        "update",
+                                        "Error updating document",
+                                        e
+                                    )
+                                }
 
                             Toast.makeText(
                                 context,

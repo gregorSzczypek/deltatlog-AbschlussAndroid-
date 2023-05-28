@@ -12,23 +12,35 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
+import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTimerBinding
 import com.example.deltatlog.viewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 
 class TimerFragment : Fragment() {
 
     private lateinit var timerBinding: FragmentTimerBinding
-    private val TimerViewModel: viewModel by viewModels()
+    private val timerViewModel: viewModel by viewModels()
     private val firebaseManager = FirebaseManager()
     private var taskId: Long = 0
     private var projectId: Long = 0
     private var taskName: String? = ""
     private var color: String? = ""
+    private val db = Firebase.firestore
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val currentUserId = firebaseAuth.currentUser!!.uid
 
     var seconds = 0
     var isRunning = true
@@ -93,7 +105,7 @@ class TimerFragment : Fragment() {
 
             isRunning = false
 
-            TimerViewModel.taskList.observe(
+            timerViewModel.taskList.observe(
                 viewLifecycleOwner,
                 Observer {
                     // Retrieve the current task from the list
@@ -113,7 +125,7 @@ class TimerFragment : Fragment() {
 
                     // Update the duration and elapsed time of the task in the ViewModel
                     currentTask.duration = timeString
-                    TimerViewModel.updateTask(currentTask)
+                    timerViewModel.updateTask(currentTask)
 
                     // Prepare the updates to be sent to Firebase
                     val updates = mapOf(
@@ -122,6 +134,62 @@ class TimerFragment : Fragment() {
                     )
                     // Update the task changes in Firebase via the firebaseManager
                     firebaseManager.updateTaskChanges(taskId = taskId.toString(), updates = updates)
+
+                    // TODO Update time in project
+                    lifecycleScope.launch {
+                        //TODO HERE UPDATE NR OF TASKS
+                        val project = withContext(Dispatchers.IO) {
+                            getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                                .find { it.id == projectId }
+                        }
+                        val tasks = withContext(Dispatchers.IO) {
+                            getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
+                                .filter { it.taskProjectId == projectId }
+                        }
+                        val tasksSize = tasks.size
+
+                        project!!.numberOfTasks = tasksSize.toLong()
+                        var totalTime = 0L
+
+                        for (i in tasks) {
+                            totalTime += i.elapsedTime
+                        }
+
+                        val hours = totalTime / 3600
+                        val minutes = (totalTime % 3600) / 60
+                        val sec = totalTime % 60
+                        val timeString =
+                            String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
+
+                        Log.e("totalTime", timeString)
+
+                        project.totalTime = timeString
+
+                        timerViewModel.updateProject(project)
+
+                        val updates = mutableMapOf<String, Any>(
+                            "numberOfTasks" to tasksSize,
+                            "totalTime" to timeString
+                        )
+
+                        db.collection("users").document(currentUserId)
+                            .collection("projects")
+                            .document(projectId.toString())
+                            .update(updates)
+                            .addOnSuccessListener {
+                                Log.d(
+                                    "update",
+                                    "DocumentSnapshot successfully updated!"
+                                )
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(
+                                    "update",
+                                    "Error updating document",
+                                    e
+                                )
+                            }
+                    }
                 }
             )
 
@@ -129,7 +197,7 @@ class TimerFragment : Fragment() {
             val hours = seconds / 3600
             val minutes = (seconds % 3600) / 60
             val sec = seconds % 60
-            val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
+            val time = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
 
             // Display a toast with the session time
             Toast.makeText(context, "Session time: $time", Toast.LENGTH_SHORT).show()
@@ -159,7 +227,7 @@ class TimerFragment : Fragment() {
                 val minutes = (seconds % 3600) / 60
                 val sec = seconds % 60
                 // Format the time as a string and set it in the text view
-                val time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, sec)
+                val time = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
                 timerTextView.text = time
 
                 // Schedule the next execution of the timer after 1 second

@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class TaskAdapter(
@@ -229,18 +230,40 @@ class TaskAdapter(
                                         getDatabase(context).projectDatabaseDao.getAllNLD()
                                             .find { it.id == projectId }
                                     }
-                                    val tasksSize = withContext(Dispatchers.IO) {
+                                    val tasks = withContext(Dispatchers.IO) {
                                         getTaskDatabase(context).taskDatabaseDao.getAllNLD()
-                                            .filter { it.taskProjectId == projectId }.size
+                                            .filter { it.taskProjectId == projectId }
                                     }
+                                    val tasksSize = tasks.size
+
                                     project!!.numberOfTasks = tasksSize.toLong()
+                                    var totalTime = 0L
+
+                                    for (i in tasks) {
+                                        totalTime += i.elapsedTime
+                                    }
+
+                                    val hours = totalTime / 3600
+                                    val minutes = (totalTime % 3600) / 60
+                                    val sec = totalTime % 60
+                                    val timeString =
+                                        String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
+
+                                    Log.e("totalTime", timeString)
+
+                                    project.totalTime = timeString
+
                                     viewModel.updateProject(project)
+                                    val updates = mutableMapOf<String, Any>(
+                                        "numberOfTasks" to tasksSize,
+                                        "totalTime" to timeString
+                                    )
 
                                     // TODO Update project changes in firebase
                                     db.collection("users").document(currentUserId)
                                         .collection("projects")
                                         .document(projectId.toString())
-                                        .update("numberOfTasks", tasksSize)
+                                        .update(updates)
                                         .addOnSuccessListener {
                                             Log.d(
                                                 "update",
