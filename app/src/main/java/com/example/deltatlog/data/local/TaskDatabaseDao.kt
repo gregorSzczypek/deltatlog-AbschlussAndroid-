@@ -3,7 +3,6 @@ package com.example.deltatlog.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 
 /**
@@ -19,7 +18,6 @@ interface TaskDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)
 
-    //ToDo: Update
     @Update
     suspend fun update(task: Task)
 
@@ -29,7 +27,6 @@ interface TaskDatabaseDao {
     @Query("SELECT * FROM taskTable")
     fun getAllNLD(): List<Task>
 
-    //Todo: Delete by id
     @Query("DELETE FROM taskTable WHERE id = :id")
     suspend fun deleteById(id: Long)
 

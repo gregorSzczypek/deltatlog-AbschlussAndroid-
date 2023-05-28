@@ -15,17 +15,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.deltatlog.ExportManager
-import com.example.deltatlog.FirebaseManager
+import com.example.deltatlog.util.ExportManager
+import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentProjectBinding
+import com.example.deltatlog.util.ProjectSnapshotListener
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,7 +43,7 @@ class ProjectFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the fragment layout and initialize the binding object
         projectFragmentBinding = DataBindingUtil.inflate(
             inflater,

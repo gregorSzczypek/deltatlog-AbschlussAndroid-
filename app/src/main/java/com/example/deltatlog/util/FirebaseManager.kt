@@ -1,17 +1,12 @@
-package com.example.deltatlog
+package com.example.deltatlog.util
 
 import android.content.Context
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.ui.LoginFragmentDirections
-import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.example.deltatlog.ui.SignUpFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore

@@ -5,7 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import com.example.deltatlog.FirebaseManager
+import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
 
@@ -21,7 +21,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the fragment's layout using data binding
         LoginBinding = DataBindingUtil.inflate(
             inflater,

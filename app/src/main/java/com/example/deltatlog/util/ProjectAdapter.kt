@@ -14,22 +14,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.example.deltatlog.FirebaseManager
+import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.google.android.material.card.MaterialCardView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 
 class ProjectAdapter(
     private var viewModel: viewModel,
@@ -40,7 +35,7 @@ class ProjectAdapter(
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
     // parts of the item which need to be change by adapter
-    inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView = view.findViewById<ImageView>(R.id.start_button)
         val textView = view.findViewById<TextView>(R.id.Project_name)
         val projectCardview = view.findViewById<MaterialCardView>(R.id.project_card_view)
@@ -152,54 +147,52 @@ class ProjectAdapter(
                                 val newDescriptionString = newDescription.text.toString()
                                 val newCompanyNameString = newCompanyName.text.toString()
 
-                                if (newCompanyNameString != "") {
-                                    viewModel.loadLogo(newCompanyNameString) {
-                                        if (newCompanyNameString != "") {
-                                            Log.d("ProjectFragment", "(5) Here updating logourl")
-                                            Log.d(
-                                                "ProjectFragment",
-                                                viewModel.logoLiveData.value!!.logo
-                                            )
-
-                                            item.logoUrl = viewModel.logoLiveData.value!!.logo
-                                        }
-
-                                        if (newProjectNameString != "") {
-                                            item.name = newProjectNameString
-                                        }
-                                        if (newCustomerNameString != "") {
-                                            item.nameCustomer = newCustomerNameString
-                                        }
-                                        if (newDescriptionString != "") {
-                                            item.description = newDescriptionString
-                                        }
-                                        if (newCompanyNameString != "") {
-                                            item.companyName = newCompanyNameString
-                                        }
-                                        Log.d("ProjectFragment", item.logoUrl)
-
-                                        viewModel.updateProject(item)
-
-                                        val updates = mutableMapOf<String, Any>(
-                                            "name" to item.name,
-                                            "nameCustomer" to item.nameCustomer,
-                                            "description" to item.description,
-                                            "companyName" to item.companyName,
-                                            "logoUrl" to item.logoUrl
-                                        )
-                                        val firebaseManager = FirebaseManager()
-                                        firebaseManager.updateProjectChanges(
-                                            item.id.toString(),
-                                            updates
+                                viewModel.loadLogo(newCompanyNameString) {
+                                    if (newCompanyNameString != "") {
+                                        Log.d("ProjectFragment", "(5) Here updating logourl")
+                                        Log.d(
+                                            "ProjectFragment",
+                                            viewModel.logoLiveData.value!!.logo
                                         )
 
-                                        Toast.makeText(
-                                            context,
-                                            "$newProjectNameString updated",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
+                                        item.logoUrl = viewModel.logoLiveData.value!!.logo
                                     }
+
+                                    if (newProjectNameString != "") {
+                                        item.name = newProjectNameString
+                                    }
+                                    if (newCustomerNameString != "") {
+                                        item.nameCustomer = newCustomerNameString
+                                    }
+                                    if (newDescriptionString != "") {
+                                        item.description = newDescriptionString
+                                    }
+                                    if (newCompanyNameString != "") {
+                                        item.companyName = newCompanyNameString
+                                    }
+                                    Log.d("ProjectFragment", item.logoUrl)
+
+                                    viewModel.updateProject(item)
+
+                                    val updates = mutableMapOf<String, Any>(
+                                        "name" to item.name,
+                                        "nameCustomer" to item.nameCustomer,
+                                        "description" to item.description,
+                                        "companyName" to item.companyName,
+                                        "logoUrl" to item.logoUrl
+                                    )
+                                    val firebaseManager = FirebaseManager()
+                                    firebaseManager.updateProjectChanges(
+                                        item.id.toString(),
+                                        updates
+                                    )
+
+                                    Toast.makeText(
+                                        context,
+                                        "$newProjectNameString updated",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
                                 }
                             }
                             setNegativeButton("Cancel") { dialog, which ->

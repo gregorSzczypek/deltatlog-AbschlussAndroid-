@@ -1,4 +1,4 @@
-package com.example.deltatlog
+package com.example.deltatlog.util
 
 import androidx.lifecycle.lifecycleScope
 import androidx.room.withTransaction

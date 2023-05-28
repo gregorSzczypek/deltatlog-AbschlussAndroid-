@@ -16,7 +16,6 @@ interface ProjectDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(project: Project)
 
-    //ToDo: Update
     @Update
     suspend fun update(project: Project)
 
@@ -26,7 +25,6 @@ interface ProjectDatabaseDao {
     @Query("SELECT * FROM projectTable")
     fun getAllNLD(): List<Project>
 
-    //Todo: Delete by id
     @Query("DELETE FROM projectTable WHERE id = :id")
     suspend fun deleteById(id: Long)
 

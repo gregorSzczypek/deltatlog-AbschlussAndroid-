@@ -14,7 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.deltatlog.FirebaseManager
+import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
@@ -68,7 +68,7 @@ class TimerFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment using DataBindingUtil
         timerBinding = DataBindingUtil.inflate(
             inflater,
@@ -128,16 +128,15 @@ class TimerFragment : Fragment() {
                     timerViewModel.updateTask(currentTask)
 
                     // Prepare the updates to be sent to Firebase
-                    val updates = mapOf(
+                    val tasskUpdates = mapOf(
                         "duration" to currentTask.duration,
                         "elapsedTime" to currentTask.elapsedTime
                     )
                     // Update the task changes in Firebase via the firebaseManager
-                    firebaseManager.updateTaskChanges(taskId = taskId.toString(), updates = updates)
+                    firebaseManager.updateTaskChanges(taskId = taskId.toString(), updates = tasskUpdates)
 
-                    // TODO Update time in project
+                    // Update the new time in Project Object and also the number of tasks
                     lifecycleScope.launch {
-                        //TODO HERE UPDATE NR OF TASKS
                         val project = withContext(Dispatchers.IO) {
                             getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                                 .find { it.id == projectId }
@@ -155,27 +154,27 @@ class TimerFragment : Fragment() {
                             totalTime += i.elapsedTime
                         }
 
-                        val hours = totalTime / 3600
-                        val minutes = (totalTime % 3600) / 60
-                        val sec = totalTime % 60
-                        val timeString =
-                            String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, sec)
+                        val hoursInner = totalTime / 3600
+                        val minutesInner = (totalTime % 3600) / 60
+                        val secInner = totalTime % 60
+                        val timeStringInner =
+                            String.format(Locale.getDefault(), "%02d:%02d:%02d", hoursInner, minutesInner, secInner)
 
-                        Log.e("totalTime", timeString)
+                        Log.e("totalTime", timeStringInner)
 
-                        project.totalTime = timeString
+                        project.totalTime = timeStringInner
 
                         timerViewModel.updateProject(project)
 
-                        val updates = mutableMapOf<String, Any>(
+                        val projectUpdates = mutableMapOf<String, Any>(
                             "numberOfTasks" to tasksSize,
-                            "totalTime" to timeString
+                            "totalTime" to timeStringInner
                         )
 
                         db.collection("users").document(currentUserId)
                             .collection("projects")
                             .document(projectId.toString())
-                            .update(updates)
+                            .update(projectUpdates)
                             .addOnSuccessListener {
                                 Log.d(
                                     "update",

@@ -1,9 +1,10 @@
-package com.example.deltatlog.ui
+package com.example.deltatlog.util
 
 import androidx.lifecycle.lifecycleScope
 import androidx.room.withTransaction
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.ProjectDatabase
+import com.example.deltatlog.ui.ProjectFragment
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

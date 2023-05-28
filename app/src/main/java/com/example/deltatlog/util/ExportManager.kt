@@ -1,4 +1,4 @@
-package com.example.deltatlog
+package com.example.deltatlog.util
 
 import android.content.Context
 import android.content.Intent

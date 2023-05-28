@@ -14,7 +14,6 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
@@ -23,13 +22,13 @@ import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.TaskFragmentDirections
+import com.example.deltatlog.util.FirebaseManager
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -37,7 +36,6 @@ import java.util.Locale
 
 class TaskAdapter(
     private var viewModel: viewModel,
-    private val lifeCycleOwner: LifecycleOwner,
     private var context: Context,
     private var dataset: List<Task>,
     private var navController: NavController,
@@ -54,7 +52,7 @@ class TaskAdapter(
     }
 
     // parts of the item which need to be change by adapter
-    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)
         val taskName = view.findViewById<TextView>(R.id.task_name)
         val taskDuration = view.findViewById<TextView>(R.id.duration)
@@ -64,7 +62,7 @@ class TaskAdapter(
     }
 
     // create new viewholders
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskAdapter.ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
 
         // inflate item layout
         val adapterLayout = LayoutInflater.from(parent.context)
@@ -149,33 +147,13 @@ class TaskAdapter(
 
                                 viewModel.updateTask(item)
 
-                                // TODO update edits of tastsk in Firebase
-                                val db = Firebase.firestore
-                                val firebaseAuth = FirebaseAuth.getInstance()
-                                val currentUserId = firebaseAuth.currentUser!!.uid
                                 val updates = mutableMapOf<String, Any>(
                                     "name" to item.name,
                                     "notes" to item.notes
                                 )
 
-                                // TODO Update task changes in firebase
-                                db.collection("users").document(currentUserId)
-                                    .collection("tasks")
-                                    .document(item.id.toString())
-                                    .update(updates)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "update",
-                                            "DocumentSnapshot successfully updated!"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(
-                                            "update",
-                                            "Error updating document",
-                                            e
-                                        )
-                                    }
+                                val firebaseManager = FirebaseManager()
+                                firebaseManager.updateTaskChanges(item.id.toString(), updates)
 
                                 submitList(viewModel.taskList.value!!)
                                 Toast.makeText(
@@ -224,7 +202,7 @@ class TaskAdapter(
                                         )
                                     }
 
-                                //TODO HERE UPDATE NR OF TASKS
+                                // Update number of tasks in Project Object
                                 coroutineScope.launch {
                                     val project = withContext(Dispatchers.IO) {
                                         getDatabase(context).projectDatabaseDao.getAllNLD()
@@ -259,24 +237,8 @@ class TaskAdapter(
                                         "totalTime" to timeString
                                     )
 
-                                    // TODO Update project changes in firebase
-                                    db.collection("users").document(currentUserId)
-                                        .collection("projects")
-                                        .document(projectId.toString())
-                                        .update(updates)
-                                        .addOnSuccessListener {
-                                            Log.d(
-                                                "update",
-                                                "DocumentSnapshot successfully updated!"
-                                            )
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.w(
-                                                "update",
-                                                "Error updating document",
-                                                e
-                                            )
-                                        }
+                                    val firebaseManager = FirebaseManager()
+                                    firebaseManager.updateProjectChanges(project.id.toString(), updates)
                                 }
 
                                 Toast.makeText(

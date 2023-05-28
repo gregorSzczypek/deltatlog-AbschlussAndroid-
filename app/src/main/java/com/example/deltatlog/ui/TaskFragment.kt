@@ -16,18 +16,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.deltatlog.ExportManager
-import com.example.deltatlog.FirebaseManager
+import com.example.deltatlog.util.ExportManager
+import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
-import com.example.deltatlog.TaskSnapshotListener
+import com.example.deltatlog.util.TaskSnapshotListener
 import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,7 +46,7 @@ class TaskFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         taskFragmentBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_task,
@@ -111,7 +109,6 @@ class TaskFragment : Fragment() {
             Observer {
                 recyclerView.adapter = TaskAdapter(
                     taskFragmentViewModel,
-                    viewLifecycleOwner,
                     requireContext(),
                     it.filter { it.taskProjectId == projectId },
                     findNavController(),
