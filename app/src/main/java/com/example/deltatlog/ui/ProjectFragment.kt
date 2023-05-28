@@ -20,6 +20,7 @@ import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -85,8 +86,14 @@ class ProjectFragment : Fragment() {
                 }
 
                 R.id.export -> {
-                    projectFragmentViewModel.projectList.value?.let { projects ->
-                        exportManager.exportProjectsToCSV(projects, requireContext())
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            val projects =
+                                getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                            val tasks =
+                                getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
+                            exportManager.exportAllToCSV(projects, tasks, requireContext())
+                        }
                     }
                 }
             }
