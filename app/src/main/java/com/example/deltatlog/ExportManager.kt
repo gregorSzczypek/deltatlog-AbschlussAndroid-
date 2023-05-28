@@ -44,38 +44,10 @@ class ExportManager {
             // Close the CSV writer
             csvWriter.close()
             sendEmail(csvFile, context, "task database")
-        }
-        else {
+        } else {
             Toast.makeText(context, "No tasks found!.", Toast.LENGTH_SHORT).show()
         }
     }
-
-    fun sendEmail(file: File, context: Context, naming: String) {
-
-        // Create an email intent with the necessary data
-        // - Set the email type as "text/csv"
-        // - Set the subject and body of the email
-        // - Attach the CSV file using a FileProvider
-        // - Start an activity to choose an email app and send the email
-
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/csv"
-            intent.putExtra(Intent.EXTRA_SUBJECT, "$naming CSV")
-            intent.putExtra(
-                Intent.EXTRA_TEXT,
-                "Please find attached the $naming in CSV format."
-            )
-            val uri =
-                FileProvider.getUriForFile(context, "com.example.deltatlog.fileprovider", file)
-            intent.putExtra(Intent.EXTRA_STREAM, uri)
-
-            // Check if there is an email app available to handle the intent
-            if (intent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(Intent.createChooser(intent, "Send Email"))
-            } else {
-                Toast.makeText(context, "No email app found.", Toast.LENGTH_SHORT).show()
-            }
-        }
 
     fun exportAllToCSV(projects: List<Project>, tasks: List<Task>, context: Context) {
         if (projects.isNotEmpty()) {
@@ -134,4 +106,30 @@ class ExportManager {
         }
     }
 
+    fun sendEmail(file: File, context: Context, naming: String) {
+
+        // Create an email intent with the necessary data
+        // - Set the email type as "text/csv"
+        // - Set the subject and body of the email
+        // - Attach the CSV file using a FileProvider
+        // - Start an activity to choose an email app and send the email
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/csv"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "$naming CSV")
+        intent.putExtra(
+            Intent.EXTRA_TEXT,
+            "Please find attached the $naming in CSV format."
+        )
+        val uri =
+            FileProvider.getUriForFile(context, "com.example.deltatlog.fileprovider", file)
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+        // Check if there is an email app available to handle the intent
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(Intent.createChooser(intent, "Send Email"))
+        } else {
+            Toast.makeText(context, "No email app found.", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
