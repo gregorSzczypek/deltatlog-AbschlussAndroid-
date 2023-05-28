@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.databinding.FragmentLoginBinding
-import com.example.deltatlog.viewModel
 
 
 class LoginFragment : Fragment() {
@@ -17,7 +15,6 @@ class LoginFragment : Fragment() {
     // Variable to hold the binding for the fragment
     private lateinit var LoginBinding: FragmentLoginBinding
     // ViewModel instance associated with the fragment
-    private val LoginViewModel: viewModel by viewModels()
     private val firebaseManager = FirebaseManager()
 
     override fun onCreateView(
