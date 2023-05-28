@@ -8,6 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.deltatlog.data.datamodels.Project
+import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.ui.LoginFragmentDirections
 import com.example.deltatlog.ui.ProjectFragmentDirections
 import com.example.deltatlog.ui.SignUpFragmentDirections
@@ -53,8 +55,48 @@ class FirebaseManager {
         }
     }
 
-    fun deleteTask() {
+    fun deleteTask(task: Task) {
+        currentUserId?.let {
+            db.collection("users").document(currentUserId)
+                .collection("tasks")
+                .document(task.id.toString())
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(
+                        "firebase",
+                        "DocumentSnapshot successfully deleted!"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(
+                        "firebase",
+                        "Error deleting document",
+                        e
+                    )
+                }
+        }
+    }
 
+    fun deleteProject(project: Project) {
+        currentUserId?.let {
+            db.collection("users").document(currentUserId)
+                .collection("projects")
+                .document(project.id.toString())
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(
+                        "firebase",
+                        "DocumentSnapshot successfully deleted!"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(
+                        "firebase",
+                        "Error deleting document",
+                        e
+                    )
+                }
+        }
     }
 
     fun logOut(

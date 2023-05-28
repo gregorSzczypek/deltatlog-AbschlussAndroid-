@@ -254,49 +254,17 @@ class ProjectAdapter(
                                     }
                                     val tasks2Delete =
                                         allTasks.filter { it.taskProjectId == item.id }
+                                    val firebaseManager = FirebaseManager()
 
                                     for (i in tasks2Delete) {
-                                        db.collection("users").document(currentUserId)
-                                            .collection("tasks")
-                                            .document(i.id.toString())
-                                            .delete()
-                                            .addOnSuccessListener {
-                                                Log.d(
-                                                    "firebase",
-                                                    "DocumentSnapshot successfully deleted!"
-                                                )
-                                            }
-                                            .addOnFailureListener { e ->
-                                                Log.w(
-                                                    "firebase",
-                                                    "Error deleting document",
-                                                    e
-                                                )
-                                            }
+                                        firebaseManager.deleteTask(i)
                                     }
                                 }
 
                                 viewModel.deleteProject(item)
 
-                                val project2Delete = item
-
-                                db.collection("users").document(currentUserId)
-                                    .collection("projects")
-                                    .document(project2Delete.id.toString())
-                                    .delete()
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "firebase",
-                                            "DocumentSnapshot successfully deleted!"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(
-                                            "firebase",
-                                            "Error deleting document",
-                                            e
-                                        )
-                                    }
+                                val firebaseManager = FirebaseManager()
+                                firebaseManager.deleteProject(item)
 
                                 Toast.makeText(
                                     context,
