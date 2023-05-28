@@ -1,19 +1,13 @@
 package com.example.deltatlog.ui
 
-import android.content.Context
 import androidx.lifecycle.lifecycleScope
 import androidx.room.withTransaction
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.ProjectDatabase
-import com.example.deltatlog.data.local.TaskDatabase
-import com.example.deltatlog.data.local.getDatabase
-import com.example.deltatlog.data.local.getTaskDatabase
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProjectSnapshotListener(
     private val projectFragment: ProjectFragment,
@@ -22,7 +16,7 @@ class ProjectSnapshotListener(
     private val db = Firebase.firestore
     private var snapshotListener: ListenerRegistration? = null
 
-    fun startListening(taskDatabase: TaskDatabase, projectDatabase: ProjectDatabase, context: Context) {
+    fun startListening(projectDatabase: ProjectDatabase) {
         val projectCollection = db.collection("users").document(currentUserId)
             .collection("projects")
 
@@ -55,7 +49,7 @@ class ProjectSnapshotListener(
                     companyName,
                     homepage,
                     logoUrl,
-                    image.toInt(),
+                    image,
                     date,
                     description,
                     color,
@@ -67,8 +61,6 @@ class ProjectSnapshotListener(
 
             // Update the local Room database
             projectFragment.lifecycleScope.launch {
-//                val database = projectFragment.getDatabase(requireContext())
-//                val taskDatabase = projectFragment.getTaskDatabase(requireContext())
 
                 // Run the database operation within a transaction
                 projectDatabase.withTransaction {
