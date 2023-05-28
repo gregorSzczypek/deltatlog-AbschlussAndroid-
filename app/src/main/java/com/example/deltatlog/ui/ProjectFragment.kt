@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -63,11 +64,13 @@ class ProjectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("deleteDB", projectFragmentViewModel.databaseDeleted.toString())
+
         if (!projectFragmentViewModel.databaseDeleted)
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
                     getDatabase(requireContext()).projectDatabaseDao.deleteAllProjects()
-                    getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
+//                    getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
                 }
                 projectFragmentViewModel.databaseDeleted = true
             }
@@ -95,10 +98,12 @@ class ProjectFragment : Fragment() {
                 R.id.export -> {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
-                            val projects =
-                                getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                             val tasks =
                                 getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
+                            Log.d("tasks", tasks.first().name)
+                            val projects =
+                                getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                            Log.d("tasks", projects.first().name)
                             exportManager.exportAllToCSV(projects, tasks, requireContext())
                         }
                     }
@@ -164,7 +169,13 @@ class ProjectFragment : Fragment() {
                         if (newCompanyNameString != "") {
                             newProject.companyName = newCompanyNameString
                         }
-                        Log.d("ProjectFragment", newProject.logoUrl)
+                        val colorString = "#" + Integer.toHexString(ContextCompat.getColor(
+                            context,
+                            projectFragmentViewModel.colors.random())).substring(2).toUpperCase()
+
+                        newProject.color = colorString
+
+                        Log.d("ProjectFragment", newProject.color)
 
                         projectFragmentViewModel.insertProject(newProject) {
 
