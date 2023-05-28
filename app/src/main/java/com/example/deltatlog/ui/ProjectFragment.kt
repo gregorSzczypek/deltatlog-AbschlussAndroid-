@@ -62,6 +62,16 @@ class ProjectFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (!projectFragmentViewModel.databaseDeleted)
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    getDatabase(requireContext()).projectDatabaseDao.deleteAllProjects()
+                    getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
+                }
+                projectFragmentViewModel.databaseDeleted = true
+            }
+
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserEmail = firebaseAuth.currentUser?.email
@@ -78,6 +88,7 @@ class ProjectFragment : Fragment() {
                         currentUserEmail!!,
                         requireContext()
                     )
+                    projectFragmentViewModel.databaseDeleted = false
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                 }
 

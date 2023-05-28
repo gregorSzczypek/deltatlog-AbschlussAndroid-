@@ -88,6 +88,7 @@ class TaskFragment : Fragment() {
                         currentUserEmail!!,
                         requireContext()
                     )
+                    taskFragmentViewModel.databaseDeleted = false
                     findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
                 }
 

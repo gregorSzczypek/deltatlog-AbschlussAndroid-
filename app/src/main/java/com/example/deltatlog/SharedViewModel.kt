@@ -24,8 +24,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     val projectList = repository.projectList
     val taskList = repository.taskList
     val logoLiveData: LiveData<Logo> = repository.logo
-
-    //    var databaseDeleted = false
+    var databaseDeleted = false
     val colors = listOf(
         R.color.colorPicker1,
         R.color.colorPicker2,
