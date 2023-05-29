@@ -5,11 +5,12 @@
     <color name="white">#FFFFFF</color>
 
     <!--    custom colors light mode -->
-    <color name="bg_low_sat">#D0E287</color>
+<!--    <color name="bg_low_sat">#D0E287</color>-->
+    <color name="bg_low_sat">#FFF9E9</color>
     <color name="bg_mid_sat">#6ABCCE</color>
     <color name="bg_high_sat">#8276A4</color>
 
-    <color name="btn_alert_lowest_sat">#FFEEEE</color>
+    <color name="btn_alert_lowest_sat">#CACACA</color>
     <color name="btn_alert_low_sat">#FBC7C7</color>
     <color name="btn_alert_mid_sat">#E27878</color>
     <color name="btn_alert_high_sat">#EF7575</color>

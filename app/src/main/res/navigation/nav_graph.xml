@@ -29,13 +29,13 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_projectDetailFragment"
-            app:destination="@id/projectDetailFragment" />
+            app:destination="@id/taskFragment" />
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/projectDetailFragment"
+        android:id="@+id/taskFragment"
         android:name="com.example.deltatlog.ui.TaskFragment"
         android:label="ProjectDetailFragment" >
         <action
@@ -60,7 +60,7 @@
         android:label="TimerFragment" >
         <action
             android:id="@+id/action_timerFragment_to_projectDetailFragment"
-            app:destination="@id/projectDetailFragment" />
+            app:destination="@id/taskFragment" />
         <argument
             android:name="projectId"
             app:argType="long" />
