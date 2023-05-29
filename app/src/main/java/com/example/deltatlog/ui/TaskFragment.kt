@@ -21,7 +21,7 @@ import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.util.TaskSnapshotListener
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTaskBinding
 import com.example.deltatlog.viewModel
@@ -175,7 +175,7 @@ class TaskFragment : Fragment() {
 
                             // Update number of tasks in project Object
                             val project = withContext(Dispatchers.IO) {
-                                getDatabase(context).projectDatabaseDao.getAllNLD()
+                                getProjectDatabase(context).projectDatabaseDao.getAllNLD()
                                     .find { it.id == projectId }
                             }
                             val tasks = withContext(Dispatchers.IO) {

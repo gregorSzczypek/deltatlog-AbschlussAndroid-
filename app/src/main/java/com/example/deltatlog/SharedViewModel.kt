@@ -9,7 +9,7 @@ import com.example.deltatlog.data.Repository
 import com.example.deltatlog.data.datamodels.Logo
 import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.data.remote.LogoApi
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ const val TAG = "SharedViewModel"
 
 class viewModel(application: Application) : AndroidViewModel(application) {
 
-    private val database = getDatabase(application)
+    private val database = getProjectDatabase(application)
     private val taskDatabase = getTaskDatabase(application)
     private val repository = Repository(database, taskDatabase, LogoApi)
     val projectList = repository.projectList

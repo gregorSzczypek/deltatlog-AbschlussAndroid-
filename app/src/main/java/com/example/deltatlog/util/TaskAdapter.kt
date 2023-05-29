@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.R
 import com.example.deltatlog.viewModel
 import com.example.deltatlog.data.datamodels.Task
-import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.ui.TaskFragmentDirections
 import com.example.deltatlog.util.FirebaseManager
@@ -205,7 +205,7 @@ class TaskAdapter(
                                 // Update number of tasks in Project Object
                                 coroutineScope.launch {
                                     val project = withContext(Dispatchers.IO) {
-                                        getDatabase(context).projectDatabaseDao.getAllNLD()
+                                        getProjectDatabase(context).projectDatabaseDao.getAllNLD()
                                             .find { it.id == projectId }
                                     }
                                     val tasks = withContext(Dispatchers.IO) {

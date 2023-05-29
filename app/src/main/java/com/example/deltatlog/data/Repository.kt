@@ -1,7 +1,6 @@
 package com.example.deltatlog.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.deltatlog.data.datamodels.Logo
 import com.example.deltatlog.data.datamodels.Project
@@ -28,11 +27,6 @@ class Repository(
     suspend fun getLogo(companyName: String) {
         try {
             logo.value = api.retrofitService.getLogo(companyName, authHeader = authHeader)
-
-            Log.d("Repository","(2) " + logo.value!!.name)
-            Log.d("Repository","(3) " + logo.value!!.domain)
-            Log.d("Repository","(4) " + logo.value!!.logo)
-
         } catch (e: Exception){
             Log.d("Repository", "API Call failed: $e")
             logo.value = Logo("nothing", "nothing", "nothing")

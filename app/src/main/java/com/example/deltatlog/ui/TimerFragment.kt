@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
-import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTimerBinding
 import com.example.deltatlog.viewModel
@@ -138,7 +138,7 @@ class TimerFragment : Fragment() {
                     // Update the new time in Project Object and also the number of tasks
                     lifecycleScope.launch {
                         val project = withContext(Dispatchers.IO) {
-                            getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                            getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                                 .find { it.id == projectId }
                         }
                         val tasks = withContext(Dispatchers.IO) {

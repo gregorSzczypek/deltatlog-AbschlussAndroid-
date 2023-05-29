@@ -19,7 +19,7 @@ abstract class ProjectDatabase : RoomDatabase() {
 private lateinit var INSTANCE: ProjectDatabase
 
 // if there's no Database a new one is built
-fun getDatabase(context: Context): ProjectDatabase {
+fun getProjectDatabase(context: Context): ProjectDatabase {
     synchronized(ProjectDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(

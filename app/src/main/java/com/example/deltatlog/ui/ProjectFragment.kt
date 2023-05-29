@@ -20,7 +20,7 @@ import com.example.deltatlog.util.ExportManager
 import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
 import com.example.deltatlog.data.datamodels.Project
-import com.example.deltatlog.data.local.getDatabase
+import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentProjectBinding
 import com.example.deltatlog.util.ProjectSnapshotListener
@@ -69,7 +69,7 @@ class ProjectFragment : Fragment() {
         if (!projectFragmentViewModel.databaseDeleted)
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
-                    getDatabase(requireContext()).projectDatabaseDao.deleteAllProjects()
+                    getProjectDatabase(requireContext()).projectDatabaseDao.deleteAllProjects()
 //                    getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
                 }
                 projectFragmentViewModel.databaseDeleted = true
@@ -102,7 +102,7 @@ class ProjectFragment : Fragment() {
                                 getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
                             Log.d("tasks", tasks.first().name)
                             val projects =
-                                getDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                                getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                             Log.d("tasks", projects.first().name)
                             exportManager.exportAllToCSV(projects, tasks, requireContext())
                         }
@@ -171,7 +171,7 @@ class ProjectFragment : Fragment() {
                         }
                         val colorString = "#" + Integer.toHexString(ContextCompat.getColor(
                             context,
-                            projectFragmentViewModel.colors.random())).substring(2).toUpperCase()
+                            projectFragmentViewModel.colors.random())).substring(2).uppercase()
 
                         newProject.color = colorString
 
@@ -179,7 +179,7 @@ class ProjectFragment : Fragment() {
 
                         projectFragmentViewModel.insertProject(newProject) {
 
-                            val database = getDatabase(context)
+                            val database = getProjectDatabase(context)
 
                             // Launch a coroutine
                             lifecycleScope.launch {
@@ -235,7 +235,7 @@ class ProjectFragment : Fragment() {
             }
         }
 
-        val projectDatabase = getDatabase(requireContext())
+        val projectDatabase = getProjectDatabase(requireContext())
         projectSnapshotListener.startListening(projectDatabase)
     }
 }
