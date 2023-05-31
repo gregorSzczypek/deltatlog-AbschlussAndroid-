@@ -1,16 +1,25 @@
 package com.example.deltatlog.ui
 
 import TaskAdapter
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.res.ColorStateList
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.RotateAnimation
+import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -117,6 +126,9 @@ class TaskFragment : Fragment() {
                     color,
                     lifecycleScope
                 )
+
+                Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
+                animateFAB(it.isEmpty())
             }
         )
 
@@ -240,5 +252,44 @@ class TaskFragment : Fragment() {
         // here firebase stuff
         val database = getTaskDatabase(requireContext())
         taskSnapshotListener.startListening(database)
+    }
+    private fun animateFAB(isEmpty: Boolean) {
+        val fab = taskFragmentBinding.floatingActionButton
+
+        // Scale animation
+        if (isEmpty) {
+            val scaleAnimation = ScaleAnimation(
+                1.0f, 1.2f, 1.0f, 1.2f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            ).apply {
+                duration = 1000
+                repeatCount = Animation.INFINITE
+                repeatMode = Animation.REVERSE
+            }
+
+            // Rotate animation
+            val rotate = RotateAnimation(
+                0f,
+                360f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+            ).apply {
+                duration = 2000
+                repeatCount = Animation.INFINITE
+                repeatMode = Animation.RESTART
+                interpolator = AccelerateDecelerateInterpolator()
+            }
+
+            val animationSet = AnimationSet(true).apply {
+                addAnimation(scaleAnimation)
+                addAnimation(rotate)
+            }
+            fab.startAnimation(animationSet)
+        } else {
+            fab.clearAnimation()
+        }
     }
 }

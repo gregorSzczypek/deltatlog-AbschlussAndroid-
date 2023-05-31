@@ -1,6 +1,5 @@
 package com.example.deltatlog.data.datamodels
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.deltatlog.R
@@ -46,5 +45,8 @@ data class Project(
     var numberOfTasks: Long = 0,
 
     @Json(name = "strTotalTime")
-    var totalTime: String = "00:00:00"
+    var totalTime: String = "00:00:00",
+
+    @Json(name = "intEstimatedHrs")
+    var estimatedTime: Int = 0
 )

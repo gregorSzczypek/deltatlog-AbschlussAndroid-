@@ -1,6 +1,7 @@
 package com.example.deltatlog.ui
 
 import ProjectAdapter
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
+import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -16,6 +23,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.util.ExportManager
 import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
@@ -39,6 +47,7 @@ class ProjectFragment : Fragment() {
     private val firebaseManager = FirebaseManager()
     private val exportManager = ExportManager()
     private lateinit var projectSnapshotListener: ProjectSnapshotListener
+    private lateinit var swellAnimation: Animation
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,12 +68,15 @@ class ProjectFragment : Fragment() {
 
         // Return the root view of the fragment
         return projectFragmentBinding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d("deleteDB", projectFragmentViewModel.databaseDeleted.toString())
+
+        swellAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.swell_animation)
 
         if (!projectFragmentViewModel.databaseDeleted)
             lifecycleScope.launch {
@@ -119,6 +131,8 @@ class ProjectFragment : Fragment() {
             Observer {
                 recyclerView.adapter =
                     ProjectAdapter(projectFragmentViewModel, requireContext(), it, lifecycleScope)
+                Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
+                animateFAB(it.isEmpty())
             }
         )
 
@@ -134,6 +148,7 @@ class ProjectFragment : Fragment() {
             val newDescription =
                 dialogLayout.findViewById<EditText>(R.id.input_project_description)
             val newCompanyName = dialogLayout.findViewById<EditText>(R.id.input_company_name)
+            val newEstimatedTime = dialogLayout.findViewById<EditText>(R.id.input_estimated_time)
 
             with(builder) {
                 setTitle("New Project")
@@ -142,6 +157,8 @@ class ProjectFragment : Fragment() {
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
                     val newCompanyNameString = newCompanyName.text.toString()
+                    val newEstimatedTimeString = newEstimatedTime.text.toString()
+
                     // create new Project instance
                     val newProject = Project()
 
@@ -169,9 +186,15 @@ class ProjectFragment : Fragment() {
                         if (newCompanyNameString != "") {
                             newProject.companyName = newCompanyNameString
                         }
-                        val colorString = "#" + Integer.toHexString(ContextCompat.getColor(
-                            context,
-                            projectFragmentViewModel.colors.random())).substring(2).uppercase()
+                        if (newEstimatedTimeString != "") {
+                            newProject.estimatedTime = newEstimatedTimeString.toInt()
+                        }
+                        val colorString = "#" + Integer.toHexString(
+                            ContextCompat.getColor(
+                                context,
+                                projectFragmentViewModel.colors.random()
+                            )
+                        ).substring(2).uppercase()
 
                         newProject.color = colorString
 
@@ -237,5 +260,45 @@ class ProjectFragment : Fragment() {
 
         val projectDatabase = getProjectDatabase(requireContext())
         projectSnapshotListener.startListening(projectDatabase)
+    }
+
+    private fun animateFAB(isEmpty: Boolean) {
+        val fab = projectFragmentBinding.floatingActionButton
+
+        // Scale animation
+        if (isEmpty) {
+            val scaleAnimation = ScaleAnimation(
+                1.0f, 1.2f, 1.0f, 1.2f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            ).apply {
+                duration = 1000
+                repeatCount = Animation.INFINITE
+                repeatMode = Animation.REVERSE
+            }
+
+            // Rotate animation
+            val rotate = RotateAnimation(
+                0f,
+                360f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+            ).apply {
+                duration = 2000
+                repeatCount = Animation.INFINITE
+                repeatMode = Animation.RESTART
+                interpolator = AccelerateDecelerateInterpolator()
+            }
+
+            val animationSet = AnimationSet(true).apply {
+                addAnimation(scaleAnimation)
+                addAnimation(rotate)
+            }
+            fab.startAnimation(animationSet)
+        } else {
+            fab.clearAnimation()
+        }
     }
 }

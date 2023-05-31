@@ -230,6 +230,7 @@ class ProjectAdapter(
 
                                 val firebaseManager = FirebaseManager()
                                 firebaseManager.deleteProject(item)
+                                notifyItemChanged(position)
 
                                 Toast.makeText(
                                     context,
