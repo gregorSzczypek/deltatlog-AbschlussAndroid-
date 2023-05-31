@@ -1,7 +1,6 @@
 package com.example.deltatlog.ui
 
 import ProjectAdapter
-import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +22,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.deltatlog.util.ExportManager
 import com.example.deltatlog.util.FirebaseManager
 import com.example.deltatlog.R
@@ -297,8 +295,13 @@ class ProjectFragment : Fragment() {
                 addAnimation(rotate)
             }
             fab.startAnimation(animationSet)
+
+            projectFragmentBinding.hintArrow.visibility = View.VISIBLE
+            projectFragmentBinding.hintText.visibility = View.VISIBLE
         } else {
             fab.clearAnimation()
+            projectFragmentBinding.hintArrow.visibility = View.INVISIBLE
+            projectFragmentBinding.hintText.visibility = View.INVISIBLE
         }
     }
 }
