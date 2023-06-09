@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.deltatlog.data.datamodels.Project
 
-/**
- * Data Access Object for projectdatabase
- */
+// Data Access Object for projectdatabase
 
 @Dao
 interface ProjectDatabaseDao {

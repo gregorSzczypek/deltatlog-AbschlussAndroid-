@@ -7,9 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.deltatlog.data.datamodels.Project
 
-/**
- *  RoomDatabase for storing Projects
- */
+// RoomDatabase for storing Projects
 
 @Database(entities = [Project::class], version = 2)
 abstract class ProjectDatabase : RoomDatabase() {
@@ -27,10 +25,10 @@ fun getProjectDatabase(context: Context): ProjectDatabase {
                 ProjectDatabase::class.java,
                 "project_database"
             )
-                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
+//                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
         }
     }
-    Log.i("DatabaseBuilder", "HERE BUILDING DB")
+    Log.i("DatabaseBuilder", "here bulding db")
     return INSTANCE
 }

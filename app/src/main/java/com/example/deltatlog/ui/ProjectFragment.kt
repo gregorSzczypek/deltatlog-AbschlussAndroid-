@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 
 class ProjectFragment : Fragment() {
 
-    // ViewModels, bindings, and Firebase components
+    // ViewModels, bindings, and Firebase components, exportmanager instance
     private val projectFragmentViewModel: viewModel by viewModels()
     private lateinit var projectFragmentBinding: FragmentProjectBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -75,19 +75,24 @@ class ProjectFragment : Fragment() {
         Log.d("deleteDB", projectFragmentViewModel.databaseDeleted.toString())
 
         swellAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.swell_animation)
-
+        // check if database has been deleted
         if (!projectFragmentViewModel.databaseDeleted)
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
+                    // delete all projects from the database
                     getProjectDatabase(requireContext()).projectDatabaseDao.deleteAllProjects()
-//                    getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
+                    // delete all tasks from the database
+                    //getTaskDatabase(requireContext()).taskDatabaseDao.deleteAllTasks()
                 }
+                // Set check variable to true after the deletion
                 projectFragmentViewModel.databaseDeleted = true
             }
 
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
+        // get instance of current user email adress
         val currentUserEmail = firebaseAuth.currentUser?.email
+        // set up firebase snapshotlistener
         projectSnapshotListener = ProjectSnapshotListener(this, firebaseAuth.currentUser!!.uid)
 
 
@@ -95,25 +100,32 @@ class ProjectFragment : Fragment() {
         projectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
+                    // destroy snapshotlistener
                     projectSnapshotListener.stopListening()
+                    // logout user routine
                     firebaseManager.logOut(
                         firebaseAuth,
                         currentUserEmail!!,
                         requireContext()
                     )
+                    // set check variable for database deletion to false
                     projectFragmentViewModel.databaseDeleted = false
                     findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                 }
 
                 R.id.export -> {
+                    // start a coroutine
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
+                            // within the coroutine get all tasks and save is to list
                             val tasks =
                                 getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
                             Log.d("tasks", tasks.first().name)
+                            // within the coroutine get all projects and save those to a list
                             val projects =
                                 getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                             Log.d("tasks", projects.first().name)
+                            // call the export routine from export manager class
                             exportManager.exportToCSV(projects, tasks, requireContext())
                         }
                     }
@@ -121,15 +133,18 @@ class ProjectFragment : Fragment() {
             }
             true
         }
-
+        // Initialize the recyclerView variable with the projectList from projectFragmentBinding
         val recyclerView = projectFragmentBinding.projectList
 
+        // Observe changes in the projectList LiveData from the projectFragmentViewModel
         projectFragmentViewModel.projectList.observe(
             viewLifecycleOwner,
             Observer {
                 recyclerView.adapter =
                     ProjectAdapter(projectFragmentViewModel, requireContext(), it, lifecycleScope)
                 Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
+                // Call the animateFAB function, passing a boolean value indicating if the observed data (it) is empty
+                // there is a hint text shown and the button is animated as long it.isEmpty() == true
                 animateFAB(it.isEmpty())
             }
         )
@@ -137,9 +152,14 @@ class ProjectFragment : Fragment() {
         // Handle click event for adding a new project
         projectFragmentBinding.floatingActionButton.setOnClickListener {
 
+            // Create an AlertDialog.Builder object
             val builder = AlertDialog.Builder(context)
+
+            // Inflate the layout for the dialog
             val inflater = layoutInflater
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_project, null)
+
+            // Find the EditText views from the dialog layout
             val newProjectName = dialogLayout.findViewById<EditText>(R.id.input_project_name)
             val newCustomerName =
                 dialogLayout.findViewById<EditText>(R.id.input_project_customer_name)
@@ -148,8 +168,11 @@ class ProjectFragment : Fragment() {
             val newCompanyName = dialogLayout.findViewById<EditText>(R.id.input_company_name)
             val newEstimatedTime = dialogLayout.findViewById<EditText>(R.id.input_estimated_time)
 
+            // Set properties for the AlertDialog.Builder
             with(builder) {
                 setTitle("New Project")
+
+                // Set the positive button click listener
                 setPositiveButton("Ok") { dialog, which ->
                     val newProjectNameString = newProjectName.text.toString()
                     val newCustomerNameString = newCustomerName.text.toString()
@@ -160,7 +183,9 @@ class ProjectFragment : Fragment() {
                     // create new Project instance
                     val newProject = Project()
 
+                    // Load the logo for the new project
                     projectFragmentViewModel.loadLogo(newCompanyNameString) {
+                        // Update the logoUrl of the new project if a logo is available
                         if (newCompanyNameString != "") {
                             Log.d("ProjectFragment", "(5) Here updating logourl")
                             Log.d(
@@ -172,6 +197,7 @@ class ProjectFragment : Fragment() {
                                 projectFragmentViewModel.logoLiveData.value!!.logo
                         }
 
+                        // Set the values of the new project based on the entered data
                         if (newProjectNameString != "") {
                             newProject.name = newProjectNameString
                         }
@@ -187,6 +213,8 @@ class ProjectFragment : Fragment() {
                         if (newEstimatedTimeString != "") {
                             newProject.estimatedTime = newEstimatedTimeString.toInt()
                         }
+
+                        // Generate a random color for the new project
                         val colorString = "#" + Integer.toHexString(
                             ContextCompat.getColor(
                                 context,
@@ -194,26 +222,31 @@ class ProjectFragment : Fragment() {
                             )
                         ).substring(2).uppercase()
 
+                        // assign the generated color to the new project instance
                         newProject.color = colorString
 
                         Log.d("ProjectFragment", newProject.color)
 
+                        // Insert the new project into the database
                         projectFragmentViewModel.insertProject(newProject) {
 
                             val database = getProjectDatabase(context)
 
-                            // Launch a coroutine
+                            // Launch a coroutine to perform database operations
                             lifecycleScope.launch {
+
                                 // Perform the database operation within the coroutine
                                 val projectList: List<Project> =
                                     withContext(Dispatchers.IO) {
                                         database.projectDatabaseDao.getAllNLD()
                                     }
 
+                                // find the last project to add to firebase
                                 val project2Add = projectList.last()
 
                                 Log.d("ProjectFragment", currentUserEmail!!)
 
+                                // create a hashmap of attributes for firebase addProject method
                                 val attributes = hashMapOf<String, Any>(
                                     "id" to project2Add.id,
                                     "name" to project2Add.name,
@@ -231,8 +264,11 @@ class ProjectFragment : Fragment() {
                                 )
 
                                 Log.d("firebasePID", project2Add.id.toString())
+
+                                // call addProject method from firebase class
                                 firebaseManager.addProject(project2Add, attributes)
 
+                                // show toast with confirmation
                                 Toast.makeText(
                                     context,
                                     "$newProjectNameString created",
@@ -243,15 +279,22 @@ class ProjectFragment : Fragment() {
                         }
                     }
                 }
+                // set negative button and cancel the creation and show toast for confirmation of cancellation
                 setNegativeButton("Cancel") { dialog, which ->
+
+                    // close dialog on negative button
                     dialog.dismiss()
+
+                    // show canellation toast
                     Toast.makeText(
                         context,
                         "Project creation cancelled by user",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                // Set the custom layout for the dialog
                 setView(dialogLayout)
+                // show the dialog
                 show()
             }
         }
@@ -265,6 +308,7 @@ class ProjectFragment : Fragment() {
 
         // Scale animation
         if (isEmpty) {
+            // Create scale animation
             val scaleAnimation = ScaleAnimation(
                 1.0f, 1.2f, 1.0f, 1.2f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
@@ -290,16 +334,22 @@ class ProjectFragment : Fragment() {
                 interpolator = AccelerateDecelerateInterpolator()
             }
 
+            // Create an animation set and add scale and rotate animations to it
             val animationSet = AnimationSet(true).apply {
                 addAnimation(scaleAnimation)
                 addAnimation(rotate)
             }
+            // start the animation set
             fab.startAnimation(animationSet)
 
+            // Show hint arrow and text
             projectFragmentBinding.hintArrow.visibility = View.VISIBLE
             projectFragmentBinding.hintText.visibility = View.VISIBLE
         } else {
+            // clear the animation
             fab.clearAnimation()
+
+            // hide hint aroow and text
             projectFragmentBinding.hintArrow.visibility = View.INVISIBLE
             projectFragmentBinding.hintText.visibility = View.INVISIBLE
         }

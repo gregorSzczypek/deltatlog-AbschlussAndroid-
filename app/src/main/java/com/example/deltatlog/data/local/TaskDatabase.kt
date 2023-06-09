@@ -7,9 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.deltatlog.data.datamodels.Task
 
-/**
- *  RoomDatabase for storing Tasks
- */
+//RoomDatabase for storing Tasks
 
 @Database(entities = [Task::class], version = 2)
 abstract class TaskDatabase : RoomDatabase() {
@@ -28,7 +26,7 @@ fun getTaskDatabase(context: Context): TaskDatabase {
                 TaskDatabase::class.java,
                 "task_database"
             )
-                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
+//                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
         }
     }

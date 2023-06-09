@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.deltatlog.data.datamodels.Task
 
-/**
- * Data Access Object for the RoomDatabase
- */
+//Data Access Object for the TaskDatabase
 
 @Dao
 interface TaskDatabaseDao {

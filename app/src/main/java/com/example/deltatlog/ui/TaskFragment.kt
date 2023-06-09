@@ -59,11 +59,13 @@ class TaskFragment : Fragment() {
             false
         )
 
-        // Hole die projectId aus den Argumenten
+        // retrieve the projects ID from the arguments
         projectId = requireArguments().getLong("projectId")
         Log.i("projectID", projectId.toString())
+        // retrieve the color from the arguments
         color = requireArguments().getString("color")
 
+        // set recycler view to fixed size
         taskFragmentBinding.taskList.setHasFixedSize(true) // set fixed size for recyclerview
 
         // Inflate the layout for this fragment
@@ -73,13 +75,16 @@ class TaskFragment : Fragment() {
     @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance()
         val currentUserId = firebaseAuth.currentUser!!.uid
         val currentUserEmail = firebaseAuth.currentUser!!.email
         taskSnapshotListener = TaskSnapshotListener(this, currentUserId)
-        // BackButton Navigation in Toolbar
+
+        // set onClickListener to BackButton Navigation in Toolbar
         taskFragmentBinding.materialToolbar.setNavigationOnClickListener {
+            // Navigate to Home Fragment
             findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToHomeFragment())
         }
 
@@ -87,25 +92,33 @@ class TaskFragment : Fragment() {
         taskFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
+                    // destroy the firebase snapshotlistener
                     taskSnapshotListener.stopListening()
+                    // call the logout method from firebasemanager
                     firebaseManager.logOut(
                         firebaseAuth,
                         currentUserEmail!!,
                         requireContext()
                     )
+                    // set the check variable for database deltion to false
                     taskFragmentViewModel.databaseDeleted = false
+                    // navigate to login fragment
                     findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
                 }
 
                 R.id.export -> {
                     // Retrieve the tasks related to the current project from the ViewModel
                     // Handle export menu item click
+
+                    // start a coroutine
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
+                            // get a list of projects from the projectdatabase within the coroutine
                             val projectDB =
                                 getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                             val project = projectDB.find { it.id == projectId }
                             val listOfProject = mutableListOf(project!!)
+                            // call the export method from exportManager
                             taskFragmentViewModel.taskList.value?.let { tasks ->
                                 exportManager.exportToCSV(listOfProject, tasks, requireContext())
                             }
@@ -118,12 +131,15 @@ class TaskFragment : Fragment() {
 
         val recyclerView = taskFragmentBinding.taskList
 
+        // Observe changes in the taskList LiveData
         taskFragmentViewModel.taskList.observe(
             viewLifecycleOwner,
             Observer {
+                // Set the adapter for the recyclerView with filtered tasks
                 recyclerView.adapter = TaskAdapter(
                     taskFragmentViewModel,
                     requireContext(),
+                    // Filter tasks based on projectId
                     it.filter { it.taskProjectId == projectId },
                     findNavController(),
                     projectId,
@@ -132,32 +148,48 @@ class TaskFragment : Fragment() {
                 )
 
                 Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
+
+                // Animate the floating action button whenever the task list is empty
                 animateFAB(it.isEmpty())
             }
         )
 
         taskFragmentBinding.floatingActionButton.setOnClickListener {
 
+            // Create an AlertDialog.Builder instance
             val builder = AlertDialog.Builder(context)
+
+            // Inflate the layout for the dialog
             val inflater = layoutInflater
             val dialogLayout = inflater.inflate(R.layout.edit_text_dialogue_task, null)
+
+            // Find the input views in the dialog layout
             val newTaskName = dialogLayout.findViewById<EditText>(R.id.input_task_name)
             val newTaskDescription =
                 dialogLayout.findViewById<EditText>(R.id.input_task_description)
 
             with(builder) {
                 setTitle("New Task")
+
+                // Set the positive button click listener
                 setPositiveButton("Ok") { dialog, which ->
+
+                    // Get the entered task name and description
                     val newTaskNameString = newTaskName.text.toString()
                     val newTaskDescriptionString = newTaskDescription.text.toString()
+
+                    // Create a new Task instance with project ID and color from arguments
                     val newTask = Task(taskProjectId = projectId, color = color.toString())
 
+                    // set attributes of new task according to the user's input
                     if (newTaskNameString != "") {
                         newTask.name = newTaskNameString
                     }
                     if (newTaskDescriptionString != "") {
                         newTask.notes = newTaskDescriptionString
                     }
+
+                    // Insert the new task into the task database
                     taskFragmentViewModel.insertTask(newTask) {
 
                         val database = getTaskDatabase(context)
@@ -169,10 +201,12 @@ class TaskFragment : Fragment() {
                                 database.taskDatabaseDao.getAllNLD()
                             }
 
+                            // Get the newly added task
                             val task2Add = taskList.last()
 
                             Log.d("TaskFragment", currentUserId)
 
+                            // Create a HashMap of attributes for firebaseManager
                             val attributes = hashMapOf<String, Any>(
                                 "id" to task2Add.id,
                                 "taskProjectId" to task2Add.taskProjectId,
@@ -187,6 +221,7 @@ class TaskFragment : Fragment() {
 
                             Log.d("firebasePTID", task2Add.id.toString())
 
+                            // Add the task to Firebase
                             firebaseManager.addTask(task2Add, attributes)
 
                             // Update number of tasks in project Object
@@ -194,19 +229,27 @@ class TaskFragment : Fragment() {
                                 getProjectDatabase(context).projectDatabaseDao.getAllNLD()
                                     .find { it.id == projectId }
                             }
+
+                            // get all tasks for the project
                             val tasks = withContext(Dispatchers.IO) {
                                 getTaskDatabase(context).taskDatabaseDao.getAllNLD()
                                     .filter { it.taskProjectId == projectId }
                             }
+
+                            // Calculate the total number of tasks
                             val tasksSize = tasks.size
 
+                            // Update the project's number of tasks
                             project!!.numberOfTasks = tasksSize.toLong()
+
+                            // Calculate the total elapsed time for all tasks
                             var totalTime = 0L
 
                             for (i in tasks) {
                                 totalTime += i.elapsedTime
                             }
 
+                            // Format the total elapsed time as a string
                             val hours = totalTime / 3600
                             val minutes = (totalTime % 3600) / 60
                             val sec = totalTime % 60
@@ -221,17 +264,22 @@ class TaskFragment : Fragment() {
 
                             Log.e("totalTime", timeString)
 
+                            // Update the project's total time
                             project.totalTime = timeString
 
+                            // Update the project in the project database
                             taskFragmentViewModel.updateProject(project)
 
+                            // Create a map of updates for Firebase
                             val updates = mutableMapOf<String, Any>(
                                 "numberOfTasks" to tasksSize,
                                 "totalTime" to timeString
                             )
 
+                            // Update the project changes in Firebase
                             firebaseManager.updateProjectChanges(project.id.toString(), updates)
 
+                            // Display a toast message for task creation success
                             Toast.makeText(
                                 context,
                                 "$newTaskNameString created",
@@ -240,7 +288,11 @@ class TaskFragment : Fragment() {
                         }
                     }
                 }
+
+                // Set the negative button click listener
                 setNegativeButton("Cancel") { dialog, which ->
+
+                    // Dismiss the dialog and display a toast message for task creation cancellation
                     dialog.dismiss()
                     Toast.makeText(
                         context,
@@ -249,11 +301,15 @@ class TaskFragment : Fragment() {
                     )
                         .show()
                 }
+
+                // Set the custom layout for the dialog
                 setView(dialogLayout)
+                // show the dialog
                 show()
             }
         }
-        // here firebase stuff
+
+        // get an instance of the task database and start listening to changes in firebase
         val database = getTaskDatabase(requireContext())
         taskSnapshotListener.startListening(database)
     }

@@ -12,6 +12,7 @@ import java.io.File
 class ExportManager {
     fun exportToCSV(projects: List<Project>, tasks: List<Task>, context: Context) {
         if (projects.isNotEmpty()) {
+
             // Create a CSV file using Apache Commons CSV library
             val csvFile = File(context.cacheDir, "workload.csv")
             val csvWriter = CSVFormat.DEFAULT.withHeader(
@@ -63,33 +64,39 @@ class ExportManager {
             // Send the project database CSV file via email
             sendEmail(csvFile, context, "Database")
         } else {
+            // show text that there are no projects saved
             Toast.makeText(context, "No projects found!.", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun sendEmail(file: File, context: Context, naming: String) {
 
-        // Create an email intent with the necessary data
-        // - Set the email type as "text/csv"
-        // - Set the subject and body of the email
-        // - Attach the CSV file using a FileProvider
-        // - Start an activity to choose an email app and send the email
-
+        // Create a new intent for sending an email
         val intent = Intent(Intent.ACTION_SEND)
+
+        // Set the type of the email to "text/csv"
         intent.type = "text/csv"
+
+        // Set the subject of the email to include the provided naming parameter
         intent.putExtra(Intent.EXTRA_SUBJECT, "$naming CSV")
         intent.putExtra(
             Intent.EXTRA_TEXT,
             "Please find attached the $naming in CSV format."
         )
+
+        // Get the URI for the file using a FileProvider
         val uri =
             FileProvider.getUriForFile(context, "com.example.deltatlog.fileprovider", file)
+
+        // Attach the file to the email intent
         intent.putExtra(Intent.EXTRA_STREAM, uri)
 
         // Check if there is an email app available to handle the intent
         if (intent.resolveActivity(context.packageManager) != null) {
+            // Start the email intent with a chooser dialog
             context.startActivity(Intent.createChooser(intent, "Send Email"))
         } else {
+            // Display a toast message if no email app is found
             Toast.makeText(context, "No email app found.", Toast.LENGTH_SHORT).show()
         }
     }

@@ -19,20 +19,27 @@ class Repository(
     val API_KEY = "sk_1c15a6f5d0a52350c5e50ff9abcb24b1"
     val authHeader = "Bearer $API_KEY"
 
-    // TODO Müssen die nächsten zwei Zeilen live data sein??
+    // Get all projects from the project database
     val projectList = database.projectDatabaseDao.getAll()
+
+    // Get all tasks from the task database
     val taskList = taskDatabase.taskDatabaseDao.getAll()
 
     val logo = MutableLiveData<Logo>()
+
+    // Get a logo for the given company name
     suspend fun getLogo(companyName: String) {
         try {
+            // make API call to get the logo
             logo.value = api.retrofitService.getLogo(companyName, authHeader = authHeader)
         } catch (e: Exception){
+            // Handle API call failure
             Log.d("Repository", "API Call failed: $e")
             logo.value = Logo("nothing", "nothing", "nothing")
         }
     }
 
+    // insert a project into the project database
     suspend fun insertProject(project: Project) {
         try {
             database.projectDatabaseDao.insert(project)
@@ -42,6 +49,7 @@ class Repository(
         }
     }
 
+    // update a project in the projectdatabase
     suspend fun updateProject(project: Project) {
         try {
             database.projectDatabaseDao.update(project)
@@ -50,6 +58,7 @@ class Repository(
         }
     }
 
+    // delete a project from the project database
     suspend fun deleteProject(project: Project) {
         try {
             database.projectDatabaseDao.deleteById(project.id)
@@ -58,6 +67,7 @@ class Repository(
         }
     }
 
+    // insert a task into the task database
     suspend fun insertTask(task: Task) {
         try {
             taskDatabase.taskDatabaseDao.insert(task)
@@ -67,6 +77,7 @@ class Repository(
         }
     }
 
+    // update a task in the task database
     suspend fun updateTask(task: Task) {
         try {
             taskDatabase.taskDatabaseDao.update(task)
@@ -75,6 +86,7 @@ class Repository(
         }
     }
 
+    // delete a task from the task database
     suspend fun deleteTask(task: Task) {
         try {
             taskDatabase.taskDatabaseDao.deleteById(task.id)
@@ -83,6 +95,7 @@ class Repository(
         }
     }
 
+    // delete all tasks related to a project from the task database
     suspend fun deleteAllTasks(projectTaskId: Long) {
         try {
             taskDatabase.taskDatabaseDao.deleteAllTasks(projectTaskId)

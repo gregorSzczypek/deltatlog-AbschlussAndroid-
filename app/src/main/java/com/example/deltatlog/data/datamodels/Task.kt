@@ -2,13 +2,10 @@ package com.example.deltatlog.data.datamodels
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.gms.common.util.Hex
 import com.squareup.moshi.Json
-import java.text.DateFormat
-import java.text.DateFormat.getDateInstance
-import java.time.LocalDate
 import java.time.LocalDateTime
 
+// This dataclass represents the different properties of a task
 @Entity(tableName = "taskTable")
 
 data class Task(

@@ -6,6 +6,7 @@ import com.example.deltatlog.R
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
+// This dataclass represents the different properties of a project
 @Entity(tableName = "projectTable")
 
 data class Project(
