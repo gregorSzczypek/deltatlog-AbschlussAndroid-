@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <!--    Inhalt des Fragments wird vom NavGraph bestimmt-->
+        <!--The content of the fragment is determined by the NavGraph-->
         <fragment
             android:id="@+id/nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"

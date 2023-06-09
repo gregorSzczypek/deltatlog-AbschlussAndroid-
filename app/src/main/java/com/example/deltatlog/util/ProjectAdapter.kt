@@ -34,16 +34,16 @@ class ProjectAdapter(
 
 ) : RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>() {
 
-    // parts of the item which need to be change by adapter
+    // parts of the item which need to be changed by adapter
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView = view.findViewById<ImageView>(R.id.start_button)
-        val textView = view.findViewById<TextView>(R.id.Project_name)
-        val projectCardview = view.findViewById<MaterialCardView>(R.id.project_card_view)
-        val dateView = view.findViewById<TextView>(R.id.date)
-        val customerView = view.findViewById<TextView>(R.id.duration)
-        val descriptionView = view.findViewById<TextView>(R.id.task_description)
-        val numberOfTasks = view.findViewById<TextView>(R.id.tv_total_task_amount)
-        val totalTime = view.findViewById<TextView>(R.id.tv_total_task_time)
+        val imageView = view.findViewById<ImageView>(R.id.start_button)!!
+        val textView = view.findViewById<TextView>(R.id.Project_name)!!
+        val projectCardview = view.findViewById<MaterialCardView>(R.id.project_card_view)!!
+        val dateView = view.findViewById<TextView>(R.id.date)!!
+        val customerView = view.findViewById<TextView>(R.id.duration)!!
+        val descriptionView = view.findViewById<TextView>(R.id.task_description)!!
+        val numberOfTasks = view.findViewById<TextView>(R.id.tv_total_task_amount)!!
+        val totalTime = view.findViewById<TextView>(R.id.tv_total_task_time)!!
     }
 
     // create new viewholders

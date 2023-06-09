@@ -57,7 +57,8 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_add_task_24" />
+            app:srcCompat="@drawable/baseline_add_task_24"
+            android:focusable="true" />
 
         <ImageView
             android:id="@+id/hintArrow"

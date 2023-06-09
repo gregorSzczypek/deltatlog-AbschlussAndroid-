@@ -53,12 +53,12 @@ class TaskAdapter(
 
     // parts of the item which need to be change by adapter
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)
-        val taskName = view.findViewById<TextView>(R.id.task_name)
-        val taskDuration = view.findViewById<TextView>(R.id.duration)
-        val taskDate = view.findViewById<TextView>(R.id.date)
-        val taskDescription = view.findViewById<TextView>(R.id.task_description)
-        val playButton = view.findViewById<ImageButton>(R.id.start_button)
+        val taskCardView = view.findViewById<MaterialCardView>(R.id.task_card_view)!!
+        val taskName = view.findViewById<TextView>(R.id.task_name)!!
+        val taskDuration = view.findViewById<TextView>(R.id.duration)!!
+        val taskDate = view.findViewById<TextView>(R.id.date)!!
+        val taskDescription = view.findViewById<TextView>(R.id.task_description)!!
+        val playButton = view.findViewById<ImageButton>(R.id.start_button)!!
     }
 
     // create new viewholders

@@ -160,28 +160,94 @@ class FirebaseManager {
         }
     }
 
+//    fun deleteUserAssociatedData() {
+//        // Check if the currentUserId is not null
+//        currentUserId?.let {
+//            Log.d("firebase", currentUserId)
+//            db.collection("users").document(currentUserId.toString())
+//                // delete the provided user data
+//                .delete()
+//                .addOnSuccessListener {
+//                    Log.d(
+//                        "firebase",
+//                        "UserData successfully deleted!"
+//                    )
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.w(
+//                        "firebase",
+//                        "Error deleting document",
+//                        e
+//                    )
+//                }
+//        }
+//    }
+
     fun deleteUserAssociatedData() {
         // Check if the currentUserId is not null
         currentUserId?.let {
-            Log.d("firebase", currentUserId)
-            db.collection("users").document(currentUserId.toString())
-                // delete the provided user data
-                .delete()
-                .addOnSuccessListener {
-                    Log.d(
-                        "firebase",
-                        "UserData successfully deleted!"
-                    )
+            // Delete user tasks
+            db.collection("users").document(currentUserId)
+                .collection("tasks")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    val batch = db.batch()
+                    for (document in querySnapshot) {
+                        batch.delete(document.reference)
+                    }
+                    batch.commit()
+                        .addOnSuccessListener {
+                            // Tasks deleted successfully
+                            Log.d("firebase", "User tasks successfully deleted!")
+                        }
+                        .addOnFailureListener { e ->
+                            // Error deleting tasks
+                            Log.w("firebase", "Error deleting user tasks", e)
+                        }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(
-                        "firebase",
-                        "Error deleting document",
-                        e
-                    )
+                    // Error retrieving tasks
+                    Log.w("firebase", "Error retrieving user tasks", e)
+                }
+
+            // Delete user projects
+            db.collection("users").document(currentUserId)
+                .collection("projects")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    val batch = db.batch()
+                    for (document in querySnapshot) {
+                        batch.delete(document.reference)
+                    }
+                    batch.commit()
+                        .addOnSuccessListener {
+                            // Projects deleted successfully
+                            Log.d("firebase", "User projects successfully deleted!")
+                        }
+                        .addOnFailureListener { e ->
+                            // Error deleting projects
+                            Log.w("firebase", "Error deleting user projects", e)
+                        }
+                }
+                .addOnFailureListener { e ->
+                    // Error retrieving projects
+                    Log.w("firebase", "Error retrieving user projects", e)
+                }
+
+            // Delete user document
+            db.collection("users").document(currentUserId)
+                .delete()
+                .addOnSuccessListener {
+                    // User document deleted successfully
+                    Log.d("firebase", "User document successfully deleted!")
+                }
+                .addOnFailureListener { e ->
+                    // Error deleting user document
+                    Log.w("firebase", "Error deleting user document", e)
                 }
         }
     }
+
 
     fun logOut(
         firebaseAuth: FirebaseAuth,

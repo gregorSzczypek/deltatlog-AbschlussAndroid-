@@ -354,8 +354,16 @@ class TaskFragment : Fragment() {
                 addAnimation(rotate)
             }
             fab.startAnimation(animationSet)
+
+            // Show hint arrow and text
+            taskFragmentBinding.hintArrow.visibility = View.VISIBLE
+            taskFragmentBinding.hintText.visibility = View.VISIBLE
         } else {
             fab.clearAnimation()
+
+            // hide hint aroow and text
+            taskFragmentBinding.hintArrow.visibility = View.INVISIBLE
+            taskFragmentBinding.hintText.visibility = View.INVISIBLE
         }
     }
 }

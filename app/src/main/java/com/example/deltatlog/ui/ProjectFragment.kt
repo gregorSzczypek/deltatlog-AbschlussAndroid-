@@ -142,6 +142,7 @@ class ProjectFragment : Fragment() {
                         .setMessage("Are you sure you want to delete your account?")
                         .setPositiveButton("Yes") { _, _ ->
                             firebaseManager.deleteAccount(firebaseAuth, currentUserEmail!!, requireContext())
+                            findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
                         }
                         .setNegativeButton("No", null)
                         .create()

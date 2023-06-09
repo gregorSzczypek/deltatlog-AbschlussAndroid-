@@ -64,7 +64,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:focusable="true" />
 
         <EditText
             android:id="@+id/input_email_adress"
@@ -79,7 +80,6 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent" />
 
-
         <EditText
             android:id="@+id/input_pw_1"
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             android:layout_marginBottom="@dimen/btn_btn_spacing"
             android:ems="10"
             android:hint="Password"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             app:layout_constraintBottom_toTopOf="@+id/input_pw_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"

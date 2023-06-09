@@ -128,12 +128,12 @@ class TimerFragment : Fragment() {
                     timerViewModel.updateTask(currentTask)
 
                     // Prepare the updates to be sent to Firebase
-                    val tasskUpdates = mapOf(
+                    val taskUpdates = mapOf(
                         "duration" to currentTask.duration,
                         "elapsedTime" to currentTask.elapsedTime
                     )
                     // Update the task changes in Firebase via the firebaseManager
-                    firebaseManager.updateTaskChanges(taskId = taskId.toString(), updates = tasskUpdates)
+                    firebaseManager.updateTaskChanges(taskId = taskId.toString(), updates = taskUpdates)
 
                     // Update the new time in Project Object and also the number of tasks
                     lifecycleScope.launch {
