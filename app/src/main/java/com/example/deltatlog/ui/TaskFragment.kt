@@ -155,7 +155,7 @@ class TaskFragment : Fragment() {
                 Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
 
                 // Animate the floating action button whenever the task list is empty
-                animateFAB(it.isEmpty())
+                animateFAB(it.filter { it.taskProjectId == projectId }.isEmpty())
             }
         )
 
