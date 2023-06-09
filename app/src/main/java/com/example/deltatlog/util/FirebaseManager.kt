@@ -160,6 +160,10 @@ class FirebaseManager {
         }
     }
 
+    fun deleteUserAssociatedData(currentUserId: String) {
+
+    }
+
     fun logOut(
         firebaseAuth: FirebaseAuth,
         currentUserEmail: String,

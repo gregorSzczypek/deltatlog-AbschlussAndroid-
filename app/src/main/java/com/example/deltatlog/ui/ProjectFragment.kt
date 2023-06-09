@@ -130,6 +130,10 @@ class ProjectFragment : Fragment() {
                         }
                     }
                 }
+
+                R.id.deleteAccount -> {
+                    firebaseManager.deleteAccount(firebaseAuth, currentUserEmail!!, requireContext())
+                }
             }
             true
         }
