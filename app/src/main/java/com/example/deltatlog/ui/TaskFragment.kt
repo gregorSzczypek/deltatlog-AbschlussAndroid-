@@ -1,11 +1,8 @@
 package com.example.deltatlog.ui
 
 import TaskAdapter
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.res.ColorStateList
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,7 +16,6 @@ import android.view.animation.RotateAnimation
 import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -104,8 +100,16 @@ class TaskFragment : Fragment() {
                 R.id.export -> {
                     // Retrieve the tasks related to the current project from the ViewModel
                     // Handle export menu item click
-                    taskFragmentViewModel.taskList.value?.let { tasks ->
-                        exportManager.exportTasksToCSV(tasks, requireContext())
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            val projectDB =
+                                getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
+                            val project = projectDB.find { it.id == projectId }
+                            val listOfProject = mutableListOf(project!!)
+                            taskFragmentViewModel.taskList.value?.let { tasks ->
+                                exportManager.exportToCSV(listOfProject, tasks, requireContext())
+                            }
+                        }
                     }
                 }
             }
@@ -253,6 +257,7 @@ class TaskFragment : Fragment() {
         val database = getTaskDatabase(requireContext())
         taskSnapshotListener.startListening(database)
     }
+
     private fun animateFAB(isEmpty: Boolean) {
         val fab = taskFragmentBinding.floatingActionButton
 

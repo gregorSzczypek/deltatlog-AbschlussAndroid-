@@ -10,46 +10,7 @@ import org.apache.commons.csv.CSVFormat
 import java.io.File
 
 class ExportManager {
-
-    fun exportTasksToCSV(tasks: List<Task>, context: Context) {
-
-        // Export the list of tasks to a CSV file
-        // - Create a CSV file using Apache Commons CSV library
-        // - Write each task to the CSV file
-        // - Show a toast message indicating the export status
-        // - Send an email with the CSV file as an attachment
-
-        if (tasks.isNotEmpty()) {
-            // Create a CSV file using Apache Commons CSV library
-            val csvFile = File(context.cacheDir, "task_database.csv")
-            val csvWriter = CSVFormat.DEFAULT.withHeader(
-                "Project ID",
-                "Task Name",
-                "Date",
-                "Duration",
-                "Notes",
-            ).print(csvFile.writer())
-
-            // Write each task to the CSV file
-            for (task in tasks) {
-                csvWriter.printRecord(
-                    task.taskProjectId,
-                    task.name,
-                    task.date,
-                    task.duration,
-                    task.notes,
-                )
-            }
-
-            // Close the CSV writer
-            csvWriter.close()
-            sendEmail(csvFile, context, "task database")
-        } else {
-            Toast.makeText(context, "No tasks found!.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun exportAllToCSV(projects: List<Project>, tasks: List<Task>, context: Context) {
+    fun exportToCSV(projects: List<Project>, tasks: List<Task>, context: Context) {
         if (projects.isNotEmpty()) {
             // Create a CSV file using Apache Commons CSV library
             val csvFile = File(context.cacheDir, "workload.csv")

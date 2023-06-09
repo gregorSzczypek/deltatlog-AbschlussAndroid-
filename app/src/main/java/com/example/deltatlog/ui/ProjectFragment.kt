@@ -114,7 +114,7 @@ class ProjectFragment : Fragment() {
                             val projects =
                                 getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
                             Log.d("tasks", projects.first().name)
-                            exportManager.exportAllToCSV(projects, tasks, requireContext())
+                            exportManager.exportToCSV(projects, tasks, requireContext())
                         }
                     }
                 }
