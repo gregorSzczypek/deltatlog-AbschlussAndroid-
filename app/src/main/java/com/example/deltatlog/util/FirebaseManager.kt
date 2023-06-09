@@ -160,8 +160,27 @@ class FirebaseManager {
         }
     }
 
-    fun deleteUserAssociatedData(currentUserId: String) {
-
+    fun deleteUserAssociatedData() {
+        // Check if the currentUserId is not null
+        currentUserId?.let {
+            Log.d("firebase", currentUserId)
+            db.collection("users").document(currentUserId.toString())
+                // delete the provided user data
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(
+                        "firebase",
+                        "UserData successfully deleted!"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.w(
+                        "firebase",
+                        "Error deleting document",
+                        e
+                    )
+                }
+        }
     }
 
     fun logOut(
@@ -240,6 +259,8 @@ class FirebaseManager {
 
         // Check if the user is signed in
         if (user != null) {
+            // delete user associated data
+            deleteUserAssociatedData()
             // Delete the user's account
             user.delete()
                 .addOnCompleteListener { task ->
@@ -268,5 +289,4 @@ class FirebaseManager {
             ).show()
         }
     }
-
 }

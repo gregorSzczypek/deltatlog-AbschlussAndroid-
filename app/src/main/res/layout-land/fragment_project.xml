@@ -25,7 +25,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/dot_menu"
+            app:menu="@menu/dot_menu_home"
             app:title="@string/home_title"
             app:titleCentered="true"
             app:titleTextColor="@color/black" />
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Click here to add\n a new project!"
+            android:text="Click here to add\n a new project"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/hintArrow"

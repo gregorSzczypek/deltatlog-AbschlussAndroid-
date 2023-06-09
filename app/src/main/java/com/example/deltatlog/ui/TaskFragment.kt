@@ -92,18 +92,23 @@ class TaskFragment : Fragment() {
         taskFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
-                    // destroy the firebase snapshotlistener
-                    taskSnapshotListener.stopListening()
-                    // call the logout method from firebasemanager
-                    firebaseManager.logOut(
-                        firebaseAuth,
-                        currentUserEmail!!,
-                        requireContext()
-                    )
-                    // set the check variable for database deltion to false
-                    taskFragmentViewModel.databaseDeleted = false
-                    // navigate to login fragment
-                    findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
+                    val alertDialog = AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Logout")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            // destroy the Firebase snapshot listener
+                            taskSnapshotListener.stopListening()
+                            // call the logout method from firebaseManager
+                            firebaseManager.logOut(firebaseAuth, currentUserEmail!!, requireContext())
+                            // set the check variable for database deletion to false
+                            taskFragmentViewModel.databaseDeleted = false
+                            // navigate to the login fragment
+                            findNavController().navigate(TaskFragmentDirections.actionProjectDetailFragmentToLoginFragment())
+                        }
+                        .setNegativeButton("No", null)
+                        .create()
+
+                    alertDialog.show()
                 }
 
                 R.id.export -> {

@@ -100,17 +100,22 @@ class ProjectFragment : Fragment() {
         projectFragmentBinding.materialToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout -> {
-                    // destroy snapshotlistener
-                    projectSnapshotListener.stopListening()
-                    // logout user routine
-                    firebaseManager.logOut(
-                        firebaseAuth,
-                        currentUserEmail!!,
-                        requireContext()
-                    )
-                    // set check variable for database deletion to false
-                    projectFragmentViewModel.databaseDeleted = false
-                    findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
+                    val alertDialog = AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Logout")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            // destroy snapshot listener
+                            projectSnapshotListener.stopListening()
+                            // logout user routine
+                            firebaseManager.logOut(firebaseAuth, currentUserEmail!!, requireContext())
+                            // set check variable for database deletion to false
+                            projectFragmentViewModel.databaseDeleted = false
+                            findNavController().navigate(ProjectFragmentDirections.actionHomeFragmentToLoginFragment())
+                        }
+                        .setNegativeButton("No", null)
+                        .create()
+
+                    alertDialog.show()
                 }
 
                 R.id.export -> {
@@ -132,7 +137,16 @@ class ProjectFragment : Fragment() {
                 }
 
                 R.id.deleteAccount -> {
-                    firebaseManager.deleteAccount(firebaseAuth, currentUserEmail!!, requireContext())
+                    val alertDialog = AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Account Deletion")
+                        .setMessage("Are you sure you want to delete your account?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            firebaseManager.deleteAccount(firebaseAuth, currentUserEmail!!, requireContext())
+                        }
+                        .setNegativeButton("No", null)
+                        .create()
+
+                    alertDialog.show()
                 }
             }
             true
