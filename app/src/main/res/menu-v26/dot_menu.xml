@@ -12,6 +12,7 @@
 
     <item
         android:id="@+id/deleteAccount"
-        android:title="Delete Account" />
+        android:title="Delete Account"
+        android:iconTint="@color/btn_alert_high_sat"/>
 
 </menu>
