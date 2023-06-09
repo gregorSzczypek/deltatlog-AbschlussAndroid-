@@ -160,29 +160,6 @@ class FirebaseManager {
         }
     }
 
-//    fun deleteUserAssociatedData() {
-//        // Check if the currentUserId is not null
-//        currentUserId?.let {
-//            Log.d("firebase", currentUserId)
-//            db.collection("users").document(currentUserId.toString())
-//                // delete the provided user data
-//                .delete()
-//                .addOnSuccessListener {
-//                    Log.d(
-//                        "firebase",
-//                        "UserData successfully deleted!"
-//                    )
-//                }
-//                .addOnFailureListener { e ->
-//                    Log.w(
-//                        "firebase",
-//                        "Error deleting document",
-//                        e
-//                    )
-//                }
-//        }
-//    }
-
     fun deleteUserAssociatedData() {
         // Check if the currentUserId is not null
         currentUserId?.let {
@@ -355,4 +332,74 @@ class FirebaseManager {
             ).show()
         }
     }
+
+    fun changePassword(firebaseAuth: FirebaseAuth, newPassword: String, context: Context) {
+        val user = firebaseAuth.currentUser
+
+        // Check if the user is signed in
+        if (user != null) {
+            // Change the user's password
+            user.updatePassword(newPassword)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Password updated successfully
+                        Toast.makeText(
+                            context,
+                            "Successfully changed password for user ${user.email}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        // An error occurred while changing the password
+                        Toast.makeText(
+                            context,
+                            "Failed to change password: ${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+        } else {
+            // User is not signed in
+            Toast.makeText(
+                context,
+                "No user is currently signed in",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    fun resetPassword(email: String, context: Context) {
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        // Check if the email is not empty
+        if (email.isNotEmpty()) {
+            // Send a password reset email to the provided email address
+            firebaseAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Password reset email sent successfully
+                        Toast.makeText(
+                            context,
+                            "Password reset email sent to $email",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        // An error occurred while sending the password reset email
+                        Toast.makeText(
+                            context,
+                            "Failed to send password reset email: ${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+        } else {
+            // Empty email is not allowed
+            Toast.makeText(
+                context,
+                "Email field cannot be empty",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
 }

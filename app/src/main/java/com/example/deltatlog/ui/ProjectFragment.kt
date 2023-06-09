@@ -2,7 +2,9 @@ package com.example.deltatlog.ui
 
 import ProjectAdapter
 import android.app.AlertDialog
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils
 import android.view.animation.RotateAnimation
 import android.view.animation.ScaleAnimation
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -125,13 +128,17 @@ class ProjectFragment : Fragment() {
                             // within the coroutine get all tasks and save is to list
                             val tasks =
                                 getTaskDatabase(requireContext()).taskDatabaseDao.getAllNLD()
-                            Log.d("tasks", tasks.first().name)
+                            if (tasks.isNotEmpty()) {
+                                Log.d("tasks", tasks.first().name)
+                            }
                             // within the coroutine get all projects and save those to a list
                             val projects =
                                 getProjectDatabase(requireContext()).projectDatabaseDao.getAllNLD()
-                            Log.d("tasks", projects.first().name)
+                            if (projects.isNotEmpty()) {
+                                Log.d("tasks", projects.first().name)
+                            }
                             // call the export routine from export manager class
-                            exportManager.exportToCSV(projects, tasks, requireContext())
+                                exportManager.exportToCSV(projects, tasks, requireContext(), requireActivity())
                         }
                     }
                 }
@@ -149,6 +156,57 @@ class ProjectFragment : Fragment() {
 
                     alertDialog.show()
                 }
+
+                R.id.changePassword -> {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Change Password")
+
+                    // Set up the layout for the dialog
+                    val layout = LinearLayout(requireContext())
+                    layout.orientation = LinearLayout.VERTICAL
+
+                    // Create the first password input field
+                    val passwordEditText = EditText(requireContext())
+                    passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    passwordEditText.hint = "Enter new password"
+                    passwordEditText.typeface = Typeface.create("sans-serif", Typeface.NORMAL) // Set custom font here
+                    layout.addView(passwordEditText)
+
+                    // Create the second password input field
+                    val confirmPasswordEditText = EditText(requireContext())
+                    confirmPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    confirmPasswordEditText.hint = "Confirm new password"
+                    confirmPasswordEditText.typeface = Typeface.create("sans-serif", Typeface.NORMAL) // Set custom font here
+                    layout.addView(confirmPasswordEditText)
+
+                    builder.setView(layout)
+
+                    // Set up the buttons
+                    builder.setPositiveButton("Change") { dialog, _ ->
+                        val password = passwordEditText.text.toString()
+                        val confirmPassword = confirmPasswordEditText.text.toString()
+
+                        // Check if passwords match
+                        if (password == confirmPassword) {
+                            // Passwords match, perform password change
+                            firebaseManager.changePassword(firebaseAuth, password, requireContext())
+
+                        } else {
+                            // Passwords don't match, show error message
+                            Toast.makeText(requireContext(), "Passwords don't match", Toast.LENGTH_SHORT).show()
+                        }
+                        dialog.dismiss()
+                    }
+
+                    builder.setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.cancel()
+                    }
+
+                    // Create and show the dialog
+                    val dialog = builder.create()
+                    dialog.show()
+                }
+
             }
             true
         }

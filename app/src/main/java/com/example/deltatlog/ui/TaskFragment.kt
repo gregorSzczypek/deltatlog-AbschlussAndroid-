@@ -125,7 +125,7 @@ class TaskFragment : Fragment() {
                             val listOfProject = mutableListOf(project!!)
                             // call the export method from exportManager
                             taskFragmentViewModel.taskList.value?.let { tasks ->
-                                exportManager.exportToCSV(listOfProject, tasks, requireContext())
+                                exportManager.exportToCSV(listOfProject, tasks, requireContext(), requireActivity())
                             }
                         }
                     }

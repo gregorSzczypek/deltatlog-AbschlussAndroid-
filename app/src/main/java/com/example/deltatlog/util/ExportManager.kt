@@ -1,5 +1,6 @@
 package com.example.deltatlog.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
@@ -10,7 +11,7 @@ import org.apache.commons.csv.CSVFormat
 import java.io.File
 
 class ExportManager {
-    fun exportToCSV(projects: List<Project>, tasks: List<Task>, context: Context) {
+    fun exportToCSV(projects: List<Project>, tasks: List<Task>, context: Context, activity: Activity) {
         if (projects.isNotEmpty()) {
 
             // Create a CSV file using Apache Commons CSV library
@@ -65,7 +66,9 @@ class ExportManager {
             sendEmail(csvFile, context, "Database")
         } else {
             // show text that there are no projects saved
-            Toast.makeText(context, "No projects found!.", Toast.LENGTH_SHORT).show()
+            activity.runOnUiThread {
+                Toast.makeText(context, "No projects found!.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

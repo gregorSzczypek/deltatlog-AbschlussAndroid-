@@ -66,6 +66,20 @@
             app:layout_constraintStart_toStartOf="parent"
             android:focusable="true" />
 
+        <TextView
+            android:id="@+id/tv_password_forgotten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="196dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/password_forgotten"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_logo" />
+
         <EditText
             android:id="@+id/input_email_adress"
             android:layout_width="@dimen/txt_input_width_land"

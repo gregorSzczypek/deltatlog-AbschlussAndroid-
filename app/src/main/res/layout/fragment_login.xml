@@ -69,6 +69,18 @@
             android:focusable="true" />
 
 
+        <TextView
+            android:id="@+id/tv_password_forgotten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/password_forgotten"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <EditText
             android:id="@+id/input_email_adress"
             android:layout_width="match_parent"
