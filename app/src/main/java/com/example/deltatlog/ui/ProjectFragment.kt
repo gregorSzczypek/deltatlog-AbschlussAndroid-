@@ -10,12 +10,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.AnimationUtils
-import android.view.animation.RotateAnimation
-import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -32,6 +26,7 @@ import com.example.deltatlog.data.datamodels.Project
 import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentProjectBinding
+import com.example.deltatlog.util.ProjectFragmentAnimator
 import com.example.deltatlog.util.ProjectSnapshotListener
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -48,7 +43,8 @@ class ProjectFragment : Fragment() {
     private val firebaseManager = FirebaseManager()
     private val exportManager = ExportManager()
     private lateinit var projectSnapshotListener: ProjectSnapshotListener
-    private lateinit var swellAnimation: Animation
+    private val animator = ProjectFragmentAnimator()
+//    private lateinit var swellAnimation: Animation
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +73,7 @@ class ProjectFragment : Fragment() {
 
         Log.d("deleteDB", projectFragmentViewModel.databaseDeleted.toString())
 
-        swellAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.swell_animation)
+//        swellAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.swell_animation)
         // check if database has been deleted
         if (!projectFragmentViewModel.databaseDeleted)
             lifecycleScope.launch {
@@ -222,7 +218,7 @@ class ProjectFragment : Fragment() {
                 Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
                 // Call the animateFAB function, passing a boolean value indicating if the observed data (it) is empty
                 // there is a hint text shown and the button is animated as long it.isEmpty() == true
-                animateFAB(it.isEmpty())
+                    animator.animateFAB(it.isEmpty(), projectFragmentBinding)
             }
         )
 
@@ -375,60 +371,7 @@ class ProjectFragment : Fragment() {
                 show()
             }
         }
-
         val projectDatabase = getProjectDatabase(requireContext())
         projectSnapshotListener.startListening(projectDatabase)
-    }
-
-    private fun animateFAB(isEmpty: Boolean) {
-        val fab = projectFragmentBinding.floatingActionButton
-
-        // Scale animation
-        if (isEmpty) {
-            // Create scale animation
-            val scaleAnimation = ScaleAnimation(
-                1.0f, 1.2f, 1.0f, 1.2f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-            ).apply {
-                duration = 1000
-                repeatCount = Animation.INFINITE
-                repeatMode = Animation.REVERSE
-            }
-
-            // Rotate animation
-            val rotate = RotateAnimation(
-                0f,
-                360f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            ).apply {
-                duration = 2000
-                repeatCount = Animation.INFINITE
-                repeatMode = Animation.RESTART
-                interpolator = AccelerateDecelerateInterpolator()
-            }
-
-            // Create an animation set and add scale and rotate animations to it
-            val animationSet = AnimationSet(true).apply {
-                addAnimation(scaleAnimation)
-                addAnimation(rotate)
-            }
-            // start the animation set
-            fab.startAnimation(animationSet)
-
-            // Show hint arrow and text
-            projectFragmentBinding.hintArrow.visibility = View.VISIBLE
-            projectFragmentBinding.hintText.visibility = View.VISIBLE
-        } else {
-            // clear the animation
-            fab.clearAnimation()
-
-            // hide hint aroow and text
-            projectFragmentBinding.hintArrow.visibility = View.INVISIBLE
-            projectFragmentBinding.hintText.visibility = View.INVISIBLE
-        }
     }
 }

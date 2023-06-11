@@ -9,11 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.RotateAnimation
-import android.view.animation.ScaleAnimation
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -29,6 +24,7 @@ import com.example.deltatlog.data.datamodels.Task
 import com.example.deltatlog.data.local.getProjectDatabase
 import com.example.deltatlog.data.local.getTaskDatabase
 import com.example.deltatlog.databinding.FragmentTaskBinding
+import com.example.deltatlog.util.TaskFragmentAnimator
 import com.example.deltatlog.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +42,7 @@ class TaskFragment : Fragment() {
     private val firebaseManager = FirebaseManager()
     private val exportManager = ExportManager()
     private lateinit var taskSnapshotListener: TaskSnapshotListener
+    private val animator = TaskFragmentAnimator()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -155,7 +152,7 @@ class TaskFragment : Fragment() {
                 Log.d("itemCount", recyclerView.adapter?.itemCount.toString())
 
                 // Animate the floating action button whenever the task list is empty
-                animateFAB(it.filter { it.taskProjectId == projectId }.isEmpty())
+                animator.animateFAB(it.filter { it.taskProjectId == projectId }.isEmpty(), taskFragmentBinding)
             }
         )
 
@@ -317,53 +314,5 @@ class TaskFragment : Fragment() {
         // get an instance of the task database and start listening to changes in firebase
         val database = getTaskDatabase(requireContext())
         taskSnapshotListener.startListening(database)
-    }
-
-    private fun animateFAB(isEmpty: Boolean) {
-        val fab = taskFragmentBinding.floatingActionButton
-
-        // Scale animation
-        if (isEmpty) {
-            val scaleAnimation = ScaleAnimation(
-                1.0f, 1.2f, 1.0f, 1.2f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-            ).apply {
-                duration = 1000
-                repeatCount = Animation.INFINITE
-                repeatMode = Animation.REVERSE
-            }
-
-            // Rotate animation
-            val rotate = RotateAnimation(
-                0f,
-                360f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            ).apply {
-                duration = 2000
-                repeatCount = Animation.INFINITE
-                repeatMode = Animation.RESTART
-                interpolator = AccelerateDecelerateInterpolator()
-            }
-
-            val animationSet = AnimationSet(true).apply {
-                addAnimation(scaleAnimation)
-                addAnimation(rotate)
-            }
-            fab.startAnimation(animationSet)
-
-            // Show hint arrow and text
-            taskFragmentBinding.hintArrow.visibility = View.VISIBLE
-            taskFragmentBinding.hintText.visibility = View.VISIBLE
-        } else {
-            fab.clearAnimation()
-
-            // hide hint aroow and text
-            taskFragmentBinding.hintArrow.visibility = View.INVISIBLE
-            taskFragmentBinding.hintText.visibility = View.INVISIBLE
-        }
     }
 }
