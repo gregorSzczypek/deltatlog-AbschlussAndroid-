@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/export"
-        android:title="Export" />
+        android:title="Export Project" />
 
     <item
         android:id="@+id/logout"
-        android:title="Logout" />
+        android:title="Logout User" />
 
 </menu>
