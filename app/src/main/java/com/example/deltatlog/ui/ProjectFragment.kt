@@ -239,7 +239,6 @@ class ProjectFragment : Fragment() {
             val newDescription =
                 dialogLayout.findViewById<EditText>(R.id.input_project_description)
             val newCompanyName = dialogLayout.findViewById<EditText>(R.id.input_company_name)
-            val newEstimatedTime = dialogLayout.findViewById<EditText>(R.id.input_estimated_time)
 
             // Set properties for the AlertDialog.Builder
             with(builder) {
@@ -251,7 +250,6 @@ class ProjectFragment : Fragment() {
                     val newCustomerNameString = newCustomerName.text.toString()
                     val newDescriptionString = newDescription.text.toString()
                     val newCompanyNameString = newCompanyName.text.toString()
-                    val newEstimatedTimeString = newEstimatedTime.text.toString()
 
                     // create new Project instance
                     val newProject = Project()
@@ -282,9 +280,6 @@ class ProjectFragment : Fragment() {
                         }
                         if (newCompanyNameString != "") {
                             newProject.companyName = newCompanyNameString
-                        }
-                        if (newEstimatedTimeString != "") {
-                            newProject.estimatedTime = newEstimatedTimeString.toInt()
                         }
 
                         // Generate a random color for the new project

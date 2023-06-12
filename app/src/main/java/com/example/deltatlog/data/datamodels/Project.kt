@@ -47,7 +47,4 @@ data class Project(
 
     @Json(name = "strTotalTime")
     var totalTime: String = "00:00:00",
-
-    @Json(name = "intEstimatedHrs")
-    var estimatedTime: Int = 0
 )

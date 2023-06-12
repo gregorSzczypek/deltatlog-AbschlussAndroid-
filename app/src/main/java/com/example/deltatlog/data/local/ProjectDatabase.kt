@@ -25,6 +25,7 @@ fun getProjectDatabase(context: Context): ProjectDatabase {
                 ProjectDatabase::class.java,
                 "project_database"
             )
+                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
         }
     }

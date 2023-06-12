@@ -26,6 +26,7 @@ fun getTaskDatabase(context: Context): TaskDatabase {
                 TaskDatabase::class.java,
                 "task_database"
             )
+                .fallbackToDestructiveMigration() // TODO THIS CODE NEEDS TO BE DELETED OTHERWISE DATA COULD GET LOST
                 .build()
         }
     }
