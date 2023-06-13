@@ -18,4 +18,8 @@
         android:id="@+id/deleteAccount"
         android:title="Delete Account" />
 
+    <item
+        android:id="@+id/manual"
+        android:title="Manual" />
+
 </menu>

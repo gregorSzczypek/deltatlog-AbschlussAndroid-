@@ -203,6 +203,10 @@ class ProjectFragment : Fragment() {
                     dialog.show()
                 }
 
+                R.id.manual -> {
+                    findNavController().navigate(ProjectFragmentDirections.actionProjectFragmentToManualFragment())
+                }
+
             }
             true
         }
@@ -219,6 +223,8 @@ class ProjectFragment : Fragment() {
                 // Call the animateFAB function, passing a boolean value indicating if the observed data (it) is empty
                 // there is a hint text shown and the button is animated as long it.isEmpty() == true
                     animator.animateFAB(it.isEmpty(), projectFragmentBinding)
+                    Log.d("animation", "animation started")
+                    Log.d("animation", it.isEmpty().toString())
             }
         )
 

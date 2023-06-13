@@ -17,7 +17,7 @@ class TaskFragmentAnimator {
         // Scale animation
         if (isEmpty) {
             val scaleAnimation = ScaleAnimation(
-                1.0f, 1.2f, 1.0f, 1.2f,
+                1.0f, 1.5f, 1.0f, 1.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
             ).apply {
@@ -47,15 +47,8 @@ class TaskFragmentAnimator {
             }
             fab.startAnimation(animationSet)
 
-            // Show hint arrow and text
-            binding.hintArrow.visibility = View.VISIBLE
-            binding.hintText.visibility = View.VISIBLE
         } else {
             fab.clearAnimation()
-
-            // hide hint aroow and text
-            binding.hintArrow.visibility = View.INVISIBLE
-            binding.hintText.visibility = View.INVISIBLE
         }
     }
 }

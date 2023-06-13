@@ -58,28 +58,5 @@
             app:srcCompat="@drawable/baseline_add_task_24"
             android:focusable="true" />
 
-        <ImageView
-            android:id="@+id/hintArrow"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
-            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
-            app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
-            android:layout_marginRight="30dp"
-            app:srcCompat="@drawable/baseline_subdirectory_arrow_right_24" />
-
-        <TextView
-            android:id="@+id/hintText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Click here to add\n a new project"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/hintArrow"
-            app:layout_constraintEnd_toEndOf="@+id/hintArrow"
-            app:layout_constraintStart_toStartOf="@+id/hintArrow" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

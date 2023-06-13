@@ -11,7 +11,83 @@
 
     <string name="login_title">LOGIN</string>
     <string name="sign_up_title">SIGN UP</string>
-    <string name="home_title">Home</string>
-    <string name="project_detail_title">Project Tasks</string>
+    <string name="home_title">HOME</string>
+    <string name="project_detail_title">TASKS</string>
+    <string name="timer_title">TIMER</string>
+    <string name="manual_title">MANUAL</string>
+
+    <string name="manual_text">
+Deltatlog Task Management System User Manual\n
+
+1. Getting Started\n
+To begin using Deltatlog, follow these steps:\n\n
+
+1.1. Create a New Project\n
+- Click the floating button in the lower right corner of the screen.\n
+- Set your project parameters or do it later.\n
+- Deltatlog will try to retrieve a company logo based on the given name.\n
+- Click "OK" to save the project on all devices.\n\n
+
+1.2. Create a New Task Associated with a Project\n
+- Click on the desired project.\n
+- Click the floating button in the lower right corner of the screen.\n
+- Set your task parameters.\n
+- Click "OK" to save the task.\n\n
+
+2. Project Management\n
+Manage your projects effectively:\n\n
+
+2.1. Edit Projects\n
+- Press and hold a project.\n
+- Select "Edit Project" to modify parameters.\n
+- Choose "Change Color" to organize tasks by color.\n
+- Select "Delete Project" to permanently remove a project and its data.\n\n
+
+2.2. Edit Tasks\n
+- Press and hold the task you want to edit.\n
+- Choose "Edit Task" to modify parameters.\n\n
+
+3. Task Execution\n
+Work on your tasks seamlessly:\n\n
+
+3.1. Start Working on a Task\n
+- Open the project containing the task.\n
+- Locate the task within the project.\n
+- Click the play button to begin working.\n
+- Click the pause button to save work time.\n\n
+
+4. Data Export\n
+Export your data easily:\n\n
+
+4.1. Export All Data\n
+- Go to your projects and click the menu icon in the upper right corner.\n
+- Select "Export All Data."\n
+- Save the data as a .csv file.\n
+- Use your preferred email provider to send the file.\n\n
+
+4.2. Export Data from a Single Project\n
+- Choose the project you want to export data from.\n
+- Access the project details.\n
+- Click the menu icon in the upper right corner.\n
+- Select "Export Project."\n
+- Save the project data as a .csv file.\n
+- Use your preferred email provider to send the file.\n\n
+
+5. Account Settings\n
+Manage your account:\n\n
+
+5.1. Change Your Password\n
+- Go to your projects and click the menu icon in the upper right corner.\n
+- Select "Change Password."\n
+- Enter your desired password and confirm it.\n
+- Click "OK" to change your password.\n\n
+
+5.2. Delete Account\n
+- Go to your projects and click the menu icon in the upper right corner.\n
+- Select "Delete Account."\n
+- Confirm the deletion of your account and associated data.\n
+- Note: Account deletion is permanent and cannot be reversed.\n
+</string>
+
 
 </resources>
