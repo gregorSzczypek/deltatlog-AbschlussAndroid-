@@ -21,6 +21,7 @@ class ProjectSnapshotListener(
         val projectCollection = db.collection("users").document(currentUserId)
             .collection("projects")
 
+        // Start listening to changes in the Firestore projects collection
         snapshotListener = projectCollection.addSnapshotListener { snapshot, exception ->
             if (exception != null) {
                 // Handle error
@@ -29,6 +30,7 @@ class ProjectSnapshotListener(
 
             val projects = mutableListOf<Project>()
 
+            // Iterate through the documents in the Firestore snapshot
             for (doc in snapshot?.documents ?: emptyList()) {
                 val id = doc.getLong("id") ?: 0
                 val name = doc.getString("name") ?: ""
@@ -43,6 +45,7 @@ class ProjectSnapshotListener(
                 val numberOfTasks = doc.getLong("numberOfTasks")?.toInt() ?: 0
                 val totalTime = doc.getString("totalTime") ?: ""
 
+                // Create a Project object
                 val project = Project(
                     id,
                     name,
@@ -60,7 +63,7 @@ class ProjectSnapshotListener(
                 projects.add(project)
             }
 
-            // Update the local Room database
+            // Update the local Room database with the changes from Firestore
             projectFragment.lifecycleScope.launch {
 
                 // Run the database operation within a transaction
@@ -83,6 +86,7 @@ class ProjectSnapshotListener(
     }
 
     fun stopListening() {
+        // Stop listening to changes in the Firestore projects collection
         snapshotListener!!.remove()
     }
 }

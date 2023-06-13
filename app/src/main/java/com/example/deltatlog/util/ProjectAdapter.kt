@@ -99,7 +99,7 @@ class ProjectAdapter(
                     animator.duration = 100
                     animator.start()
                 }
-
+                // Reverse the animation on the view when released or canceled
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     val animator = ObjectAnimator.ofPropertyValuesHolder(
                         v,
@@ -112,13 +112,14 @@ class ProjectAdapter(
             }
             false
         }
-
+        // open menu at longClick
         holder.projectCardview.setOnLongClickListener {
             val menuItems = arrayOf("Edit Project", "Change Color", "Delete Project")
             val popupMenu = PopupMenu(context, holder.projectCardview)
 
             menuItems.forEach { popupMenu.menu.add(it) }
 
+            // Handle edit project action
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.title) {
                     "Edit Project" -> {
@@ -138,7 +139,7 @@ class ProjectAdapter(
                         val newCompanyName =
                             dialogLayout.findViewById<EditText>(R.id.input_company_name)
                         newCompanyName.setText(item.companyName)
-
+                        // Update changes into databases local and remote (firestore)
                         with(builder) {
                             setTitle("Update Project")
                             setPositiveButton("Ok") { dialog, which ->
@@ -203,6 +204,7 @@ class ProjectAdapter(
                         true
                     }
 
+                    // Handle delete Project action
                     "Delete Project" -> {
                         // Handle delete project action
                         AlertDialog.Builder(context)
@@ -225,7 +227,7 @@ class ProjectAdapter(
                                         firebaseManager.deleteTask(i)
                                     }
                                 }
-
+                                // delete project from local datbase
                                 viewModel.deleteProject(item)
 
                                 val firebaseManager = FirebaseManager()
@@ -248,6 +250,7 @@ class ProjectAdapter(
                         true
                     }
 
+                    // Handle change of project color
                     "Change Color" -> {
                         // Show dialog when a button is clicked
                         val dialogView =

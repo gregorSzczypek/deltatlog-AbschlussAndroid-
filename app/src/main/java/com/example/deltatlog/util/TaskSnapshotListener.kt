@@ -21,6 +21,7 @@ class TaskSnapshotListener (
             val taskCollection = db.collection("users").document(currentUserId)
                 .collection("tasks")
 
+            // Start listening to changes in the Firestore projects collection
             snapshotListener = taskCollection.addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
                     // Handle error
@@ -29,6 +30,7 @@ class TaskSnapshotListener (
 
                 val tasks = mutableListOf<Task>()
 
+                // Iterate through the documents in the Firestore snapshot
                 for (doc in snapshot?.documents ?: emptyList()) {
                     val id = doc.id.toLong()
                     val taskProjectId = doc.getLong("taskProjectId")?: 0
@@ -40,6 +42,7 @@ class TaskSnapshotListener (
                     val notes = doc.getString("notes") ?: ""
                     val elapsedTime = doc.getLong("elapsedTime")?: 0
 
+                    // Create a Task object
                     val task = Task(
                         id,
                         taskProjectId,
@@ -77,6 +80,7 @@ class TaskSnapshotListener (
         }
 
         fun stopListening() {
+            // Stop listening to changes in the Firestore projects collection
             snapshotListener!!.remove()
         }
 }

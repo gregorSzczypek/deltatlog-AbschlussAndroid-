@@ -21,10 +21,15 @@ class viewModel(application: Application) : AndroidViewModel(application) {
     private val database = getProjectDatabase(application)
     private val taskDatabase = getTaskDatabase(application)
     private val repository = Repository(database, taskDatabase, LogoApi)
+
+    // LiveData variables to observe data changes
     val projectList = repository.projectList
     val taskList = repository.taskList
     val logoLiveData: LiveData<Logo> = repository.logo
+
     var databaseDeleted = false
+
+    // List of colors for UI
     val colors = listOf(
         R.color.colorPicker1,
         R.color.colorPicker2,
@@ -48,6 +53,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         R.color.colorPicker20,
     )
 
+    // Load logo from API
     fun loadLogo(companyName: String, callback: () -> Unit) {
         viewModelScope.launch {
             Log.d(TAG, "(1) API CALL")
@@ -56,6 +62,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // Insert a project
     fun insertProject(project: Project, callback: () -> Unit) {
         viewModelScope.launch {
             repository.insertProject(project)
@@ -63,12 +70,14 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // update a project
     fun updateProject(project: Project) {
         viewModelScope.launch {
             repository.updateProject(project)
         }
     }
 
+    // delete a project
     fun deleteProject(project: Project) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${project.id}")
@@ -76,6 +85,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // insert a task
     fun insertTask(task: Task, callback: () -> Unit) {
         viewModelScope.launch {
             repository.insertTask(task)
@@ -83,12 +93,14 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // update a task
     fun updateTask(task: Task) {
         viewModelScope.launch {
             repository.updateTask(task)
         }
     }
 
+    // delete a task
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${task.id}")
@@ -96,6 +108,7 @@ class viewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // delete all task
     fun deleteAllTasks(projectTaskId: Long) {
         viewModelScope.launch {
             Log.d("ViewModel", "Calling repository delete with: ${projectTaskId}")

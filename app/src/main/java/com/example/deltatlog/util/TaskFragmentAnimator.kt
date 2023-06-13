@@ -16,6 +16,8 @@ class TaskFragmentAnimator {
 
         // Scale animation
         if (isEmpty) {
+
+            // Create a scale animation that enlarges the FAB
             val scaleAnimation = ScaleAnimation(
                 1.0f, 1.5f, 1.0f, 1.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f,
@@ -27,6 +29,7 @@ class TaskFragmentAnimator {
             }
 
             // Rotate animation
+            // Create a rotate animation that spins the FAB
             val rotate = RotateAnimation(
                 0f,
                 360f,
@@ -41,13 +44,16 @@ class TaskFragmentAnimator {
                 interpolator = AccelerateDecelerateInterpolator()
             }
 
+            // Create an animation set and add both animations to it
             val animationSet = AnimationSet(true).apply {
                 addAnimation(scaleAnimation)
                 addAnimation(rotate)
             }
+            // Start the animation set on the FAB
             fab.startAnimation(animationSet)
 
         } else {
+            // If the FAB is not empty, clear any animations on it
             fab.clearAnimation()
         }
     }
